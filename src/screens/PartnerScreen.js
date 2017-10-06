@@ -1,43 +1,99 @@
-import React, { Component } from 'react';
-import { SectionList, StyleSheet, Text, View } from 'react-native';
+import React from 'react';
+import { View,
+    Image,
+    FlatList,
+    ActivityIndicator } from 'react-native';
+import { Card, 
+    CardItem, 
+    Thumbnail, 
+    Text, 
+    Button, 
+    Icon, 
+    Left,
+    Body, 
+    Right } from 'native-base';
 
-export default class PartnerScreen extends React.Component {
+import PartnerService from './../services/PartnerService';
+
+export default class PartnerScreen extends React.PureComponent {
     
+    static navigationOptions = ({ navigation }) => ({
+        title: navigation.state.params.segment.name,
+      })
+
+    constructor(props) {
+        super(props);
+
+        this.partnerService = new PartnerService();
+        this.state = {
+            partners: [],
+            loading: true       
+        }
+    }
+
+    componentDidMount() {
+        this.partnerService.fetchIfNeeded( (partnersJson) => {
+            this.setState({ partners: partnersJson, loading: false });
+        } );
+    }
+
+    _renderItem = ({item}) => (
+        <Card>
+            <CardItem>
+                <Left>
+                    <Thumbnail source={{uri: item.logo.uri}} />
+                    <Body>
+                        <Text>{item.name}</Text>
+                        <Text note>{item.subtitle}</Text>
+                    </Body>
+                </Left>
+            </CardItem>
+            <CardItem cardBody>
+                <Image source={{uri: item.latest_posts[0].image.uri}} style={styles.image}/>
+            </CardItem>
+            <CardItem>
+                <Left>
+                    <Button transparent>
+                        <Icon active name="thumbs-up" />
+                        <Text>12 Curtidas</Text>
+                    </Button>
+                </Left>
+                <Right>
+                    <Text>{item.latest_posts[0].created_at}</Text>
+                </Right>
+            </CardItem>
+        </Card>
+    )
+
+    
+    _renderFooter = () => {
+        if(!this.state.loading) return null;
+        
+        return (
+            <View>
+                <ActivityIndicator animating size="large" />
+            </View>
+        ); 
+    }
+    
+    _keyExtrator = (item) => item.id
+
     render() {
         return (
-          <View style={styles.container}>
-            <SectionList
-              sections={[
-                {title: 'D', data: ['Devin']},
-                {title: 'J', data: ['Jackson', 'James', 'Jillian', 'Jimmy', 'Joel', 'John', 'Julie',
-                    'Jackson', 'James', 'Jillian', 'Jimmy', 'Joel', 'John', 'Julie']},
-              ]}
-              renderItem={({item}) => <Text style={styles.item}>{item}</Text>}
-              renderSectionHeader={({section}) => <Text style={styles.sectionHeader}>{section.title}</Text>}
+            <FlatList  
+                data={this.state.partners}
+                keyExtractor={this._keyExtrator}
+                renderItem={this._renderItem}
+                ListFooterComponent={this._renderFooter}
             />
-          </View>
-        );
+    );
   }
 }
 
-const styles = StyleSheet.create({
-  container: {
-   flex: 1,
-   paddingTop: 22
-  },
-  sectionHeader: {
-    paddingTop: 2,
-    paddingLeft: 10,
-    paddingRight: 10,
-    paddingBottom: 2,
-    fontSize: 14,
-    fontWeight: 'bold',
-    backgroundColor: 'rgba(247,247,247,1.0)',
-  },
-  item: {
-    padding: 10,
-    fontSize: 18,
-    height: 44,
-  },
-})
-
+const styles = {
+    image: {
+        height: 200, 
+        width: null, 
+        flex: 1
+    }
+}
