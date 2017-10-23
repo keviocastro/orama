@@ -1,62 +1,69 @@
-import React, { Component } from 'react';
-import { View, Text, FlatList, ActivityIndicator, Image, TouchableHighlight} from 'react-native';
+import React from 'react';
+import PropTypes from 'prop-types';
+import { View, Text, FlatList, ActivityIndicator, Image, TouchableHighlight } from 'react-native';
+import { Card, CardItem } from 'native-base';
 import SegmentService from './../services/SegmentService';
-import {Card} from 'react-native-elements';
 
 export default class SegmentScreen extends React.PureComponent {
-    static navigationOptions = {
-        title: 'Segmentos'
-    }
+  static navigationOptions = {
+    title: 'Segmentos',
+  };
 
-    constructor(props) {
-        super(props);
-        
-        this.segmentService = new SegmentService();
-        this.state = {
-            segments: [],
-            loading: true
-        }
+  constructor(props) {
+    super(props);
+
+    this.segmentService = new SegmentService();
+    this.state = {
+      segments: [],
+      loading: true,
     };
+  }
 
-    componentDidMount() {
-        this.segmentService.fetchIfNeeded( (segmentsJson) => {
-            this.setState({ segments: segmentsJson, loading: false });
-        } );
-    }
+  componentDidMount() {
+    this.segmentService.fetch((segmentsJson) => {
+      this.setState({ segments: segmentsJson, loading: false });
+    });
+  }
 
-    _onPressItem = (item) => {
-        this.props.navigation.navigate('Partner', {segment: item});
-    }
+  onPressItem = (item) => {
+    this.props.navigation.navigate('Partner', { segment: item });
+  };
 
-    _renderItem = ({item}) => (
-        <TouchableHighlight onPress={ () => this._onPressItem(item) } >
-            <View>
-                <Card
-                    title={item.name}
-                    image={{uri: item.image.uri}}
-                />
-            </View>
-        </TouchableHighlight>
+  keyExtractor = item => item.id;
+
+  renderItem = ({ item }) => (
+    <TouchableHighlight onPress={() => this.onPressItem(item)}>
+      <View>
+        <Card>
+          <CardItem>
+            <Text>{item.name}</Text>
+          </CardItem>
+          <CardItem cardBody>
+            <Image source={{ uri: item.image.uri }} style={{ height: 100, width: null, flex: 1 }} />
+          </CardItem>
+        </Card>
+      </View>
+    </TouchableHighlight>
+  );
+
+  renderFooter = () => {
+    if (!this.state.loading) return null;
+
+    return <ActivityIndicator animating size="large" />;
+  };
+
+  render() {
+    return (
+      <FlatList
+        data={this.state.segments}
+        keyExtractor={this.keyExtractor}
+        renderItem={this.renderItem}
+        ListFooterComponent={this.renderFooter}
+      />
     );
-
-    _keyExtractor = (item, index) => item.id;
-
-    _renderFooter = () => {
-        if(!this.state.loading) return null;
-
-        return (
-            <ActivityIndicator animating size='large' />
-        );
-    }
-
-    render(){
-        return(
-            <FlatList
-                data={this.state.segments}
-                keyExtractor={this._keyExtractor}
-                renderItem={this._renderItem}
-                ListFooterComponent={this._renderFooter}
-            />
-        )
-    };
+  }
 }
+
+SegmentScreen.propTypes = {
+  navigation: PropTypes.object,
+};

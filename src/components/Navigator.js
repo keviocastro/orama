@@ -1,11 +1,12 @@
-import React from 'react';
+import { StackNavigator } from 'react-navigation';
 import SegmentScreen from './../screens/SegmentScreen';
 import PartnerScreen from './../screens/PartnerScreen';
-import { StackNavigator } from 'react-navigation';
+import PartnerFeedScreen from './../screens/PartnerFeedScreen';
 
 const Navigator = StackNavigator({
   Home: { screen: SegmentScreen },
-  Partner: { screen: PartnerScreen }
+  Partner: { screen: PartnerScreen },
+  PartnerFeed: { screen: PartnerFeedScreen },
 });
 
 export default Navigator;

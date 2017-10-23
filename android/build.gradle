@@ -21,4 +21,9 @@ allprojects {
             url "$rootDir/../node_modules/react-native/android"
         }
     }
+    configurations.all {
+            resolutionStrategy {
+              force 'com.facebook.android:facebook-android-sdk:4.22.1'
+            }
+        }
 }

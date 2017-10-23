@@ -1,30 +1,43 @@
 {
-  "name": "FastCommerce",
-  "version": "0.0.1",
+  "name": "orama",
+  "version": "0.0.2",
   "private": true,
   "scripts": {
     "start": "node node_modules/react-native/local-cli/cli.js start",
     "test": "jest",
-    "mock-server": "./node_modules/json-server/bin/index.js -H $(hostname -I | cut -d' ' -f1) -c ./mock-server/json-server.json -s ./mock-server/public ./mock-server/db.json"
+    "mock-server": "source .env && ./node_modules/json-server/bin/index.js -H ${API_HOST} -c ./mock-server/json-server.json -s ./mock-server/public ./mock-server/db.json",
+    "mock-randon-server": "source .env && ./node_modules/json-server/bin/index.js -H ${API_HOST} -c ./mock-server/json-server.json -s ./mock-server/public ./mock-server/randon.js",
+    "packager-kill": "react-native-kill-packager",
+    "packager-restart": "react-native-kill-packager; npm start"
   },
   "dependencies": {
-    "native-base": "^2.3.1",
+    "native-base": "^2.3.3",
     "prop-types": "^15.5.10",
     "react": "16.0.0-alpha.12",
     "react-native": "0.48.3",
     "react-native-config": "^0.8.0",
-    "react-native-elements": "^0.17.0",
-    "react-native-vector-icons": "^4.4.0",
-    "react-navigation": "^1.0.0-beta.11"
+    "react-native-fbsdk": "^0.6.3",
+    "react-native-vector-icons": "^4.4.2",
+    "react-navigation": "^1.0.0-beta.15"
   },
   "devDependencies": {
+    "babel-eslint": "^8.0.1",
     "babel-jest": "21.0.2",
     "babel-preset-react-native": "3.0.2",
-    "eslint": "^4.8.0",
+    "eslint": "^4.9.0",
+    "eslint-config-airbnb": "^16.1.0",
+    "eslint-plugin-import": "^2.8.0",
+    "eslint-plugin-jsx-a11y": "^6.0.2",
     "eslint-plugin-react": "^7.4.0",
+    "faker": "^4.1.0",
     "jest": "21.0.2",
     "json-server": "^0.12.0",
-    "react-test-renderer": "16.0.0-alpha.12"
+    "node-env-file": "^0.1.8",
+    "prettier": "^1.7.4",
+    "prettier-eslint": "^8.2.1",
+    "react-native-kill-packager": "^1.0.0",
+    "react-test-renderer": "16.0.0-alpha.12",
+    "underscore": "^1.8.3"
   },
   "jest": {
     "preset": "react-native"
