@@ -65,6 +65,11 @@
         "latitude": -16.675459,
         "longitude": -49.251237,
         "distance": 0.6
+      },
+      "auth": {
+        "accessToken":
+          "EAAF1zJ3haZCkBANTDVVDGr1QssfmKLTtOHUbvx5s69v8kCixpjILrDZCFNYE12WlSjPl9HrwyIrAbrxonaXUsLlaQCoO5HDQj1KV9kZA0WWbjZCiUPqw3uNgMHW39ZCWZCAXebp83JOV3xM91ZBfNDaN05EamUw3XtdZCNiD67ZBdgtUZAn0urILRC3bUeXooZARwJRlif5H31EzdZA87sE7tIlZCvFWa7Rql5MTnyDtQu6sThUexyIV7SXHF",
+        "expires": 1513993487000
       }
     },
     {
