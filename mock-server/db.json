@@ -4,35 +4,35 @@
       "id": 1,
       "name": "Bebidas",
       "image": {
-        "uri": "http://192.168.25.27:3000/images/segments/bebidas.jpg"
+        "uri": "http://192.168.25.3:3000/images/segments/bebidas.jpg"
       }
     },
     {
       "id": 2,
       "name": "Restaurantes",
       "image": {
-        "uri": "http://192.168.25.27:3000/images/segments/restaurantes.jpg"
+        "uri": "http://192.168.25.3:3000/images/segments/restaurantes.jpg"
       }
     },
     {
       "id": 3,
       "name": "Padarias",
       "image": {
-        "uri": "http://192.168.25.27:3000/images/segments/padarias.jpg"
+        "uri": "http://192.168.25.3:3000/images/segments/padarias.jpg"
       }
     },
     {
       "id": 4,
       "name": "Pets",
       "image": {
-        "uri": "http://192.168.25.27:3000/images/segments/pets.jpg"
+        "uri": "http://192.168.25.3:3000/images/segments/pets.jpg"
       }
     },
     {
       "id": 5,
       "name": "Farmacias",
       "image": {
-        "uri": "http://192.168.25.27:3000/images/segments/farmacias.jpg"
+        "uri": "http://192.168.25.3:3000/images/segments/farmacias.jpg"
       }
     },
     {
@@ -40,7 +40,7 @@
       "name": "Assistência técnica",
       "image": {
         "uri":
-          "http://192.168.25.27:3000/images/segments/assistencia-tecnica.jpg"
+          "http://192.168.25.3:3000/images/segments/assistencia-tecnica.jpg"
       }
     }
   ],
@@ -51,12 +51,12 @@
       "subtitle": "Choperia artesanal",
       "segmentIds": [1, 2],
       "logo": {
-        "uri": "http://192.168.25.27:3000/images/partners/logos/logo-1.png"
+        "uri": "http://192.168.25.3:3000/images/partners/logos/logo-1.png"
       },
       "latest_posts": [
         {
           "image": {
-            "uri": "http://192.168.25.27:3000/images/partners/posts/promo-1.jpg"
+            "uri": "http://192.168.25.3:3000/images/partners/posts/promo-1.jpg"
           },
           "created_at": "10m atrás"
         }
@@ -78,12 +78,12 @@
       "subtitle": "Chop de primeira",
       "segmentIds": [1],
       "logo": {
-        "uri": "http://192.168.25.27:3000/images/partners/logos/logo-2.png"
+        "uri": "http://192.168.25.3:3000/images/partners/logos/logo-2.png"
       },
       "latest_posts": [
         {
           "image": {
-            "uri": "http://192.168.25.27:3000/images/partners/posts/promo-2.jpg"
+            "uri": "http://192.168.25.3:3000/images/partners/posts/promo-2.jpg"
           },
           "created_at": "15m atrás"
         }
@@ -100,12 +100,12 @@
       "subtitle": "Mais uma",
       "segmentIds": [1],
       "logo": {
-        "uri": "http://192.168.25.27:3000/images/partners/logos/logo-3.png"
+        "uri": "http://192.168.25.3:3000/images/partners/logos/logo-3.png"
       },
       "latest_posts": [
         {
           "image": {
-            "uri": "http://192.168.25.27:3000/images/partners/posts/promo-3.jpg"
+            "uri": "http://192.168.25.3:3000/images/partners/posts/promo-3.jpg"
           },
           "created_at": "2h atrás"
         }

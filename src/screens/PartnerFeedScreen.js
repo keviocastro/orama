@@ -1,8 +1,9 @@
 import React from 'react';
-import { FlatList, Text, ActivityIndicator, View } from 'react-native';
+import { FlatList, Text, ActivityIndicator, View, Image } from 'react-native';
 import PropTypes from 'prop-types';
 
 import { GraphRequest, GraphRequestManager } from 'react-native-fbsdk';
+import { Card, CardItem, Body } from 'native-base';
 
 export default class PartnerFeedScreen extends React.Component {
   static navigationOptions = ({ navigation }) => ({
@@ -34,6 +35,9 @@ export default class PartnerFeedScreen extends React.Component {
             string:
               'type,story,picture,full_picture,message,message_tags,attachments{type,media,url}',
           },
+          limit: {
+            string: '3',
+          },
         },
       },
       (error, result) => {
@@ -58,10 +62,36 @@ export default class PartnerFeedScreen extends React.Component {
     );
   };
 
-  renderItem = ({ item }) => {
-    const message = item.message ? item.message : 'No post message';
-    return <Text>{message}</Text>;
-  };
+  renderCardMessage = item => (
+    <CardItem>
+      <Body>
+        <Text>{item.message}</Text>
+      </Body>
+    </CardItem>
+  );
+
+  renderCardVideo = item => (
+    <CardItem cardBody>
+      <Image source={{ uri: item.full_picture }} style={{ height: 200, width: null, flex: 1 }} />
+    </CardItem>
+  );
+
+  renderCardPhoto = item => (
+    <CardItem>
+      <Text>Photo album</Text>
+    </CardItem>
+  );
+
+  renderItem = ({ item }) => (
+    <Card>
+      <CardItem>
+        <Text>Debug: {item.type}</Text>
+      </CardItem>
+      {item.message && this.renderCardMessage(item)}
+      {item.type === 'video' && this.renderCardVideo(item)}
+      {item.type === 'photo' && this.renderCardPhoto(item)}
+    </Card>
+  );
 
   render = () => (
     <FlatList
