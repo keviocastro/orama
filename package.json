@@ -5,8 +5,10 @@
   "scripts": {
     "start": "node node_modules/react-native/local-cli/cli.js start",
     "test": "jest",
-    "mock-server": "source .env && ./node_modules/json-server/bin/index.js -H ${API_HOST} -c ./mock-server/json-server.json -s ./mock-server/public ./mock-server/db.json",
-    "mock-randon-server": "source .env && ./node_modules/json-server/bin/index.js -H ${API_HOST} -c ./mock-server/json-server.json -s ./mock-server/public ./mock-server/randon.js",
+    "mock-server":
+      "chmod +x ./scripts/mock-server.sh && ./scripts/mock-server.sh",
+    "mock-randon-server":
+      "#!/bin/bash && source .env && ./node_modules/json-server/bin/index.js -H ${MOCK_API_HOST} -c ./mock-server/json-server.json -s ./mock-server/public ./mock-server/randon.js",
     "packager-kill": "react-native-kill-packager",
     "packager-restart": "react-native-kill-packager; npm start"
   },
