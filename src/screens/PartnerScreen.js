@@ -1,7 +1,7 @@
 import React from 'react';
 import PropTypes from 'prop-types';
 import { View, Image, FlatList, ActivityIndicator, TouchableNativeFeedback } from 'react-native';
-import { Card, CardItem, Thumbnail, Text, Button, Icon, Left, Body, Right } from 'native-base';
+import { Card, CardItem, Thumbnail, Text, Button, Icon, Left, Body } from 'native-base';
 
 import PartnerService from './../services/PartnerService';
 
@@ -29,13 +29,17 @@ export default class PartnerScreen extends React.PureComponent {
   }
 
   componentDidMount() {
-    this.partnerService.getPartners((partnersJson) => {
+    this.partnerService.getPartnersBySegment((partnersJson) => {
       this.setState({ partners: partnersJson, loading: false });
-    });
+    }, this.segment.id);
   }
 
   onPressPost(item) {
     this.props.navigation.navigate('PartnerFeed', { partner: item });
+  }
+
+  get segment() {
+    return this.props.navigation.state.params.segment;
   }
 
   keyExtrator = item => item.id;
@@ -62,16 +66,10 @@ export default class PartnerScreen extends React.PureComponent {
       <CardItem>
         <Left>
           <Button transparent>
-            <Icon active name="thumbs-up" />
-            <Text>12 Curtidas</Text>
+            <Icon active name="md-time" />
+            <Text>{item.latest_posts[0].created_at}</Text>
           </Button>
         </Left>
-        <Right>
-          <Button transparent>
-            <Icon active name="map" />
-            <Text>{item.location.distance} km</Text>
-          </Button>
-        </Right>
       </CardItem>
     </Card>
   );
