@@ -11,6 +11,19 @@ const styles = {
     width: null,
     flex: 1,
   },
+  emptyState: {
+    container: {
+      flex: 1,
+      flexDirection: 'column',
+      justifyContent: 'center',
+      alignItems: 'center',
+      paddingLeft: 56,
+      paddingRight: 56,
+    },
+    icon: {
+      fontSize: 24,
+    },
+  },
 };
 
 export default class PartnerScreen extends React.PureComponent {
@@ -25,12 +38,17 @@ export default class PartnerScreen extends React.PureComponent {
     this.state = {
       partners: [],
       loading: true,
+      empty: false,
     };
   }
 
   componentDidMount() {
     this.partnerService.getPartnersBySegment((partnersJson) => {
-      this.setState({ partners: partnersJson, loading: false });
+      if (this.state.partners.length === 0 && partnersJson.length === 0) {
+        this.setState({ partners: partnersJson, loading: false, empty: true });
+      } else {
+        this.setState({ partners: partnersJson, loading: false, empty: false });
+      }
     }, this.segment.id);
   }
 
@@ -84,7 +102,20 @@ export default class PartnerScreen extends React.PureComponent {
     );
   };
 
+  renderEmptyState = () => (
+    <View style={styles.emptyState.container}>
+      <View>
+        <Icon active name="md-walk" style={styles.emptyState.icon} />
+      </View>
+      <View>
+        <Text>Esta categoria ainda está sem parceiros. Estamos correndo para inclui-los.</Text>
+      </View>
+    </View>
+  );
+
   render() {
+    if (this.state.empty) return this.renderEmptyState();
+
     return (
       <FlatList
         data={this.state.partners}
