@@ -10,10 +10,10 @@ import {
   Linking,
 } from 'react-native';
 import PropTypes from 'prop-types';
-import Config from 'react-native-config';
 
-import { GraphRequest, GraphRequestManager } from 'react-native-fbsdk';
 import { Card, CardItem, Body } from 'native-base';
+
+import PartnerFeedService from './../services/PartnerFeedService';
 
 const styles = StyleSheet.create({
   cardImage: { height: 200, width: null, flex: 1 },
@@ -47,7 +47,7 @@ export default class PartnerFeedScreen extends React.Component {
       if (suported) {
         Linking.openURL(url);
       } else {
-        console.log(`Don 't know how to open URI: ${url}`);
+        console.log(`db.jsonDon 't know how to open URI: ${url}`);
       }
     });
   };
@@ -57,30 +57,18 @@ export default class PartnerFeedScreen extends React.Component {
   }
 
   getFeed() {
-    const infoRequest = new GraphRequest(
-      `/${this.partner.fb_id}/feed`,
-      {
-        accessToken: Config.FB_ACCESS_TOKEN,
-        parameters: {
-          fields: {
-            string:
-              'type,story,picture,full_picture,message,message_tags,attachments{type,media,url,subattachments}',
-          },
-          limit: {
-            string: '10',
-          },
-        },
-      },
-      (error, result) => {
-        if (error) {
-          console.log(`Error fetching data: ${JSON.stringify(error)}`);
-        } else {
-          this.setState({ feed: result.data, loading: false });
-        }
-      },
-    );
+    PartnerFeedService.getPartnerFeed(this.partner.fb_id, (result, error) => {
+      console.log(result);
+      if (error) {
+        console.log('PartnerFeedScreen error: ', error);
+        return false;
+      }
 
-    new GraphRequestManager().addRequest(infoRequest).start();
+      this.setState({
+        feed: result.data,
+        loading: false,
+      });
+    });
   }
 
   renderFooter = () => {
