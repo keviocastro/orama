@@ -2,45 +2,197 @@
   "segments": [
     {
       "id": 1,
-      "name": "Bebidas",
+      "name": "Assitência técnica",
       "image": {
-        "uri": "http://orama.origamisapp.com/images/segments/bebidas.jpg"
+        "uri": "http://orama.origamisapp.com/images/segments/botaoAssistenciaTecnica.JPG"
       }
     },
     {
       "id": 2,
-      "name": "Restaurantes",
+      "name": "Bebidas",
       "image": {
-        "uri": "http://orama.origamisapp.com/images/segments/restaurantes.jpg"
+        "uri": "http://orama.origamisapp.com/images/segments/botaoBebidas.jpg"
       }
     },
     {
       "id": 3,
-      "name": "Padarias",
+      "name": "Beleza",
       "image": {
-        "uri": "http://orama.origamisapp.com/images/segments/padarias.jpg"
+        "uri": "http://orama.origamisapp.com/images/segments/botaoBeleza.JPG"
       }
     },
     {
       "id": 4,
-      "name": "Pets",
+      "name": "Calçados",
       "image": {
-        "uri": "http://orama.origamisapp.com/images/segments/pets.jpg"
+        "uri": "http://orama.origamisapp.com/images/segments/botaoCalcados.JPG"
       }
     },
     {
       "id": 5,
-      "name": "Farmacias",
+      "name": "Construção",
       "image": {
-        "uri": "http://orama.origamisapp.com/images/segments/farmacias.jpg"
+        "uri": "http://orama.origamisapp.com/images/segments/botaoCasaeConstrucao.jpg"
       }
     },
     {
       "id": 6,
-      "name": "Assistência técnica",
+      "name": "Corpo e Mente",
       "image": {
         "uri":
-          "http://orama.origamisapp.com/images/segments/assistencia-tecnica.jpg"
+          "http://orama.origamisapp.com/images/segments/botaoCorpomente.JPG"
+      }
+    },
+    {
+      "id": 7,
+      "name": "Educação",
+      "image": {
+        "uri":
+          "http://orama.origamisapp.com/images/segments/botaoEducacao.JPG"
+      }
+    },
+    {
+      "id": 8,
+      "name": "Empregos",
+      "image": {
+        "uri":
+          "http://orama.origamisapp.com/images/segments/botaoEmpregos.jpg"
+      }
+    },
+    {
+      "id": 9,
+      "name": "Esportes",
+      "image": {
+        "uri":
+          "http://orama.origamisapp.com/images/segments/botaoEsportes.JPG"
+      }
+    },
+    {
+      "id": 10,
+      "name": "Estetica",
+      "image": {
+        "uri":
+          "http://orama.origamisapp.com/images/segments/BotaoEstetica.JPG"
+      }
+    },
+    {
+      "id": 11,
+      "name": "Eventos",
+      "image": {
+        "uri":
+          "http://orama.origamisapp.com/images/segments/botaoEventos.jpg"
+      }
+    },
+    {
+      "id": 12,
+      "name": "Foto e Video",
+      "image": {
+        "uri":
+          "http://orama.origamisapp.com/images/segments/botaoFotoVideo.JPG"
+      }
+    },
+    {
+      "id": 13,
+      "name": "Hortifruti",
+      "image": {
+        "uri":
+          "http://orama.origamisapp.com/images/segments/botaoHortifruti.JPG"
+      }
+    },
+    {
+      "id": 14,
+      "name": "Imobiliárias",
+      "image": {
+        "uri":
+          "http://orama.origamisapp.com/images/segments/BotaoImobiliarias.JPG"
+      }
+    },
+    {
+      "id": 15,
+      "name": "Justiça",
+      "image": {
+        "uri":
+          "http://orama.origamisapp.com/images/segments/BotaoJustica.JPG"
+      }
+    },
+    {
+      "id": 16,
+      "name": "Decoração",
+      "image": {
+        "uri":
+          "http://orama.origamisapp.com/images/segments/BotaoMoveiseDecoracao.JPG"
+      }
+    },
+    {
+      "id": 17,
+      "name": "Orama",
+      "image": {
+        "uri":
+          "http://orama.origamisapp.com/images/segments/BotaoOrama.JPG"
+      }
+    },
+    {
+      "id": 18,
+      "name": "Pães, Bolos e Doces",
+      "image": {
+        "uri":
+          "http://orama.origamisapp.com/images/segments/botaoPaesBoloseDoces.JPG"
+      }
+    },
+    {
+      "id": 19,
+      "name": "Papeis e Impressão",
+      "image": {
+        "uri":
+          "http://orama.origamisapp.com/images/segments/BotaoPapeiseImpressao.JPG"
+      }
+    },
+    {
+      "id": 20,
+      "name": "Pets",
+      "image": {
+        "uri":
+          "http://orama.origamisapp.com/images/segments/botaoPets.JPG"
+      }
+    },
+    {
+      "id": 21,
+      "name": "Restaurantes",
+      "image": {
+        "uri":
+          "http://orama.origamisapp.com/images/segments/BotaoRestaurentes.jpg"
+      }
+    },
+    {
+      "id": 22,
+      "name": "Roupas",
+      "image": {
+        "uri":
+          "http://orama.origamisapp.com/images/segments/BotaoRoupas.jpg"
+      }
+    },
+    {
+      "id": 23,
+      "name": "Sanduicheria e Café",
+      "image": {
+        "uri":
+          "http://orama.origamisapp.com/images/segments/BotaoSanduicheriaeCafe.JPG"
+      }
+    },
+    {
+      "id": 24,
+      "name": "Saúde",
+      "image": {
+        "uri":
+          "http://orama.origamisapp.com/images/segments/BotaoSaude.JPG"
+      }
+    },
+    {
+      "id": 25,
+      "name": "Transporte",
+      "image": {
+        "uri":
+          "http://orama.origamisapp.com/images/segments/botaoTransporte.jpg"
       }
     }
   ],
@@ -51,7 +203,7 @@
       "fb_user_name": "origamis.app.9",
       "name": "Bear Head",
       "subtitle": "Choperia artesanal",
-      "segmentIds": [1, 2],
+      "segmentIds": [2],
       "logo": {
         "uri": "http://orama.origamisapp.com/images/partners/logos/logo-1.png"
       },
@@ -74,52 +226,6 @@
         "accessToken":
           "EAAF1zJ3haZCkBANTDVVDGr1QssfmKLTtOHUbvx5s69v8kCixpjILrDZCFNYE12WlSjPl9HrwyIrAbrxonaXUsLlaQCoO5HDQj1KV9kZA0WWbjZCiUPqw3uNgMHW39ZCWZCAXebp83JOV3xM91ZBfNDaN05EamUw3XtdZCNiD67ZBdgtUZAn0urILRC3bUeXooZARwJRlif5H31EzdZA87sE7tIlZCvFWa7Rql5MTnyDtQu6sThUexyIV7SXHF",
         "expires": 1513993487000
-      }
-    },
-    {
-      "id": 2,
-      "name": "Cariboos",
-      "subtitle": "Chop de primeira",
-      "segmentIds": [1],
-      "logo": {
-        "uri": "http://orama.origamisapp.com/images/partners/logos/logo-2.png"
-      },
-      "latest_posts": [
-        {
-          "image": {
-            "uri":
-              "http://orama.origamisapp.com/images/partners/posts/promo-2.jpg"
-          },
-          "created_at": "3 horas atrás"
-        }
-      ],
-      "location": {
-        "latitude": -16.675459,
-        "longitude": -49.251237,
-        "distance": 0.8
-      }
-    },
-    {
-      "id": 3,
-      "name": "Beer Beer",
-      "subtitle": "Mais uma",
-      "segmentIds": [1],
-      "logo": {
-        "uri": "http://orama.origamisapp.com/images/partners/logos/logo-3.png"
-      },
-      "latest_posts": [
-        {
-          "image": {
-            "uri":
-              "http://orama.origamisapp.com/images/partners/posts/promo-3.jpg"
-          },
-          "created_at": "6h atrás"
-        }
-      ],
-      "location": {
-        "latitude": -16.675459,
-        "longitude": -49.251237,
-        "distance": 1.4
       }
     }
   ]
