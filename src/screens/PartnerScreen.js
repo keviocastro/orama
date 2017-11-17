@@ -62,33 +62,48 @@ export default class PartnerScreen extends React.PureComponent {
 
   keyExtrator = item => item.id;
 
+  renderCardItemBody = (item) => {
+    if (!Object.prototype.hasOwnProperty.call(item, 'latest_posts')) return null;
+
+    return (
+      <View>
+        <CardItem cardBody>
+          <TouchableNativeFeedback
+            onPress={() => this.onPressPost(item)}
+            background={TouchableNativeFeedback.SelectableBackground()}
+          >
+            <Image source={{ uri: item.latest_posts[0].image.uri }} style={styles.image} />
+          </TouchableNativeFeedback>
+        </CardItem>
+        <CardItem>
+          <Left>
+            <Button transparent>
+              <Icon active name="md-time" />
+              <Text>{item.latest_posts[0].created_at}</Text>
+            </Button>
+          </Left>
+        </CardItem>
+      </View>
+    );
+  };
+
   renderItem = ({ item }) => (
     <Card>
-      <CardItem>
-        <Left>
-          <Thumbnail source={{ uri: item.logo.uri }} />
-          <Body>
-            <Text>{item.name}</Text>
-            <Text note>{item.subtitle}</Text>
-          </Body>
-        </Left>
-      </CardItem>
-      <CardItem cardBody>
-        <TouchableNativeFeedback
-          onPress={() => this.onPressPost(item)}
-          background={TouchableNativeFeedback.SelectableBackground()}
-        >
-          <Image source={{ uri: item.latest_posts[0].image.uri }} style={styles.image} />
-        </TouchableNativeFeedback>
-      </CardItem>
-      <CardItem>
-        <Left>
-          <Button transparent>
-            <Icon active name="md-time" />
-            <Text>{item.latest_posts[0].created_at}</Text>
-          </Button>
-        </Left>
-      </CardItem>
+      <TouchableNativeFeedback
+        onPress={() => this.onPressPost(item)}
+        background={TouchableNativeFeedback.SelectableBackground()}
+      >
+        <CardItem>
+          <Left>
+            <Thumbnail source={{ uri: item.logo.uri }} />
+            <Body>
+              <Text>{item.name}</Text>
+              <Text note>{item.subtitle}</Text>
+            </Body>
+          </Left>
+        </CardItem>
+      </TouchableNativeFeedback>
+      {this.renderCardItemBody(item)}
     </Card>
   );
 

@@ -39,160 +39,126 @@
       "id": 6,
       "name": "Corpo e Mente",
       "image": {
-        "uri":
-          "http://orama.origamisapp.com/images/segments/botaoCorpomente.JPG"
+        "uri": "http://orama.origamisapp.com/images/segments/botaoCorpomente.JPG"
       }
     },
     {
       "id": 7,
       "name": "Educação",
       "image": {
-        "uri":
-          "http://orama.origamisapp.com/images/segments/botaoEducacao.JPG"
+        "uri": "http://orama.origamisapp.com/images/segments/botaoEducacao.JPG"
       }
     },
     {
       "id": 8,
       "name": "Empregos",
       "image": {
-        "uri":
-          "http://orama.origamisapp.com/images/segments/botaoEmpregos.jpg"
+        "uri": "http://orama.origamisapp.com/images/segments/botaoEmpregos.jpg"
       }
     },
     {
       "id": 9,
       "name": "Esportes",
       "image": {
-        "uri":
-          "http://orama.origamisapp.com/images/segments/botaoEsportes.JPG"
+        "uri": "http://orama.origamisapp.com/images/segments/botaoEsportes.JPG"
       }
     },
     {
       "id": 10,
       "name": "Estetica",
       "image": {
-        "uri":
-          "http://orama.origamisapp.com/images/segments/BotaoEstetica.JPG"
+        "uri": "http://orama.origamisapp.com/images/segments/BotaoEstetica.JPG"
       }
     },
     {
       "id": 11,
       "name": "Eventos",
       "image": {
-        "uri":
-          "http://orama.origamisapp.com/images/segments/botaoEventos.jpg"
+        "uri": "http://orama.origamisapp.com/images/segments/botaoEventos.jpg"
       }
     },
     {
       "id": 12,
       "name": "Foto e Video",
       "image": {
-        "uri":
-          "http://orama.origamisapp.com/images/segments/botaoFotoVideo.JPG"
+        "uri": "http://orama.origamisapp.com/images/segments/botaoFotoVideo.JPG"
       }
     },
     {
       "id": 13,
       "name": "Hortifruti",
       "image": {
-        "uri":
-          "http://orama.origamisapp.com/images/segments/botaoHortifruti.JPG"
+        "uri": "http://orama.origamisapp.com/images/segments/botaoHortifruti.JPG"
       }
     },
     {
       "id": 14,
       "name": "Imobiliárias",
       "image": {
-        "uri":
-          "http://orama.origamisapp.com/images/segments/BotaoImobiliarias.JPG"
+        "uri": "http://orama.origamisapp.com/images/segments/BotaoImobiliarias.JPG"
       }
     },
     {
       "id": 15,
       "name": "Justiça",
       "image": {
-        "uri":
-          "http://orama.origamisapp.com/images/segments/BotaoJustica.JPG"
+        "uri": "http://orama.origamisapp.com/images/segments/BotaoJustica.JPG"
       }
     },
     {
       "id": 16,
       "name": "Decoração",
       "image": {
-        "uri":
-          "http://orama.origamisapp.com/images/segments/BotaoMoveiseDecoracao.JPG"
+        "uri": "http://orama.origamisapp.com/images/segments/BotaoMoveiseDecoracao.JPG"
       }
     },
     {
       "id": 17,
       "name": "Orama",
       "image": {
-        "uri":
-          "http://orama.origamisapp.com/images/segments/BotaoOrama.JPG"
+        "uri": "http://orama.origamisapp.com/images/segments/BotaoOrama.JPG"
       }
     },
     {
       "id": 18,
       "name": "Pães, Bolos e Doces",
       "image": {
-        "uri":
-          "http://orama.origamisapp.com/images/segments/botaoPaesBoloseDoces.JPG"
+        "uri": "http://orama.origamisapp.com/images/segments/botaoPaesBoloseDoces.JPG"
       }
     },
     {
       "id": 19,
       "name": "Papeis e Impressão",
       "image": {
-        "uri":
-          "http://orama.origamisapp.com/images/segments/BotaoPapeiseImpressao.JPG"
+        "uri": "http://orama.origamisapp.com/images/segments/BotaoPapeiseImpressao.JPG"
       }
     },
     {
       "id": 20,
       "name": "Pets",
       "image": {
-        "uri":
-          "http://orama.origamisapp.com/images/segments/botaoPets.JPG"
+        "uri": "http://orama.origamisapp.com/images/segments/botaoPets.JPG"
       }
     },
     {
       "id": 21,
       "name": "Restaurantes",
       "image": {
-        "uri":
-          "http://orama.origamisapp.com/images/segments/BotaoRestaurentes.jpg"
+        "uri": "http://orama.origamisapp.com/images/segments/BotaoRestaurentes.jpg"
       }
     },
     {
       "id": 22,
       "name": "Roupas",
       "image": {
-        "uri":
-          "http://orama.origamisapp.com/images/segments/BotaoRoupas.jpg"
+        "uri": "http://orama.origamisapp.com/images/segments/BotaoRoupas.jpg"
       }
     },
     {
       "id": 23,
       "name": "Sanduicheria e Café",
       "image": {
-        "uri":
-          "http://orama.origamisapp.com/images/segments/BotaoSanduicheriaeCafe.JPG"
-      }
-    },
-    {
-      "id": 24,
-      "name": "Saúde",
-      "image": {
-        "uri":
-          "http://orama.origamisapp.com/images/segments/BotaoSaude.JPG"
-      }
-    },
-    {
-      "id": 25,
-      "name": "Transporte",
-      "image": {
-        "uri":
-          "http://orama.origamisapp.com/images/segments/botaoTransporte.jpg"
+        "uri": "http://orama.origamisapp.com/images/segments/BotaoSanduicheriaeCafe.JPG"
       }
     }
   ],
@@ -203,15 +169,13 @@
       "fb_user_name": "origamis.app.9",
       "name": "Bear Head",
       "subtitle": "Choperia artesanal",
-      "segmentIds": [2],
-      "logo": {
-        "uri": "http://orama.origamisapp.com/images/partners/logos/logo-1.png"
-      },
+      "segmentIds": [
+        2
+      ],
       "latest_posts": [
         {
           "image": {
-            "uri":
-              "http://orama.origamisapp.com/images/partners/posts/promo-1.jpg"
+            "uri": "http://orama.origamisapp.com/images/partners/posts/promo-1.jpg"
           },
           "created_at": "10 minutos atrás",
           "created_time": "2017-11-07T01:29:31+0000"
@@ -223,10 +187,37 @@
         "distance": 0.6
       },
       "auth": {
-        "accessToken":
-          "EAAF1zJ3haZCkBANTDVVDGr1QssfmKLTtOHUbvx5s69v8kCixpjILrDZCFNYE12WlSjPl9HrwyIrAbrxonaXUsLlaQCoO5HDQj1KV9kZA0WWbjZCiUPqw3uNgMHW39ZCWZCAXebp83JOV3xM91ZBfNDaN05EamUw3XtdZCNiD67ZBdgtUZAn0urILRC3bUeXooZARwJRlif5H31EzdZA87sE7tIlZCvFWa7Rql5MTnyDtQu6sThUexyIV7SXHF",
+        "accessToken": "EAAF1zJ3haZCkBANTDVVDGr1QssfmKLTtOHUbvx5s69v8kCixpjILrDZCFNYE12WlSjPl9HrwyIrAbrxonaXUsLlaQCoO5HDQj1KV9kZA0WWbjZCiUPqw3uNgMHW39ZCWZCAXebp83JOV3xM91ZBfNDaN05EamUw3XtdZCNiD67ZBdgtUZAn0urILRC3bUeXooZARwJRlif5H31EzdZA87sE7tIlZCvFWa7Rql5MTnyDtQu6sThUexyIV7SXHF",
         "expires": 1513993487000
+      },
+      "logo": {
+        "uri": "http://localhost:3003/images/partners/logos/1-promo-serva.jpg",
+        "name": "promo-serva.jpg"
       }
+    },
+    {
+      "fb_id": "1i81391399sdf8",
+      "name": "Novo parceiro",
+      "subtitle": "bom demais",
+      "logo": {
+        "uri": "http://localhost:3003/images/partners/logos/undefined-baterias.jpg",
+        "name": "baterias.jpg"
+      },
+      "id": 2
+    },
+    {
+      "segmentIds": [
+        23,
+        22
+      ],
+      "fb_id": "123123",
+      "name": "12313",
+      "subtitle": "12312312",
+      "logo": {
+        "uri": "http://localhost:3003/images/partners/logos/undefined-banner-heliar2.jpg",
+        "name": "banner-heliar2.jpg"
+      },
+      "id": 4
     }
   ]
 }
