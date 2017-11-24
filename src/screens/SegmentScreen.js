@@ -1,28 +1,31 @@
 import React from 'react';
+import { connect } from 'react-redux';
 import PropTypes from 'prop-types';
-import { View, Text, FlatList, ActivityIndicator, Image, TouchableHighlight } from 'react-native';
+import {
+  View,
+  Text,
+  FlatList,
+  ActivityIndicator,
+  Image,
+  TouchableHighlight,
+  Alert,
+} from 'react-native';
 import { Card, CardItem } from 'native-base';
-import SegmentService from './../services/SegmentService';
+import { getSegments } from './../actions/segments';
 
-export default class SegmentScreen extends React.PureComponent {
+class SegmentScreen extends React.PureComponent {
   static navigationOptions = {
     title: 'Segmentos',
   };
 
-  constructor(props) {
-    super(props);
-
-    this.segmentService = new SegmentService();
-    this.state = {
-      segments: [],
-      loading: true,
-    };
+  componentWillMount() {
+    this.props.dispatch(getSegments());
   }
 
-  componentDidMount() {
-    this.segmentService.fetch((segmentsJson) => {
-      this.setState({ segments: segmentsJson, loading: false });
-    });
+  componentWillReceiveProps(nextProps) {
+    if (nextProps.requestError) {
+      Alert.alert('Request Error', nextProps.requestError);
+    }
   }
 
   onPressItem = (item) => {
@@ -46,8 +49,8 @@ export default class SegmentScreen extends React.PureComponent {
     </TouchableHighlight>
   );
 
-  renderFooter = () => {
-    if (!this.state.loading) return null;
+  renderFooter = (isFatching) => {
+    if (!isFatching) return null;
 
     return <ActivityIndicator animating size="large" />;
   };
@@ -55,10 +58,10 @@ export default class SegmentScreen extends React.PureComponent {
   render() {
     return (
       <FlatList
-        data={this.state.segments}
+        data={this.props.segments}
         keyExtractor={this.keyExtractor}
         renderItem={this.renderItem}
-        ListFooterComponent={this.renderFooter}
+        ListFooterComponent={() => this.renderFooter(this.props.isFetching)}
       />
     );
   }
@@ -66,4 +69,16 @@ export default class SegmentScreen extends React.PureComponent {
 
 SegmentScreen.propTypes = {
   navigation: PropTypes.object,
+  dispatch: PropTypes.func,
+  segments: PropTypes.array,
+  isFetching: PropTypes.bool,
+  requestError: PropTypes.string,
 };
+
+const mapStateToProps = state => ({
+  isFetching: state.segments.isFetching,
+  segments: state.segments.data,
+  requestError: state.segments.requestError,
+});
+
+export default connect(mapStateToProps)(SegmentScreen);

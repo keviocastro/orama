@@ -1,10 +1,22 @@
 import React from 'react';
+import { createStore, applyMiddleware } from 'redux';
+import { Provider } from 'react-redux';
+import thunkMiddleware from 'redux-thunk';
+import logger from 'redux-logger';
 import Navigator from './components/Navigator';
+import reducers from './reducers';
 
-export default class App extends React.Component {
-  render(){
-    return(
-      <Navigator />
-    )
-  }
+const middleware = [thunkMiddleware];
+if (process.env.NODE_ENV === 'development') {
+  middleware.push(logger);
 }
+
+const store = createStore(reducers, applyMiddleware(...middleware));
+
+const App = () => (
+  <Provider store={store}>
+    <Navigator />
+  </Provider>
+);
+
+export default App;
