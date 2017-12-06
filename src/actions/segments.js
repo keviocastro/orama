@@ -1,33 +1,21 @@
-import Config from 'react-native-config';
+import search from './api';
 
-export const RECEIVE_SEGMENTS = 'RETRIEVE_SEGMENTS';
-export const receiveSegments = segments => ({
-  type: RECEIVE_SEGMENTS,
+export const SEGMENTS_RECEIVED = 'SEGMENTS_RECEIVED';
+export const received = segments => ({
+  type: SEGMENTS_RECEIVED,
   segments,
 });
 
-export const REQUEST_SEGMENTS = 'REQUEST_SEGMENTS';
-export const requestSegments = () => ({
-  type: REQUEST_SEGMENTS,
+export const SEGMENTS_REQUEST = 'SEGMENTS_REQUEST';
+export const request = () => ({
+  type: SEGMENTS_REQUEST,
 });
 
-export const REQUEST_ERROR = 'REQUEST_ERROR';
+export const SEGMENTS_REQUEST_ERROR = 'SEGMENTS_REQUEST_ERROR';
 export const requestError = error => ({
-  type: REQUEST_ERROR,
+  type: SEGMENTS_REQUEST_ERROR,
   error,
 });
 
-export const getSegments = () => (dispatch) => {
-  dispatch(requestSegments());
-  return fetch(`${Config.API_URL}/segments`)
-    .then((response) => {
-      if (!response.ok) dispatch(requestError(`Request error with status ${response.status}`));
-      return response.json();
-    })
-    .then((result) => {
-      dispatch(receiveSegments(result));
-    })
-    .catch((error) => {
-      // TODO: how to dispatch error
-    });
-};
+export const getSegments = () => dispatch =>
+  search('segments', dispatch, received, request, requestError);

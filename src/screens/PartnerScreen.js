@@ -1,9 +1,16 @@
 import React from 'react';
 import PropTypes from 'prop-types';
-import { View, Image, FlatList, ActivityIndicator, TouchableNativeFeedback } from 'react-native';
+import { connect } from 'react-redux';
+import {
+  View,
+  Image,
+  FlatList,
+  ActivityIndicator,
+  TouchableNativeFeedback,
+  Alert,
+} from 'react-native';
 import { Card, CardItem, Thumbnail, Text, Button, Icon, Left, Body } from 'native-base';
-
-import PartnerService from './../services/PartnerService';
+import { getPartners } from '../actions/partners';
 
 const styles = {
   image: {
@@ -26,30 +33,19 @@ const styles = {
   },
 };
 
-export default class PartnerScreen extends React.PureComponent {
+class PartnerScreen extends React.PureComponent {
   static navigationOptions = ({ navigation }) => ({
     title: navigation.state.params.segment.name,
   });
 
-  constructor(props) {
-    super(props);
-
-    this.partnerService = PartnerService;
-    this.state = {
-      partners: [],
-      loading: true,
-      empty: false,
-    };
+  componentWillMount() {
+    this.props.dispatch(getPartners(this.segment.id));
   }
 
-  componentDidMount() {
-    this.partnerService.getPartnersBySegment((partnersJson) => {
-      if (this.state.partners.length === 0 && partnersJson.length === 0) {
-        this.setState({ partners: partnersJson, loading: false, empty: true });
-      } else {
-        this.setState({ partners: partnersJson, loading: false, empty: false });
-      }
-    }, this.segment.id);
+  componentWillReceiveProps(nextProps) {
+    if (nextProps.requestError) {
+      Alert.alert('Request Error', nextProps.requestError);
+    }
   }
 
   onPressPost(item) {
@@ -108,7 +104,7 @@ export default class PartnerScreen extends React.PureComponent {
   );
 
   renderFooter = () => {
-    if (!this.state.loading) return null;
+    if (!this.props.isFetching) return null;
 
     return (
       <View>
@@ -129,11 +125,13 @@ export default class PartnerScreen extends React.PureComponent {
   );
 
   render() {
-    if (this.state.empty) return this.renderEmptyState();
+    if (this.props.partners.length <= 0 && this.props.isFetching === false) {
+      return this.renderEmptyState();
+    }
 
     return (
       <FlatList
-        data={this.state.partners}
+        data={this.props.partners}
         keyExtractor={this.keyExtrator}
         renderItem={this.renderItem}
         ListFooterComponent={this.renderFooter}
@@ -144,4 +142,16 @@ export default class PartnerScreen extends React.PureComponent {
 
 PartnerScreen.propTypes = {
   navigation: PropTypes.object,
+  dispatch: PropTypes.func,
+  partners: PropTypes.array,
+  isFetching: PropTypes.bool,
+  requestError: PropTypes.string,
 };
+
+const mapStateToProps = state => ({
+  isFetching: state.partners.isFetching,
+  partners: state.partners.data,
+  requestError: state.partners.requestError,
+});
+
+export default connect(mapStateToProps)(PartnerScreen);

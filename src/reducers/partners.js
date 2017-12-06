@@ -1,25 +1,25 @@
-import { SEGMENTS_RECEIVED, SEGMENTS_REQUEST, SEGMENTS_REQUEST_ERROR } from './../actions/segments';
+import { PARTNERS_RECEIVED, PARTNERS_REQUEST, PARTNERS_REQUEST_ERROR } from './../actions/partners';
 
 const initialState = {
   data: [],
-  isFetching: false,
+  isFetching: true,
   requestError: '',
 };
 
 const reducer = (state = initialState, action) => {
   switch (action.type) {
-    case SEGMENTS_RECEIVED:
+    case PARTNERS_RECEIVED:
       return {
         ...state,
-        data: Array.isArray(action.segments) ? action.segments : [],
+        data: Array.isArray(action.partners) ? action.partners : [],
         isFetching: false,
       };
-    case SEGMENTS_REQUEST:
+    case PARTNERS_REQUEST:
       return {
         ...state,
         isFetching: true,
       };
-    case SEGMENTS_REQUEST_ERROR:
+    case PARTNERS_REQUEST_ERROR:
       return {
         ...state,
         isFetching: false,
