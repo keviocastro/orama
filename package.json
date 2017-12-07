@@ -13,7 +13,8 @@
     "packager-restart": "react-native-kill-packager && npm start",
     "build-android": "cd android && ./gradlew assembleRelease",
     "build-install-android":
-      "cd android && ./gradlew assembleRelease && adb install app/build/outputs/apk/app-release.apk"
+      "cd android && ./gradlew assembleRelease && ./scripts/android-install.sh",
+    "android-install": "chmod +x ./scripts/android-install.sh && ./scripts/android-install.sh"
   },
   "dependencies": {
     "install": "^0.10.2",

@@ -33,6 +33,8 @@ const styles = {
   },
 };
 
+// TODO: refatorar para componentes de container e visuais
+// TODO: despachar getPartners somente se necessário
 class PartnerScreen extends React.PureComponent {
   static navigationOptions = ({ navigation }) => ({
     title: navigation.state.params.segment.name,
@@ -46,6 +48,8 @@ class PartnerScreen extends React.PureComponent {
     if (nextProps.requestError) {
       Alert.alert('Request Error', nextProps.requestError);
     }
+
+    console.log('nextProps: ', nextProps);
   }
 
   onPressPost(item) {
@@ -164,9 +168,9 @@ const mapStateToProps = (state) => {
       requestError: state.partners.bySegment[segmentId].requestError,
     }
     : {
-      isFetching: state.partners.isFetching,
+      isFetching: true,
       partners: [],
-      requestError: state.partners.requestError,
+      requestError: '',
     };
 
   return props;

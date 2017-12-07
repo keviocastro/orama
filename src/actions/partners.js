@@ -8,8 +8,9 @@ export const received = (partners, filter) => ({
 });
 
 export const PARTNERS_REQUEST = 'PARTNERS_REQUEST';
-export const request = () => ({
+export const request = filter => ({
   type: PARTNERS_REQUEST,
+  segmentId: filter.value,
 });
 
 export const PARTNERS_REQUEST_ERROR = 'PARTNERS_REQUEST_ERROR';

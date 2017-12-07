@@ -8,6 +8,7 @@ import {
   ActivityIndicator,
   Image,
   TouchableHighlight,
+  TouchableNativeFeedback,
   Alert,
 } from 'react-native';
 import { Card, CardItem } from 'native-base';
@@ -35,7 +36,10 @@ class SegmentScreen extends React.PureComponent {
   keyExtractor = item => item.id;
 
   renderItem = ({ item }) => (
-    <TouchableHighlight onPress={() => this.onPressItem(item)}>
+    <TouchableHighlight
+      onPress={() => this.onPressItem(item)}
+      background={TouchableNativeFeedback.SelectableBackground()}
+    >
       <View>
         <Card>
           <CardItem>

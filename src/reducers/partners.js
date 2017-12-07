@@ -1,9 +1,12 @@
 import { PARTNERS_RECEIVED, PARTNERS_REQUEST, PARTNERS_REQUEST_ERROR } from './../actions/partners';
 
 const initialState = {
-  bySegment: {}, // {segmentId<id>: {data: array, isFetching: bool, requestError: string}}
-  isFetching: true,
-  requestError: '',
+  bySegment: {
+    isFetching: true,
+    requestError: '',
+    data: [],
+  },
+  currentSegmentId: -1,
 };
 
 const setPartnersBySegment = (state, action) => {
@@ -25,17 +28,15 @@ const reducer = (state = initialState, action) => {
         ...state,
         bySegment: setPartnersBySegment(state, action),
         currentSegmentId: action.segmentId,
-        isFetching: false,
       };
     case PARTNERS_REQUEST:
       return {
         ...state,
-        isFetching: true,
+        currentSegmentId: action.segmentId,
       };
     case PARTNERS_REQUEST_ERROR:
       return {
         ...state,
-        isFetching: false,
         requestError: action.error,
       };
     default:

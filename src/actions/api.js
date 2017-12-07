@@ -1,7 +1,7 @@
 import Config from 'react-native-config';
 
 const search = (resource, dispatch, receiveAction, initRequestAction, errorAction, filter = []) => {
-  dispatch(initRequestAction());
+  dispatch(initRequestAction(filter));
   let queryFilter = '';
 
   if (Object.keys(filter).length > 0) {
