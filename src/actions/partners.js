@@ -4,7 +4,7 @@ export const PARTNERS_RECEIVED = 'PARTNERS_RECEIVED';
 export const received = (partners, filter) => ({
   type: PARTNERS_RECEIVED,
   partners,
-  segmentId: [filter.value],
+  segmentId: filter.value,
 });
 
 export const PARTNERS_REQUEST = 'PARTNERS_REQUEST';

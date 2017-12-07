@@ -3,7 +3,7 @@ import { createStore, applyMiddleware } from 'redux';
 import { Provider } from 'react-redux';
 import thunkMiddleware from 'redux-thunk';
 import logger from 'redux-logger';
-import Navigator from './components/Navigator';
+import AppWithNavigationState from './components/Navigator';
 import reducers from './reducers';
 
 const middleware = [thunkMiddleware];
@@ -12,10 +12,9 @@ if (process.env.NODE_ENV === 'development') {
 }
 
 const store = createStore(reducers, applyMiddleware(...middleware));
-
 const App = () => (
   <Provider store={store}>
-    <Navigator />
+    <AppWithNavigationState />
   </Provider>
 );
 

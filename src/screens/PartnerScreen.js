@@ -148,10 +148,28 @@ PartnerScreen.propTypes = {
   requestError: PropTypes.string,
 };
 
-const mapStateToProps = state => ({
-  isFetching: state.partners.isFetching,
-  partners: state.partners.data,
-  requestError: state.partners.requestError,
-});
+const mapStateToProps = (state) => {
+  let props = {};
+  const segmentId = state.partners.currentSegmentId;
+
+  const hasPartnersBySegment = Object.prototype.hasOwnProperty.call(
+    state.partners.bySegment,
+    segmentId,
+  );
+
+  props = hasPartnersBySegment
+    ? {
+      isFetching: state.partners.bySegment[segmentId].isFetching,
+      partners: state.partners.bySegment[segmentId].data,
+      requestError: state.partners.bySegment[segmentId].requestError,
+    }
+    : {
+      isFetching: state.partners.isFetching,
+      partners: [],
+      requestError: state.partners.requestError,
+    };
+
+  return props;
+};
 
 export default connect(mapStateToProps)(PartnerScreen);
