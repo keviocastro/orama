@@ -7,13 +7,13 @@ import {
   FlatList,
   ActivityIndicator,
   Image,
-  TouchableHighlight,
-  TouchableNativeFeedback,
+  TouchableOpacity,
   Alert,
 } from 'react-native';
 import { Card, CardItem } from 'native-base';
 import { getSegments } from './../actions/segments';
 
+// TODO: melhorar Touchable
 class SegmentScreen extends React.PureComponent {
   static navigationOptions = {
     title: 'Segmentos',
@@ -36,10 +36,7 @@ class SegmentScreen extends React.PureComponent {
   keyExtractor = item => item.id;
 
   renderItem = ({ item }) => (
-    <TouchableHighlight
-      onPress={() => this.onPressItem(item)}
-      background={TouchableNativeFeedback.SelectableBackground()}
-    >
+    <TouchableOpacity onPress={() => this.onPressItem(item)}>
       <View>
         <Card>
           <CardItem>
@@ -50,7 +47,7 @@ class SegmentScreen extends React.PureComponent {
           </CardItem>
         </Card>
       </View>
-    </TouchableHighlight>
+    </TouchableOpacity>
   );
 
   renderFooter = (isFatching) => {

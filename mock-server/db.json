@@ -193,6 +193,29 @@
       "logo": {
         "uri": "http://localhost:3003/images/partners/logos/1-promo-serva.jpg",
         "name": "promo-serva.jpg"
+      },
+      "last_post": {
+        "type": "photo",
+        "picture": "https://scontent.xx.fbcdn.net/v/t1.0-0/s130x130/23376597_131677224263709_7493303080538028261_n.jpg?oh=2843ed05565f435e2709ae745ad6274a&oe=5AD0B220",
+        "full_picture": "https://scontent.xx.fbcdn.net/v/t1.0-9/23376597_131677224263709_7493303080538028261_n.jpg?oh=06eb784a19e08d5842bcdae370413c21&oe=5A9339BD",
+        "message": "Super promo de cervejas hoje",
+        "id": "111582516273180_131678314263600",
+        "attachments": {
+          "data": [
+            {
+              "type": "photo",
+              "media": {
+                "image": {
+                  "height": 300,
+                  "src": "https://scontent.xx.fbcdn.net/v/t1.0-9/23376597_131677224263709_7493303080538028261_n.jpg?oh=06eb784a19e08d5842bcdae370413c21&oe=5A9339BD",
+                  "width": 570
+                }
+              },
+              "url": "https://www.facebook.com/photo.php?fbid=131677224263709&set=p.131677224263709&type=3"
+            }
+          ]
+        },
+        "privider": "facebook"
       }
     },
     {

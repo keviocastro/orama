@@ -1,14 +1,7 @@
 import React from 'react';
 import PropTypes from 'prop-types';
 import { connect } from 'react-redux';
-import {
-  View,
-  Image,
-  FlatList,
-  ActivityIndicator,
-  TouchableNativeFeedback,
-  Alert,
-} from 'react-native';
+import { View, Image, FlatList, ActivityIndicator, TouchableOpacity, Alert } from 'react-native';
 import { Card, CardItem, Thumbnail, Text, Button, Icon, Left, Body } from 'native-base';
 import { getPartners } from '../actions/partners';
 
@@ -35,6 +28,8 @@ const styles = {
 
 // TODO: refatorar para componentes de container e visuais
 // TODO: despachar getPartners somente se necessário
+// TODO: melhorar Touchable
+// TODO: analisar se compensa utilizar ionicons
 class PartnerScreen extends React.PureComponent {
   static navigationOptions = ({ navigation }) => ({
     title: navigation.state.params.segment.name,
@@ -48,8 +43,6 @@ class PartnerScreen extends React.PureComponent {
     if (nextProps.requestError) {
       Alert.alert('Request Error', nextProps.requestError);
     }
-
-    console.log('nextProps: ', nextProps);
   }
 
   onPressPost(item) {
@@ -67,14 +60,14 @@ class PartnerScreen extends React.PureComponent {
 
     return (
       <View>
-        <CardItem cardBody>
-          <TouchableNativeFeedback
-            onPress={() => this.onPressPost(item)}
-            background={TouchableNativeFeedback.SelectableBackground()}
-          >
-            <Image source={{ uri: item.latest_posts[0].image.uri }} style={styles.image} />
-          </TouchableNativeFeedback>
-        </CardItem>
+        <TouchableOpacity onPress={() => this.onPressPost(item)}>
+          <CardItem cardBody>
+            <Image
+              source={{ uri: 'http://orama.origamisapp.com/images/partners/posts/promo-1.jpg' }}
+              style={styles.image}
+            />
+          </CardItem>
+        </TouchableOpacity>
         <CardItem>
           <Left>
             <Button transparent>
@@ -89,10 +82,7 @@ class PartnerScreen extends React.PureComponent {
 
   renderItem = ({ item }) => (
     <Card>
-      <TouchableNativeFeedback
-        onPress={() => this.onPressPost(item)}
-        background={TouchableNativeFeedback.SelectableBackground()}
-      >
+      <TouchableOpacity onPress={() => this.onPressPost(item)}>
         <CardItem>
           <Left>
             <Thumbnail source={{ uri: item.logo.uri }} />
@@ -102,7 +92,7 @@ class PartnerScreen extends React.PureComponent {
             </Body>
           </Left>
         </CardItem>
-      </TouchableNativeFeedback>
+      </TouchableOpacity>
       {this.renderCardItemBody(item)}
     </Card>
   );

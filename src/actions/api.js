@@ -16,6 +16,10 @@ const search = (resource, dispatch, receiveAction, initRequestAction, errorActio
     })
     .then((result) => {
       dispatch(receiveAction(result, filter));
+    })
+    .catch((err) => {
+      // TODO: register error
+      console.log('Error api search: ', err);
     });
 };
 

@@ -6,7 +6,7 @@ import {
   View,
   Image,
   StyleSheet,
-  TouchableNativeFeedback,
+  TouchableOpacity,
   Linking,
 } from 'react-native';
 import PropTypes from 'prop-types';
@@ -138,15 +138,12 @@ export default class PartnerFeedScreen extends React.Component {
     attachments.map((attachment, index) => this.renderCardItemByMeidaType(attachment, index));
 
   renderItem = ({ item }) => (
-    <TouchableNativeFeedback
-      onPress={this.onClickItemCard}
-      background={TouchableNativeFeedback.SelectableBackground()}
-    >
+    <TouchableOpacity onPress={this.onClickItemCard} >
       <Card>
         {item.message && this.renderCardItemMessage(item)}
         {item.attachments && this.renderCardItensAttachments(item.attachments.data)}
       </Card>
-    </TouchableNativeFeedback>
+    </TouchableOpacity>
   );
 
   render = () => (
