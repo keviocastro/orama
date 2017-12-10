@@ -1,8 +1,18 @@
 import React from 'react';
 import PropTypes from 'prop-types';
 import { connect } from 'react-redux';
-import { View, Image, FlatList, ActivityIndicator, TouchableOpacity, Alert } from 'react-native';
-import { Card, CardItem, Thumbnail, Text, Button, Icon, Left, Body } from 'native-base';
+import {
+  View,
+  Image,
+  FlatList,
+  ActivityIndicator,
+  TouchableOpacity,
+  Alert,
+  Linking,
+  Modal,
+} from 'react-native';
+import { Card, CardItem, Thumbnail, Text, Button, Left, Body, Right, Icon } from 'native-base';
+// import Icon from 'react-native-vector-icons/MaterialCommunityIcons';
 import { getPartners } from '../actions/partners';
 
 const styles = {
@@ -20,9 +30,9 @@ const styles = {
       paddingLeft: 56,
       paddingRight: 56,
     },
-    icon: {
-      fontSize: 24,
-    },
+  },
+  chatIcon: {
+    fontSize: 37,
   },
 };
 
@@ -49,6 +59,26 @@ class PartnerScreen extends React.PureComponent {
     this.props.navigation.navigate('PartnerFeed', { partner: item });
   }
 
+  openAppLink(link) {
+    Linking.canOpenURL(link)
+      .then((supported) => {
+        if (supported) {
+          Linking.openURL(link);
+        } else {
+          console.log('Device does not have support to open link '.link);
+        }
+      })
+      .catch(err => console.log('onPressMessengerIcon: ', err));
+  }
+
+  onPressMessengerIcon(item) {
+    this.openAppLink(`https://www.messenger.com/t/${item.fb_user_name}`);
+  }
+
+  onPressWhatsAppIcon(item) {
+    this.openAppLink(`https://www.messenger.com/t/${item.phone_number}`);
+  }
+
   get segment() {
     return this.props.navigation.state.params.segment;
   }
@@ -62,19 +92,26 @@ class PartnerScreen extends React.PureComponent {
       <View>
         <TouchableOpacity onPress={() => this.onPressPost(item)}>
           <CardItem cardBody>
-            <Image
-              source={{ uri: 'http://orama.origamisapp.com/images/partners/posts/promo-1.jpg' }}
-              style={styles.image}
-            />
+            <Image source={{ uri: item.latest_posts[0].image.uri }} style={styles.image} />
           </CardItem>
         </TouchableOpacity>
         <CardItem>
           <Left>
             <Button transparent>
-              <Icon active name="md-time" />
-              <Text>{item.latest_posts[0].created_at}</Text>
+              <Icon active name="map-marker-radius" />
+              <Text>2,1 km</Text>
             </Button>
           </Left>
+          <Right>
+            <Button transparent onPress={this.onPressMessengerIcon(item)}>
+              <Icon active name="facebook-messenger" style={styles.chatIcon} />
+            </Button>
+          </Right>
+          <Right style={styles.containerIcons} onPress={this.onPressWhatsAppIcon(item)}>
+            <Button transparent>
+              <Icon active name="whatsapp" style={styles.chatIcon} />
+            </Button>
+          </Right>
         </CardItem>
       </View>
     );
