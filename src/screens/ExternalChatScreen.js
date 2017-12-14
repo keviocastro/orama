@@ -1,9 +1,15 @@
 import React from 'react';
 import PropTypes from 'prop-types';
-import { Text, Linking } from 'react-native';
-import { Card, CardItem, Right, Icon, Thumbnail } from 'native-base';
+import { Text, Linking, View } from 'react-native';
+import { Card, CardItem, Right, Icon, Thumbnail, Body } from 'native-base';
 import { connect } from 'react-redux';
 import ReactNativeParallaxHeader from 'react-native-parallax-header';
+
+const styles = {
+  contactIcon: {
+    fontSize: 46,
+  },
+};
 
 const Logo = props => <Thumbnail large source={{ uri: props.partner.logo.uri }} />;
 
@@ -71,23 +77,29 @@ class ExternalChatScreen extends React.Component {
         extraScrollHeight={20}
         navbarColor="#F7F7F7"
         title={<Logo partner={this.props.partner} />}
-        backgroundImage={{ uri: 'http://localhost:3003/images/partners/covers/cover-1.jpg' }}
+        backgroundImage={{ uri: this.props.partner.cover.uri }}
         backgroundImageScale={1.2}
         renderContent={() => (
-          <Card>
-            <CardItem header>
-              <Text>Contatos</Text>
-            </CardItem>
-            {contacts.map((item, index) => (
-              <CardItem key={index} button onPress={() => this.onPressContact(item)}>
-                {this.renderContactIcon(item)}
-                <Text>{item.name}</Text>
-                <Right style={{ flex: 1 }}>
-                  <Icon name="chevron-right" />
-                </Right>
-              </CardItem>
-            ))}
-          </Card>
+          <View style={{ flex: 1, flexDirection: 'row', justifyContent: 'space-between' }}>
+            <Card>
+              <Body>
+                <Icon name="whatsapp" style={{ ...styles.contactIcon, color: '#00E45B' }} />
+              </Body>
+            </Card>
+            <Card>
+              <Body>
+                <Icon
+                  name="facebook-messenger"
+                  style={{ ...styles.contactIcon, color: '#0077FF' }}
+                />
+              </Body>
+            </Card>
+            <Card>
+              <Body>
+                <Icon active name="phone" style={{ ...styles.contactIcon }} />
+              </Body>
+            </Card>
+          </View>
         )}
       />
     );

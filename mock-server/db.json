@@ -190,10 +190,10 @@
         "expires": 1513993487000
       },
       "cover": {
-        "uri": "http://localhost:3003/images/partners/covers/cover-1.jpg"
+        "uri": "http://192.168.25.55:3003/images/partners/covers/cover-1.jpg"
       },
       "logo": {
-        "uri": "http://localhost:3003/images/partners/logos/logo-1.png",
+        "uri": "http://192.168.25.55:3003/images/partners/logos/logo-1.png",
         "name": "promo-serva.jpg"
       },
       "last_post": {
@@ -226,18 +226,15 @@
       "contacts": [
         {
           "type": "facebook-messenger",
-          "identifier": "origamis.app.9",
-          "name": "Facebook"
+          "identifier": "origamis.app.9"
         },
         {
           "type": "whatsapp",
-          "identifier": "+5562985701820",
-          "name": "Whatsapp"
+          "identifier": "+5562985701820"
         },
         {
           "type": "phone",
-          "identifier": "+5562985701820",
-          "name": "Telefone"
+          "identifier": "+5562985701820"
         }
       ]
     },
