@@ -1,13 +1,16 @@
 import React from 'react';
 import PropTypes from 'prop-types';
 import { Text, Linking } from 'react-native';
-import { Content, Card, CardItem, Right, Icon } from 'native-base';
+import { Card, CardItem, Right, Icon, Thumbnail } from 'native-base';
 import { connect } from 'react-redux';
+import ReactNativeParallaxHeader from 'react-native-parallax-header';
+
+const Logo = props => <Thumbnail large source={{ uri: props.partner.logo.uri }} />;
 
 class ExternalChatScreen extends React.Component {
-  static navigationOptions = {
-    title: 'Contatos',
-  };
+  // static navigationOptions = ({ navigation }) => ({
+  //   title: <Header partner={navigation.state.params.partner}>hi</Header>,
+  // });
 
   constructor(props) {
     super(props);
@@ -62,28 +65,38 @@ class ExternalChatScreen extends React.Component {
     const { contacts } = this.props.partner;
 
     return (
-      <Content>
-        <Card>
-          <CardItem header>
-            <Text>Contatos</Text>
-          </CardItem>
-          {contacts.map((item, index) => (
-            <CardItem key={index} button onPress={() => this.onPressContact(item)}>
-              {this.renderContactIcon(item)}
-              <Text>{item.name}</Text>
-              <Right style={{ flex: 1 }}>
-                <Icon name="chevron-right" />
-              </Right>
+      <ReactNativeParallaxHeader
+        headerMinHeight={90}
+        headerMaxHeight={200}
+        extraScrollHeight={20}
+        navbarColor="#F7F7F7"
+        title={<Logo partner={this.props.partner} />}
+        backgroundImage={{ uri: 'http://localhost:3003/images/partners/covers/cover-1.jpg' }}
+        backgroundImageScale={1.2}
+        renderContent={() => (
+          <Card>
+            <CardItem header>
+              <Text>Contatos</Text>
             </CardItem>
-          ))}
-        </Card>
-      </Content>
+            {contacts.map((item, index) => (
+              <CardItem key={index} button onPress={() => this.onPressContact(item)}>
+                {this.renderContactIcon(item)}
+                <Text>{item.name}</Text>
+                <Right style={{ flex: 1 }}>
+                  <Icon name="chevron-right" />
+                </Right>
+              </CardItem>
+            ))}
+          </Card>
+        )}
+      />
     );
   }
 }
 
 ExternalChatScreen.propTypes = {
   partner: PropTypes.object,
+  navigation: PropTypes.object,
 };
 
 const mapStateToProps = state => ({

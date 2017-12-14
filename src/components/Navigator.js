@@ -16,7 +16,7 @@ export const ModeCardStack = StackNavigator({
 export const Navigator = StackNavigator(
   {
     Home: { screen: ModeCardStack, navigationOptions: { header: null } },
-    ExternalChat: { screen: ExternalChatScreen },
+    ExternalChat: { screen: ExternalChatScreen, navigationOptions: { header: null } },
   },
   { mode: 'modal' },
 );

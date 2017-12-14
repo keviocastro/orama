@@ -189,8 +189,11 @@
           "EAAF1zJ3haZCkBANTDVVDGr1QssfmKLTtOHUbvx5s69v8kCixpjILrDZCFNYE12WlSjPl9HrwyIrAbrxonaXUsLlaQCoO5HDQj1KV9kZA0WWbjZCiUPqw3uNgMHW39ZCWZCAXebp83JOV3xM91ZBfNDaN05EamUw3XtdZCNiD67ZBdgtUZAn0urILRC3bUeXooZARwJRlif5H31EzdZA87sE7tIlZCvFWa7Rql5MTnyDtQu6sThUexyIV7SXHF",
         "expires": 1513993487000
       },
+      "cover": {
+        "uri": "http://localhost:3003/images/partners/covers/cover-1.jpg"
+      },
       "logo": {
-        "uri": "http://localhost:3003/images/partners/logos/1-promo-serva.jpg",
+        "uri": "http://localhost:3003/images/partners/logos/logo-1.png",
         "name": "promo-serva.jpg"
       },
       "last_post": {
