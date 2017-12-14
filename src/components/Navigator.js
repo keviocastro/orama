@@ -5,15 +5,24 @@ import { connect } from 'react-redux';
 import SegmentScreen from './../screens/SegmentScreen';
 import PartnerScreen from './../screens/PartnerScreen';
 import PartnerFeedScreen from './../screens/PartnerFeedScreen';
+import ExternalChatScreen from './../screens/ExternalChatScreen';
 
-export const StackNav = StackNavigator({
+export const ModeCardStack = StackNavigator({
   Home: { screen: SegmentScreen },
   Partner: { screen: PartnerScreen },
   PartnerFeed: { screen: PartnerFeedScreen },
 });
 
-const Navigator = props => (
-  <StackNav
+export const Navigator = StackNavigator(
+  {
+    Home: { screen: ModeCardStack, navigationOptions: { header: null } },
+    ExternalChat: { screen: ExternalChatScreen },
+  },
+  { mode: 'modal' },
+);
+
+const AppWithNavigationState = props => (
+  <Navigator
     navigation={addNavigationHelpers({
       dispatch: props.dispatch,
       state: props.nav,
@@ -21,7 +30,7 @@ const Navigator = props => (
   />
 );
 
-Navigator.propTypes = {
+AppWithNavigationState.propTypes = {
   dispatch: PropTypes.func,
   nav: PropTypes.object,
 };
@@ -30,4 +39,4 @@ const mapStateToProps = state => ({
   nav: state.nav,
 });
 
-export default connect(mapStateToProps)(Navigator);
+export default connect(mapStateToProps)(AppWithNavigationState);

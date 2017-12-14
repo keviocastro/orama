@@ -169,9 +169,7 @@
       "fb_user_name": "origamis.app.9",
       "name": "Bear Head",
       "subtitle": "Choperia artesanal",
-      "segmentIds": [
-        2
-      ],
+      "segmentIds": [2],
       "latest_posts": [
         {
           "image": {
@@ -187,7 +185,8 @@
         "distance": 0.6
       },
       "auth": {
-        "accessToken": "EAAF1zJ3haZCkBANTDVVDGr1QssfmKLTtOHUbvx5s69v8kCixpjILrDZCFNYE12WlSjPl9HrwyIrAbrxonaXUsLlaQCoO5HDQj1KV9kZA0WWbjZCiUPqw3uNgMHW39ZCWZCAXebp83JOV3xM91ZBfNDaN05EamUw3XtdZCNiD67ZBdgtUZAn0urILRC3bUeXooZARwJRlif5H31EzdZA87sE7tIlZCvFWa7Rql5MTnyDtQu6sThUexyIV7SXHF",
+        "accessToken":
+          "EAAF1zJ3haZCkBANTDVVDGr1QssfmKLTtOHUbvx5s69v8kCixpjILrDZCFNYE12WlSjPl9HrwyIrAbrxonaXUsLlaQCoO5HDQj1KV9kZA0WWbjZCiUPqw3uNgMHW39ZCWZCAXebp83JOV3xM91ZBfNDaN05EamUw3XtdZCNiD67ZBdgtUZAn0urILRC3bUeXooZARwJRlif5H31EzdZA87sE7tIlZCvFWa7Rql5MTnyDtQu6sThUexyIV7SXHF",
         "expires": 1513993487000
       },
       "logo": {
@@ -196,8 +195,10 @@
       },
       "last_post": {
         "type": "photo",
-        "picture": "https://scontent.xx.fbcdn.net/v/t1.0-0/s130x130/23376597_131677224263709_7493303080538028261_n.jpg?oh=2843ed05565f435e2709ae745ad6274a&oe=5AD0B220",
-        "full_picture": "https://scontent.xx.fbcdn.net/v/t1.0-9/23376597_131677224263709_7493303080538028261_n.jpg?oh=06eb784a19e08d5842bcdae370413c21&oe=5A9339BD",
+        "picture":
+          "https://scontent.xx.fbcdn.net/v/t1.0-0/s130x130/23376597_131677224263709_7493303080538028261_n.jpg?oh=2843ed05565f435e2709ae745ad6274a&oe=5AD0B220",
+        "full_picture":
+          "https://scontent.xx.fbcdn.net/v/t1.0-9/23376597_131677224263709_7493303080538028261_n.jpg?oh=06eb784a19e08d5842bcdae370413c21&oe=5A9339BD",
         "message": "Super promo de cervejas hoje",
         "id": "111582516273180_131678314263600",
         "attachments": {
@@ -207,16 +208,35 @@
               "media": {
                 "image": {
                   "height": 300,
-                  "src": "https://scontent.xx.fbcdn.net/v/t1.0-9/23376597_131677224263709_7493303080538028261_n.jpg?oh=06eb784a19e08d5842bcdae370413c21&oe=5A9339BD",
+                  "src":
+                    "https://scontent.xx.fbcdn.net/v/t1.0-9/23376597_131677224263709_7493303080538028261_n.jpg?oh=06eb784a19e08d5842bcdae370413c21&oe=5A9339BD",
                   "width": 570
                 }
               },
-              "url": "https://www.facebook.com/photo.php?fbid=131677224263709&set=p.131677224263709&type=3"
+              "url":
+                "https://www.facebook.com/photo.php?fbid=131677224263709&set=p.131677224263709&type=3"
             }
           ]
         },
         "privider": "facebook"
-      }
+      },
+      "contacts": [
+        {
+          "type": "facebook-messenger",
+          "identifier": "origamis.app.9",
+          "name": "Facebook"
+        },
+        {
+          "type": "whatsapp",
+          "identifier": "+5562985701820",
+          "name": "Whatsapp"
+        },
+        {
+          "type": "phone",
+          "identifier": "+5562985701820",
+          "name": "Telefone"
+        }
+      ]
     },
     {
       "fb_id": "1i81391399sdf8",
@@ -229,10 +249,7 @@
       "id": 2
     },
     {
-      "segmentIds": [
-        23,
-        22
-      ],
+      "segmentIds": [23, 22],
       "fb_id": "123123",
       "name": "12313",
       "subtitle": "12312312",

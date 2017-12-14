@@ -1,4 +1,9 @@
-import { PARTNERS_RECEIVED, PARTNERS_REQUEST, PARTNERS_REQUEST_ERROR } from './../actions/partners';
+import {
+  PARTNERS_RECEIVED,
+  PARTNERS_REQUEST,
+  PARTNERS_REQUEST_ERROR,
+  PARTNERS_SELECT,
+} from './../actions/partners';
 
 const initialState = {
   bySegment: {
@@ -6,7 +11,9 @@ const initialState = {
     requestError: '',
     data: [],
   },
-  currentSegmentId: -1,
+  currentSegmentId: null,
+  partnerSelectedForChat: {},
+  chatType: null,
 };
 
 const setPartnersBySegment = (state, action) => {
@@ -38,6 +45,11 @@ const reducer = (state = initialState, action) => {
       return {
         ...state,
         requestError: action.error,
+      };
+    case PARTNERS_SELECT:
+      return {
+        ...state,
+        partnerSelected: action.partner,
       };
     default:
       return state;

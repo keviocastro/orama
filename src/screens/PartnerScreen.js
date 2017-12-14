@@ -1,19 +1,9 @@
 import React from 'react';
 import PropTypes from 'prop-types';
 import { connect } from 'react-redux';
-import {
-  View,
-  Image,
-  FlatList,
-  ActivityIndicator,
-  TouchableOpacity,
-  Alert,
-  Linking,
-  Modal,
-} from 'react-native';
-import { Card, CardItem, Thumbnail, Text, Button, Left, Body, Right, Icon } from 'native-base';
-// import Icon from 'react-native-vector-icons/MaterialCommunityIcons';
-import { getPartners } from '../actions/partners';
+import { View, Image, FlatList, ActivityIndicator, TouchableOpacity, Alert } from 'react-native';
+import { Card, CardItem, Thumbnail, Text, Button, Left, Body, Icon } from 'native-base';
+import { getPartners, selectPartner } from '../actions/partners';
 
 const styles = {
   image: {
@@ -55,28 +45,13 @@ class PartnerScreen extends React.PureComponent {
     }
   }
 
-  onPressPost(item) {
-    this.props.navigation.navigate('PartnerFeed', { partner: item });
+  onPressPost(partner) {
+    this.props.navigation.navigate('PartnerFeed', { partner });
   }
 
-  openAppLink(link) {
-    Linking.canOpenURL(link)
-      .then((supported) => {
-        if (supported) {
-          Linking.openURL(link);
-        } else {
-          console.log('Device does not have support to open link '.link);
-        }
-      })
-      .catch(err => console.log('onPressMessengerIcon: ', err));
-  }
-
-  onPressMessengerIcon(item) {
-    this.openAppLink(`https://www.messenger.com/t/${item.fb_user_name}`);
-  }
-
-  onPressWhatsAppIcon(item) {
-    this.openAppLink(`https://www.messenger.com/t/${item.phone_number}`);
+  onPressLogo(partner) {
+    this.props.dispatch(selectPartner(partner));
+    this.props.navigation.navigate('ExternalChat', { partner });
   }
 
   get segment() {
@@ -102,16 +77,6 @@ class PartnerScreen extends React.PureComponent {
               <Text>2,1 km</Text>
             </Button>
           </Left>
-          <Right>
-            <Button transparent onPress={this.onPressMessengerIcon(item)}>
-              <Icon active name="facebook-messenger" style={styles.chatIcon} />
-            </Button>
-          </Right>
-          <Right style={styles.containerIcons} onPress={this.onPressWhatsAppIcon(item)}>
-            <Button transparent>
-              <Icon active name="whatsapp" style={styles.chatIcon} />
-            </Button>
-          </Right>
         </CardItem>
       </View>
     );
@@ -119,7 +84,7 @@ class PartnerScreen extends React.PureComponent {
 
   renderItem = ({ item }) => (
     <Card>
-      <TouchableOpacity onPress={() => this.onPressPost(item)}>
+      <TouchableOpacity onPress={() => this.onPressLogo(item)}>
         <CardItem>
           <Left>
             <Thumbnail source={{ uri: item.logo.uri }} />
@@ -193,11 +158,13 @@ const mapStateToProps = (state) => {
       isFetching: state.partners.bySegment[segmentId].isFetching,
       partners: state.partners.bySegment[segmentId].data,
       requestError: state.partners.bySegment[segmentId].requestError,
+      openChatModal: state.partners.openChatModal,
     }
     : {
       isFetching: true,
       partners: [],
       requestError: '',
+      openChatModal: false,
     };
 
   return props;

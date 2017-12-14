@@ -4,6 +4,7 @@
 
 #mock-server
 mock-server/plublic/images
+.env
 
 # Xcode
 #

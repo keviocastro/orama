@@ -1,8 +1,9 @@
-import { StackNav } from './../components/Navigator';
+import { NavigationActions } from 'react-navigation';
+import { Navigator } from './../components/Navigator';
 
-const initialState = StackNav.router.getStateForAction(StackNav.router.getActionForPathAndParams('Home'));
+const initialState = Navigator.router.getStateForAction(NavigationActions.init());
 
 export default (state = initialState, action) => {
-  const nextState = StackNav.router.getStateForAction(action, state);
+  const nextState = Navigator.router.getStateForAction(action, state);
   return nextState || state;
 };

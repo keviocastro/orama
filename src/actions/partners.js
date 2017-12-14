@@ -24,3 +24,9 @@ export const getPartners = segmentId => dispatch =>
     field: 'segmentIds',
     value: segmentId,
   });
+
+export const PARTNERS_SELECT = 'PARTNERS_SELECT';
+export const selectPartner = partner => ({
+  type: PARTNERS_SELECT,
+  partner,
+});
