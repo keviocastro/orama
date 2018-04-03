@@ -1,7 +1,7 @@
 import React from 'react';
 import PropTypes from 'prop-types';
 import { connect } from 'react-redux';
-import { View, Image, FlatList, ActivityIndicator, TouchableOpacity, Alert } from 'react-native';
+import { View, Image, FlatList, ActivityIndicator, TouchableOpacity, Alert, Linking } from 'react-native';
 import { Card, CardItem, Thumbnail, Text, Button, Left, Body, Icon } from 'native-base';
 import { getPartners, selectPartner } from '../actions/partners';
 
@@ -50,8 +50,14 @@ class PartnerScreen extends React.PureComponent {
   }
 
   onPressLogo(partner) {
-    this.props.dispatch(selectPartner(partner));
-    this.props.navigation.navigate('ExternalChat', { partner });
+    const url = `https://www.messenger.com/t/${this.partner.fb_user_name}`;
+    Linking.canOpenURL(url).then((suported) => {
+      if (suported) {
+        Linking.openURL(url);
+      } else {
+        console.log(`db.jsonDon 't know how to open URI: ${url}`);
+      }
+    });
   }
 
   get segment() {
