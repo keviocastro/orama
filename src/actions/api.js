@@ -1,4 +1,4 @@
-import Config from 'react-native-config';
+import { API_URL } from './../config';
 
 const search = (resource, dispatch, receiveAction, initRequestAction, errorAction, filter = []) => {
   dispatch(initRequestAction(filter));
@@ -7,8 +7,8 @@ const search = (resource, dispatch, receiveAction, initRequestAction, errorActio
   if (Object.keys(filter).length > 0) {
     queryFilter = `?${filter.field}_like=${filter.value}`;
   }
-  const url = `${Config.API_URL}/${resource}${queryFilter}`;
-
+  const url = `${API_URL}/${resource}${queryFilter}`;
+  
   return fetch(url)
     .then((response) => {
       if (!response.ok) dispatch(errorAction(`Request error with status ${response.status}`));
@@ -18,8 +18,11 @@ const search = (resource, dispatch, receiveAction, initRequestAction, errorActio
       dispatch(receiveAction(result, filter));
     })
     .catch((err) => {
-      // TODO: register error
-      console.log('Error api search: ', err);
+      if(__DEV__){
+        throw err;          
+      }else{
+        //@todo tratar erro e exibir mensagem pro usuáio
+      }
     });
 };
 

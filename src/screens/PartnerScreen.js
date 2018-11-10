@@ -1,9 +1,10 @@
-import React from 'react';
-import PropTypes from 'prop-types';
-import { connect } from 'react-redux';
-import { View, Image, FlatList, ActivityIndicator, TouchableOpacity, Alert, Linking } from 'react-native';
-import { Card, CardItem, Thumbnail, Text, Button, Left, Body, Icon } from 'native-base';
-import { getPartners, selectPartner } from '../actions/partners';
+import React from 'react'
+import PropTypes from 'prop-types'
+import { connect } from 'react-redux'
+import { View, Image, FlatList, ActivityIndicator, TouchableOpacity, Alert, Linking } from 'react-native'
+import { Card, CardItem, Thumbnail, Text, Button, Left, Body, Icon } from 'native-base'
+import { getPartners, selectForChat } from '../actions/partners'
+import { CHAT } from './../config'
 
 const styles = {
   image: {
@@ -24,7 +25,7 @@ const styles = {
   chatIcon: {
     fontSize: 37,
   },
-};
+}
 
 // TODO: refatorar para componentes de container e visuais
 // TODO: despachar getPartners somente se necessário
@@ -33,41 +34,47 @@ const styles = {
 class PartnerScreen extends React.PureComponent {
   static navigationOptions = ({ navigation }) => ({
     title: navigation.state.params.segment.name,
-  });
+  })
 
   componentWillMount() {
-    this.props.dispatch(getPartners(this.segment.id));
+    this.props.dispatch(getPartners(this.segment.id))
   }
 
   componentWillReceiveProps(nextProps) {
     if (nextProps.requestError) {
-      Alert.alert('Request Error', nextProps.requestError);
+      Alert.alert('Request Error', nextProps.requestError)
     }
   }
 
   onPressPost(partner) {
-    this.props.navigation.navigate('PartnerFeed', { partner });
+    this.props.navigation.navigate('PartnerFeed', { partner })
   }
 
   onPressLogo(partner) {
-    const url = `https://www.messenger.com/t/${this.partner.fb_user_name}`;
-    Linking.canOpenURL(url).then((suported) => {
-      if (suported) {
-        Linking.openURL(url);
-      } else {
-        console.log(`db.jsonDon 't know how to open URI: ${url}`);
-      }
-    });
+    this.props.dispatch(selectForChat(partner))
+    if(CHAT == 'FB'){
+      const url = `https://www.messenger.com/t/${this.partner.fb_user_name}`
+      Linking.canOpenURL(url).then((suported) => {
+        if (suported) {
+          Linking.openURL(url)
+          this.props.navigation.navigate('ExternalChat', { partner })
+        } else {
+          console.log(`db.jsonDon 't know how to open URI: ${url}`)
+        }
+      })
+    }else{
+      this.props.navigation.navigate('Chat', { partner })
+    }
   }
 
   get segment() {
-    return this.props.navigation.state.params.segment;
+    return this.props.navigation.state.params.segment
   }
 
-  keyExtrator = item => item.id;
+  keyExtrator = item => item.id.toString()
 
   renderCardItemBody = (item) => {
-    if (!Object.prototype.hasOwnProperty.call(item, 'latest_posts')) return null;
+    if (!Object.prototype.hasOwnProperty.call(item, 'latest_posts')) return null
 
     return (
       <View>
@@ -85,8 +92,8 @@ class PartnerScreen extends React.PureComponent {
           </Left>
         </CardItem>
       </View>
-    );
-  };
+    )
+  }
 
   renderItem = ({ item }) => (
     <Card>
@@ -103,17 +110,17 @@ class PartnerScreen extends React.PureComponent {
       </TouchableOpacity>
       {this.renderCardItemBody(item)}
     </Card>
-  );
+  )
 
   renderFooter = () => {
-    if (!this.props.isFetching) return null;
+    if (!this.props.isFetching) return null
 
     return (
       <View>
         <ActivityIndicator animating size="large" />
       </View>
-    );
-  };
+    )
+  }
 
   renderEmptyState = () => (
     <View style={styles.emptyState.container}>
@@ -124,11 +131,11 @@ class PartnerScreen extends React.PureComponent {
         <Text>Esta categoria ainda está sem parceiros. Estamos correndo para inclui-los.</Text>
       </View>
     </View>
-  );
+  )
 
   render() {
     if (this.props.partners.length <= 0 && this.props.isFetching === false) {
-      return this.renderEmptyState();
+      return this.renderEmptyState()
     }
 
     return (
@@ -138,7 +145,7 @@ class PartnerScreen extends React.PureComponent {
         renderItem={this.renderItem}
         ListFooterComponent={this.renderFooter}
       />
-    );
+    )
   }
 }
 
@@ -148,16 +155,16 @@ PartnerScreen.propTypes = {
   partners: PropTypes.array,
   isFetching: PropTypes.bool,
   requestError: PropTypes.string,
-};
+}
 
 const mapStateToProps = (state) => {
-  let props = {};
-  const segmentId = state.partners.currentSegmentId;
+  let props = {}
+  const segmentId = state.partners.currentSegmentId
 
   const hasPartnersBySegment = Object.prototype.hasOwnProperty.call(
     state.partners.bySegment,
     segmentId,
-  );
+  )
 
   props = hasPartnersBySegment
     ? {
@@ -171,9 +178,9 @@ const mapStateToProps = (state) => {
       partners: [],
       requestError: '',
       openChatModal: false,
-    };
+    }
 
-  return props;
-};
+  return props
+}
 
-export default connect(mapStateToProps)(PartnerScreen);
+export default connect(mapStateToProps)(PartnerScreen)

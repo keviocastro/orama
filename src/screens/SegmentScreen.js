@@ -9,18 +9,46 @@ import {
   Image,
   TouchableOpacity,
   Alert,
+  StyleSheet,
+  Dimensions,
+  StatusBar
 } from 'react-native';
 import { Card, CardItem } from 'native-base';
+import Carousel, { ParallaxImage } from 'react-native-snap-carousel';
 import { getSegments } from './../actions/segments';
+import { getHighlights } from './../actions/highlights';
 
-// TODO: melhorar Touchable
+const horizontalMargin = 20;
+const slideWidth = 280;
+
+const sliderWidth = Dimensions.get('window').width;
+const itemWidth = slideWidth + horizontalMargin * 2;
+const itemHeight = 200;
+
+const styles = StyleSheet.create({
+  slideContainer: {
+    paddingTop: StatusBar.currentHeight + 5,
+    paddingBottom: 5,
+  },
+  slide: {
+    width: itemWidth,
+    height: itemHeight,
+    paddingHorizontal: horizontalMargin
+  },
+  slideInnerContainer: {
+      width: slideWidth,
+      flex: 1
+  }
+})
+
 class SegmentScreen extends React.PureComponent {
   static navigationOptions = {
-    title: 'Segmentos',
+    header: null
   };
 
   componentWillMount() {
     this.props.dispatch(getSegments());
+    this.props.dispatch(getHighlights());
   }
 
   componentWillReceiveProps(nextProps) {
@@ -33,7 +61,7 @@ class SegmentScreen extends React.PureComponent {
     this.props.navigation.navigate('Partner', { segment: item });
   };
 
-  keyExtractor = item => item.id;
+  keyExtractor = item => item.id.toString();
 
   renderItem = ({ item }) => (
     <TouchableOpacity onPress={() => this.onPressItem(item)}>
@@ -50,20 +78,57 @@ class SegmentScreen extends React.PureComponent {
     </TouchableOpacity>
   );
 
-  renderFooter = (isFatching) => {
+  renderFooter = (isFatching) => {const horizontalMargin = 20;
+    const slideWidth = 280;
+    
+    const sliderWidth = Dimensions.get('window').width;
+    const itemWidth = slideWidth + horizontalMargin * 2;
+    const itemHeight = 200;
+    
     if (!isFatching) return null;
 
     return <ActivityIndicator animating size="large" />;
   };
 
+  renderItemCarousel({item, index}, parallaxProps) {
+    return (
+      <View style={styles.slide}>
+          <ParallaxImage
+              source={{ uri: item.logo.uri }}
+              containerStyle={styles.slideInnerContainer}
+              style={styles.image}
+              parallaxFactor={0.4}
+              {...parallaxProps}
+          />
+          <Text style={styles.title} numberOfLines={2}>
+              { item.subtitle }
+          </Text>
+      </View>
+    );
+  }
+
   render() {
     return (
-      <FlatList
-        data={this.props.segments}
-        keyExtractor={this.keyExtractor}
-        renderItem={this.renderItem}
-        ListFooterComponent={() => this.renderFooter(this.props.isFetching)}
-      />
+      <View>
+        <View style={styles.slideContainer}>
+          <Carousel
+            ref={(c) => { this._carousel = c; }}
+            data={this.props.highlights}
+            renderItem={this.renderItemCarousel}
+            hasParallaxImages={true}
+            sliderWidth={sliderWidth}
+            itemWidth={itemWidth}
+            autoplay={true}
+            loop={true}
+          />
+        </View>
+        <FlatList
+          data={this.props.segments}
+          keyExtractor={(this.keyExtractor)}
+          renderItem={this.renderItem}
+          ListFooterComponent={() => this.renderFooter(this.props.isFetching)}
+        />
+      </View>
     );
   }
 }
@@ -74,12 +139,14 @@ SegmentScreen.propTypes = {
   segments: PropTypes.array,
   isFetching: PropTypes.bool,
   requestError: PropTypes.string,
+  highlights: PropTypes.array
 };
 
 const mapStateToProps = state => ({
   isFetching: state.segments.isFetching,
   segments: state.segments.data,
   requestError: state.segments.requestError,
+  highlights: state.highlights.partners
 });
 
 export default connect(mapStateToProps)(SegmentScreen);

@@ -3,7 +3,8 @@ import {
   PARTNERS_REQUEST,
   PARTNERS_REQUEST_ERROR,
   PARTNERS_SELECT,
-} from './../actions/partners';
+  SELECTED_FOR_CHAT
+} from './../actions/partners'
 
 const initialState = {
   bySegment: {
@@ -14,19 +15,19 @@ const initialState = {
   currentSegmentId: null,
   partnerSelectedForChat: {},
   chatType: null,
-};
+}
 
 const setPartnersBySegment = (state, action) => {
-  const bySegment = { ...state.bySegment };
+  const bySegment = { ...state.bySegment }
 
   bySegment[action.segmentId] = {
     isFetching: false,
     requestError: '',
     data: action.partners,
-  };
+  }
 
-  return bySegment;
-};
+  return bySegment
+}
 
 const reducer = (state = initialState, action) => {
   switch (action.type) {
@@ -35,25 +36,30 @@ const reducer = (state = initialState, action) => {
         ...state,
         bySegment: setPartnersBySegment(state, action),
         currentSegmentId: action.segmentId,
-      };
+      }
     case PARTNERS_REQUEST:
       return {
         ...state,
         currentSegmentId: action.segmentId,
-      };
+      }
     case PARTNERS_REQUEST_ERROR:
       return {
         ...state,
         requestError: action.error,
-      };
+      }
     case PARTNERS_SELECT:
       return {
         ...state,
         partnerSelected: action.partner,
-      };
+      }
+    case SELECTED_FOR_CHAT:
+      return {
+        ...state,
+        partnerSelectedForChat: action.partner
+      }
     default:
-      return state;
+      return state
   }
-};
+}
 
-export default reducer;
+export default reducer
