@@ -28,7 +28,7 @@ const AppWithNavigationState = props => (
     navigation={{
       dispatch: props.dispatch,
       state: props.nav,
-      addListener: () => {}
+      addListener: () => { }
     }}
   />
 );
