@@ -8,7 +8,7 @@ const search = (resource, dispatch, receiveAction, initRequestAction, errorActio
     queryFilter = `?${filter.field}_like=${filter.value}`;
   }
   const url = `${API_URL}/${resource}${queryFilter}`;
-  
+
   return fetch(url)
     .then((response) => {
       if (!response.ok) dispatch(errorAction(`Request error with status ${response.status}`));
@@ -18,9 +18,9 @@ const search = (resource, dispatch, receiveAction, initRequestAction, errorActio
       dispatch(receiveAction(result, filter));
     })
     .catch((err) => {
-      if(__DEV__){
-        throw err;          
-      }else{
+      if (__DEV__) {
+        throw err;
+      } else {
         //@todo tratar erro e exibir mensagem pro usuáio
       }
     });

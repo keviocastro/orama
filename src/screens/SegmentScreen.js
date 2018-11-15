@@ -39,7 +39,7 @@ const styles = StyleSheet.create({
     paddingHorizontal: horizontalMargin,
     borderRadius: 50,
   },
-  slideSubtitle: { 
+  slideSubtitle: {
     backgroundColor: '#1a1919',
     height: 70,
     borderBottomLeftRadius: 5,
@@ -56,12 +56,12 @@ const styles = StyleSheet.create({
     marginLeft: 10,
     fontSize: 15,
     color: '#fff',
-  },  
+  },
   slideInnerContainer: {
-      width: slideWidth,
-      flex: 1,
-      borderTopLeftRadius: 5,
-      borderTopRightRadius: 5,
+    width: slideWidth,
+    flex: 1,
+    borderTopLeftRadius: 5,
+    borderTopRightRadius: 5,
   }
 })
 
@@ -102,36 +102,43 @@ class SegmentScreen extends React.PureComponent {
     </TouchableOpacity>
   )
 
-  renderFooter = (isFatching) => {const horizontalMargin = 20
+  renderFooter = (isFatching) => {
+    const horizontalMargin = 20
     const slideWidth = 280
-    
+
     const sliderWidth = Dimensions.get('window').width
     const itemWidth = slideWidth + horizontalMargin * 2
     const itemHeight = 200
-    
+
     if (!isFatching) return null
 
     return <ActivityIndicator animating size="large" />
   }
-  
+
   onPressCarousel = (partner) => {
     this.props.dispatch(selectForChat(partner))
     this.props.navigation.navigate('Chat', { partner })
   }
 
-  renderItemCarousel = ({item, index}, parallaxProps) => (
-      <TouchableOpacity  onPress={() => console.log(this.onPressCarousel(item)) }>
+  renderItemCarousel = ({ item, index }, parallaxProps) => {
+
+    const img = (item.highligh_image !== undefined && item.highligh_image.length !== 0)
+      ? item.highligh_image
+      : item.logo.uri
+
+    return (
+      <TouchableOpacity onPress={() => console.log(this.onPressCarousel(item))}>
         <View style={styles.slide}>
           <ParallaxImage
-              source={{ uri: item.logo.uri }}
-              containerStyle={styles.slideInnerContainer}
-              style={styles.image}
-              parallaxFactor={0.4}
-              {...parallaxProps}
+            source={{ uri: img }}
+            containerStyle={styles.slideInnerContainer}
+            style={styles.image}
+            parallaxFactor={0.4}
+            {...parallaxProps}
           />
           <View style={styles.slideSubtitle}>
             <Text style={styles.slideSubtitleText} numberOfLines={2}>
-                { item.subtitle }
+              {item.subtitle}
             </Text>
             <Text style={styles.slideSubtitleText2}>
               {item.highlight_message}
@@ -139,7 +146,8 @@ class SegmentScreen extends React.PureComponent {
           </View>
         </View>
       </TouchableOpacity>
-  )
+    )
+  }
 
   render() {
     return (
