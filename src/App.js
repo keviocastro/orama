@@ -34,27 +34,16 @@ export default class App extends Component {
       },
       senderID: SENDER_ID
     })
-    AppState.addEventListener('change', this.handleAppStateChange);
+    // AppState.addEventListener('change', this.handleAppStateChange);
   }
 
   componentWillUnmount() {
-    AppState.removeEventListener('change', this.handleAppStateChange);
+    // AppState.removeEventListener('change', this.handleAppStateChange);
   }
 
   handleAppStateChange(appState) {
     if (appState === 'background') {
-      if (DEBUG) {
-        let date = new Date(Date.now() + 1000);
 
-        if (Platform.OS === 'ios') {
-          date = date.toISOString();
-        }
-
-        PushNotification.localNotificationSchedule({
-          message: "Está saindo o pão quentinho agora na Padaria Della",
-          date,
-        });
-      }
     }
   }
 

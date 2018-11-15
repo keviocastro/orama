@@ -8,21 +8,21 @@ class ChatSreen extends React.Component {
     static navigationOptions = ({ navigation }) => ({
         title: navigation.state.params.partner.name
     });
-    
-    componentWillMount(){
+
+    componentWillMount() {
         let recentMessage = false
         let timeLimiteWelcome = new Date()
         timeLimiteWelcome.setHours(timeLimiteWelcome.getHours() - 4)
 
         this.props.messages.forEach(msg => {
-            if(msg.createdAt.getTime() > timeLimiteWelcome.getTime())
+            if (msg.createdAt.getTime() > timeLimiteWelcome.getTime())
                 recentMessage = true
-        }) 
+        })
 
-        if(!recentMessage){
-            if(this.props.partner.welcome_messages == undefined){
+        if (!recentMessage) {
+            if (this.props.partner.welcome_messages == undefined) {
                 // @todo obter de uma config do servidor
-                this.props.partner.welcome_messages = [            
+                this.props.partner.welcome_messages = [
                     {
                         _id: Math.random() * 1000,
                         text: "O que você está precisando hoje?",
@@ -31,7 +31,17 @@ class ChatSreen extends React.Component {
                             _id: this.props.partner.id,
                             name: this.props.partner.name,
                             avatar: this.props.partner.logo.uri
-                        } 
+                        }
+                    },
+                    {
+                        _id: Math.random() * 1000,
+                        text: "É muito bom te ver por aqui",
+                        createdAt: new Date(),
+                        user: {
+                            _id: this.props.partner.id,
+                            name: this.props.partner.name,
+                            avatar: this.props.partner.logo.uri
+                        }
                     },
                     {
                         _id: Math.random() * 1000,
@@ -41,11 +51,11 @@ class ChatSreen extends React.Component {
                             _id: this.props.partner.id,
                             name: this.props.partner.name,
                             avatar: this.props.partner.logo.uri
-                        } 
+                        }
                     }
                 ]
                 this.props.dispatch(addMessages(this.props.partner.welcome_messages, this.props.partner.id))
-            }else{
+            } else {
                 let messages = this.props.partner.welcome_messages.map((msg) => {
                     return {
                         _id: Math.random() * 1000,
@@ -56,31 +66,31 @@ class ChatSreen extends React.Component {
                             _id: this.props.partner.id,
                             name: this.props.partner.name,
                             avatar: this.props.partner.logo.uri
-                        } 
+                        }
                     }
                 }).reverse()
                 this.props.dispatch(addMessages(messages, this.props.partner.id))
             }
         }
     }
-    
-    onSend(newMessages = []){
+
+    onSend(newMessages = []) {
         this.props.dispatch(addMessages(newMessages, this.props.partner.id))
     }
-    
+
     render() {
         return (
             <GiftedChat
-            messages={this.props.messages}
-            onSend={messages => this.onSend(messages)}
-            user={{
-                _id: 0,
-            }}
+                messages={this.props.messages}
+                onSend={messages => this.onSend(messages)}
+                user={{
+                    _id: 0,
+                }}
             />
         )
     }
 }
-    
+
 ChatSreen.propTypes = {
     partner: PropTypes.object,
     navigation: PropTypes.object,
@@ -88,7 +98,7 @@ ChatSreen.propTypes = {
 
 const mapStateToProps = state => {
     let messages = []
-    if(state.chat.messages.hasOwnProperty(state.partners.partnerSelectedForChat.id)){
+    if (state.chat.messages.hasOwnProperty(state.partners.partnerSelectedForChat.id)) {
         messages = state.chat.messages[state.partners.partnerSelectedForChat.id]
     }
     return ({
