@@ -18,57 +18,69 @@ class ChatSreen extends React.Component {
             if (msg.createdAt.getTime() > timeLimiteWelcome.getTime())
                 recentMessage = true
         })
+        let defaultMessages = [
+            {
+                _id: Math.random() * 1000,
+                text: "Olá",
+                createdAt: new Date(),
+                user: {
+                    _id: this.props.partner.id,
+                    name: this.props.partner.name,
+                    avatar: this.props.partner.logo.uri
+                }
+            },
+            {
+                _id: Math.random() * 1000,
+                text: "O que podemos fazer por você hoje?",
+                createdAt: new Date(),
+                user: {
+                    _id: this.props.partner.id,
+                    name: this.props.partner.name,
+                    avatar: this.props.partner.logo.uri
+                }
+            }
+        ].reverse()
 
         if (!recentMessage) {
             if (this.props.partner.welcome_messages == undefined) {
-                // @todo obter de uma config do servidor
-                this.props.partner.welcome_messages = [
-                    {
-                        _id: Math.random() * 1000,
-                        text: "O que você está precisando hoje?",
-                        createdAt: new Date(),
-                        user: {
-                            _id: this.props.partner.id,
-                            name: this.props.partner.name,
-                            avatar: this.props.partner.logo.uri
-                        }
-                    },
-                    {
-                        _id: Math.random() * 1000,
-                        text: "É muito bom te ver por aqui",
-                        createdAt: new Date(),
-                        user: {
-                            _id: this.props.partner.id,
-                            name: this.props.partner.name,
-                            avatar: this.props.partner.logo.uri
-                        }
-                    },
-                    {
-                        _id: Math.random() * 1000,
-                        text: "Olá",
-                        createdAt: new Date(),
-                        user: {
-                            _id: this.props.partner.id,
-                            name: this.props.partner.name,
-                            avatar: this.props.partner.logo.uri
-                        }
-                    }
-                ]
-                this.props.dispatch(addMessages(this.props.partner.welcome_messages, this.props.partner.id))
+                this.props.dispatch(addMessages(defaultMessages, this.props.partner.id))
             } else {
-                let messages = this.props.partner.welcome_messages.map((msg) => {
-                    return {
-                        _id: Math.random() * 1000,
-                        text: msg,
-                        welcome: true,
-                        createdAt: new Date(),
-                        user: {
-                            _id: this.props.partner.id,
-                            name: this.props.partner.name,
-                            avatar: this.props.partner.logo.uri
+                messages = defaultMessages
+
+                if (typeof this.props.partner.welcome_messages === 'string') {
+                    messages = this.props.partner.welcome_messages.split(/\r?\n/)
+                    messages = messages.map((msg) => {
+                        return {
+                            _id: Math.random() * 1000,
+                            text: msg,
+                            welcome: true,
+                            createdAt: new Date(),
+                            user: {
+                                _id: this.props.partner.id,
+                                name: this.props.partner.name,
+                                avatar: this.props.partner.logo.uri
+                            }
                         }
-                    }
-                }).reverse()
+                    })
+                    messages = messages.reverse()
+                }
+
+                if (Array.isArray(this.props.partner.welcome_messages)) {
+                    messages = this.props.partner.welcome_messages.map((msg) => {
+                        return {
+                            _id: Math.random() * 1000,
+                            text: msg,
+                            welcome: true,
+                            createdAt: new Date(),
+                            user: {
+                                _id: this.props.partner.id,
+                                name: this.props.partner.name,
+                                avatar: this.props.partner.logo.uri
+                            }
+                        }
+                    }).reverse()
+                }
+
                 this.props.dispatch(addMessages(messages, this.props.partner.id))
             }
         }

@@ -1,4 +1,4 @@
-export const API_URL = "http://192.168.15.2:3000";
+export const API_URL = "http://192.168.15.2:3003";
 export const FB_APP_ACCESS_TOKEN = "410996659284985|7Xr3cNTZce1h1m2iJFEQQdBXpYg";
 export const CHAT = 'orama'
 export const DEBUG = false

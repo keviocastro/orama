@@ -105,7 +105,7 @@ class PartnerScreen extends React.PureComponent {
       sliderWidth={sliderWidth}
       itemWidth={itemWidth}
       autoplay={false}
-      loop={false}
+      loop={true}
     />
   )
 
