@@ -1,4 +1,4 @@
-import Config from 'react-native-config';
+import { ORAMA_URL } from '../config/api';
 
 const search = (resource, dispatch, receiveAction, initRequestAction, errorAction, filter = []) => {
   dispatch(initRequestAction(filter));
@@ -7,7 +7,7 @@ const search = (resource, dispatch, receiveAction, initRequestAction, errorActio
   if (Object.keys(filter).length > 0) {
     queryFilter = `?${filter.field}_like=${filter.value}`;
   }
-  const url = `${Config.API_URL}/${resource}${queryFilter}`;
+  const url = `${ORAMA_URL}/${resource}${queryFilter}`;
 
   return fetch(url)
     .then((response) => {

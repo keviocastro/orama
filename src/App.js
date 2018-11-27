@@ -11,7 +11,7 @@ import material from './theme/variables/material';
 
 const middleware = [thunkMiddleware];
 if (process.env.NODE_ENV === 'development') {
-  middleware.push(logger);
+  // middleware.push(logger);
 }
 
 const store = createStore(reducers, applyMiddleware(...middleware));

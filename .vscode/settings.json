@@ -2,5 +2,6 @@
   "prettier.eslintIntegration": true,
   "editor.formatOnSave": true,
   "editor.tabSize": 2,
-  "editor.fontSize": 14
+  "editor.fontSize": 14,
+  "git.ignoreLimitWarning": true
 }

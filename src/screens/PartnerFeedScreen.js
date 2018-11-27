@@ -42,14 +42,8 @@ export default class PartnerFeedScreen extends React.Component {
   }
 
   onClickItemCard = () => {
-    const url = `https://www.messenger.com/t/${this.partner.fb_user_name}`;
-    Linking.canOpenURL(url).then((suported) => {
-      if (suported) {
-        Linking.openURL(url);
-      } else {
-        console.log(`db.jsonDon 't know how to open URI: ${url}`);
-      }
-    });
+    console.log(this.partner);
+    this.props.navigation.navigate('Chat', { partner: this.partner });
   };
 
   get partner() {
@@ -107,11 +101,6 @@ export default class PartnerFeedScreen extends React.Component {
   renderCardItemByMeidaType = (media, key) => {
     let cardItem = null;
     switch (media.type) {
-      case 'video':
-      case 'video_autoplay':
-      case 'video_inline':
-        cardItem = this.renderCardItemVideo(media, key);
-        break;
       case 'photo':
         cardItem = this.renderCardItemPhoto(media, key);
         break;
@@ -122,6 +111,9 @@ export default class PartnerFeedScreen extends React.Component {
       case 'avatar':
       case 'profile_media':
       case 'link':
+      case 'video':
+      case 'video_autoplay':
+      case 'video_inline':
       default:
         cardItem = null;
         break;

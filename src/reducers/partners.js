@@ -11,9 +11,7 @@ const initialState = {
     requestError: '',
     data: [],
   },
-  currentSegmentId: null,
-  partnerSelectedForChat: {},
-  chatType: null,
+  currentSegmentId: null
 };
 
 const setPartnersBySegment = (state, action) => {

@@ -2,6 +2,8 @@
 #
 .DS_Store
 
+node_modules
+
 #mock-server
 mock-server/plublic/images
 .env

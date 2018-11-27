@@ -50,14 +50,7 @@ class PartnerScreen extends React.PureComponent {
   }
 
   onPressLogo(partner) {
-    const url = `https://www.messenger.com/t/${this.partner.fb_user_name}`;
-    Linking.canOpenURL(url).then((suported) => {
-      if (suported) {
-        Linking.openURL(url);
-      } else {
-        console.log(`db.jsonDon 't know how to open URI: ${url}`);
-      }
-    });
+    this.props.navigation.navigate('Chat', { partner });
   }
 
   get segment() {
@@ -76,14 +69,6 @@ class PartnerScreen extends React.PureComponent {
             <Image source={{ uri: item.latest_posts[0].image.uri }} style={styles.image} />
           </CardItem>
         </TouchableOpacity>
-        <CardItem>
-          <Left>
-            <Button transparent>
-              <Icon active name="map-marker-radius" />
-              <Text>2,1 km</Text>
-            </Button>
-          </Left>
-        </CardItem>
       </View>
     );
   };

@@ -1,4 +1,4 @@
-import Config from 'react-native-config';
+import { FB_APP_ACCESS_TOKEN } from '../config/api'
 
 /**
  * @todo Não está sendo utilizado o package react-native-fbsdk
@@ -6,7 +6,7 @@ import Config from 'react-native-config';
  */
 export default class PartnerFeedService {
   static getPartnerFeed(fbUserId, callback) {
-    const token = encodeURIComponent(Config.FB_APP_ACCESS_TOKEN);
+    const token = encodeURIComponent(FB_APP_ACCESS_TOKEN);
     const baseUrl = 'https://graph.facebook.com/v2.11/';
     const endPoint = `${fbUserId}/feed/`;
     const fields =
