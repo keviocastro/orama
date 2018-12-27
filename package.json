@@ -1,5 +1,5 @@
 {
-  "name": "orama2",
+  "name": "orama",
   "version": "0.0.1",
   "private": true,
   "scripts": {
@@ -18,6 +18,7 @@
     "react-native-parallax-header": "^1.0.6",
     "react-native-push-notification": "^3.1.2",
     "react-native-snap-carousel": "^3.7.5",
+    "react-native-splash-screen": "^3.1.1",
     "react-navigation": "2.2.0",
     "react-redux": "^5.1.0",
     "redux": "^4.0.1",

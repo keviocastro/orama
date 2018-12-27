@@ -83,7 +83,6 @@ class PartnerScreen extends React.PureComponent {
   keyExtrator = item => item.id.toString()
 
   renderCardItemBodyImage = (partner, imageUri) => {
-    console.log("imageUri: ", imageUri)
     return (
       <View>
         <TouchableOpacity onPress={() => this.onPressPost(partner)}>
@@ -118,20 +117,20 @@ class PartnerScreen extends React.PureComponent {
   }
 
   renderItem = ({ item }) => (
-    <Card>
-      <TouchableOpacity onPress={() => this.onPressLogo(item)}>
-        <CardItem>
-          <Left>
-            <Thumbnail source={{ uri: item.logo.uri }} />
-            <Body>
-              <Text>{item.name}</Text>
-              <Text note>{item.subtitle}</Text>
-            </Body>
-          </Left>
-        </CardItem>
-      </TouchableOpacity>
-      {this.renderCardItemBody(item)}
-    </Card>
+      <Card>
+        <TouchableOpacity onPress={() => this.onPressLogo(item)}>
+          <CardItem>
+            <Left>
+              <Thumbnail source={{ uri: item.logo }} />
+              <Body>
+                <Text>{item.name}</Text>
+                <Text note>{item.subtitle}</Text>
+              </Body>
+            </Left>
+          </CardItem>
+        </TouchableOpacity>
+        {this.renderCardItemBody(item)}
+      </Card>
   )
 
   renderFooter = () => {

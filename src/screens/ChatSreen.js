@@ -26,7 +26,7 @@ class ChatSreen extends React.Component {
                 user: {
                     _id: this.props.partner.id,
                     name: this.props.partner.name,
-                    avatar: this.props.partner.logo.uri
+                    avatar: this.props.partner.logo
                 }
             },
             {
@@ -36,7 +36,7 @@ class ChatSreen extends React.Component {
                 user: {
                     _id: this.props.partner.id,
                     name: this.props.partner.name,
-                    avatar: this.props.partner.logo.uri
+                    avatar: this.props.partner.logo
                 }
             }
         ].reverse()
@@ -58,7 +58,7 @@ class ChatSreen extends React.Component {
                             user: {
                                 _id: this.props.partner.id,
                                 name: this.props.partner.name,
-                                avatar: this.props.partner.logo.uri
+                                avatar: this.props.partner.logo
                             }
                         }
                     })
@@ -75,7 +75,7 @@ class ChatSreen extends React.Component {
                             user: {
                                 _id: this.props.partner.id,
                                 name: this.props.partner.name,
-                                avatar: this.props.partner.logo.uri
+                                avatar: this.props.partner.logo
                             }
                         }
                     }).reverse()

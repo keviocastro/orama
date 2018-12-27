@@ -15,6 +15,7 @@ import {
 } from 'react-native'
 import { Card, CardItem, Body, H1, H2, H3, Subtitle } from 'native-base'
 import Carousel, { ParallaxImage } from 'react-native-snap-carousel'
+import SplashScreen from 'react-native-splash-screen'
 import { getSegments } from './../actions/segments'
 import { getHighlights } from './../actions/highlights'
 import { selectForChat } from './../actions/partners'
@@ -75,6 +76,10 @@ class SegmentScreen extends React.PureComponent {
     this.props.dispatch(getHighlights())
   }
 
+  componentDidMount() {
+    SplashScreen.hide()
+  }
+
   componentWillReceiveProps(nextProps) {
     if (nextProps.requestError) {
       Alert.alert('Request Error', nextProps.requestError)
@@ -95,7 +100,7 @@ class SegmentScreen extends React.PureComponent {
             <Text>{item.name}</Text>
           </CardItem>
           <CardItem cardBody>
-            <Image source={{ uri: item.image.uri }} style={{ height: 100, width: null, flex: 1 }} />
+            <Image source={{ uri: item.image }} style={{ height: 100, width: null, flex: 1 }} />
           </CardItem>
         </Card>
       </View>
@@ -124,7 +129,7 @@ class SegmentScreen extends React.PureComponent {
 
     const img = (item.highligh_image !== undefined && item.highligh_image.length !== 0)
       ? item.highligh_image
-      : item.logo.uri
+      : item.logo
 
     return (
       <TouchableOpacity onPress={() => console.log(this.onPressCarousel(item))}>
