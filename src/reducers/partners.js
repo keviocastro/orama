@@ -55,7 +55,8 @@ const reducer = (state = initialState, action) => {
     case SELECTED_FOR_CHAT:
       return {
         ...state,
-        partnerSelectedForChat: action.partner
+        partnerSelectedForChat: action.partner,
+        image: action.image
       }
     default:
       return state

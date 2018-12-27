@@ -38,8 +38,8 @@ class PartnerFeedScreen extends React.Component {
     this.getFeed()
   }
 
-  onClickItemCard = () => {
-    this.props.dispatch(selectForChat(this.partner))
+  onClickItemCard = (image) => {
+    this.props.dispatch(selectForChat(this.partner, image))
     this.props.navigation.navigate('Chat', { partner: this.partner })
   }
 
@@ -86,9 +86,11 @@ class PartnerFeedScreen extends React.Component {
   )
 
   renderCardItemPhoto = (attachment, key) => (
-    <CardItem cardBody key={key} style={styles.cardItem}>
-      <Image source={{ uri: attachment.media.image.src }} style={styles.cardImage} />
-    </CardItem>
+    <TouchableOpacity onPress={() => this.onClickItemCard(attachment.media.image)} >
+      <CardItem cardBody key={key} style={styles.cardItem}>
+        <Image source={{ uri: attachment.media.image.src }} style={styles.cardImage} />
+      </CardItem>
+    </TouchableOpacity>
   )
 
   renderCardItemByMeidaType = (media, key) => {
@@ -123,12 +125,10 @@ class PartnerFeedScreen extends React.Component {
     attachments.map((attachment, index) => this.renderCardItemByMeidaType(attachment, index))
 
   renderItem = ({ item }) => (
-    <TouchableOpacity onPress={this.onClickItemCard} >
-      <Card>
-        {item.message && this.renderCardItemMessage(item)}
-        {item.attachments && this.renderCardItensAttachments(item.attachments.data)}
-      </Card>
-    </TouchableOpacity>
+    <Card>
+      {item.message && this.renderCardItemMessage(item)}
+      {item.attachments && this.renderCardItensAttachments(item.attachments.data)}
+    </Card>
   )
 
   render = () => (

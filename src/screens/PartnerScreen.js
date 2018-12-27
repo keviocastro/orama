@@ -57,8 +57,12 @@ class PartnerScreen extends React.PureComponent {
     title: navigation.state.params.segment.name,
   })
 
-  componentWillMount() {
+  refrash() {
     this.props.dispatch(getPartners(this.segment.id))
+  }
+
+  componentWillMount() {
+    this.refrash()
   }
 
   componentWillReceiveProps(nextProps) {
@@ -117,20 +121,20 @@ class PartnerScreen extends React.PureComponent {
   }
 
   renderItem = ({ item }) => (
-      <Card>
-        <TouchableOpacity onPress={() => this.onPressLogo(item)}>
-          <CardItem>
-            <Left>
-              <Thumbnail source={{ uri: item.logo }} />
-              <Body>
-                <Text>{item.name}</Text>
-                <Text note>{item.subtitle}</Text>
-              </Body>
-            </Left>
-          </CardItem>
-        </TouchableOpacity>
-        {this.renderCardItemBody(item)}
-      </Card>
+    <Card>
+      <TouchableOpacity onPress={() => this.onPressLogo(item)}>
+        <CardItem>
+          <Left>
+            <Thumbnail source={{ uri: item.logo }} />
+            <Body>
+              <Text>{item.name}</Text>
+              <Text note>{item.subtitle}</Text>
+            </Body>
+          </Left>
+        </CardItem>
+      </TouchableOpacity>
+      {this.renderCardItemBody(item)}
+    </Card>
   )
 
   renderFooter = () => {
@@ -169,10 +173,11 @@ class PartnerScreen extends React.PureComponent {
 
     return (
       <FlatList
+        onRefresh={() => this.refrash()}
+        refreshing={this.props.isFetching}
         data={this.props.partners}
         keyExtractor={this.keyExtrator}
         renderItem={this.renderItem}
-        ListFooterComponent={this.renderFooter}
       />
     )
   }

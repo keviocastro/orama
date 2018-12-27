@@ -20,7 +20,7 @@ export const getPartners = segmentId => dispatch =>
   search('partners', dispatch, received, request, requestError, {
     field: 'segmentIds',
     value: segmentId,
-})
+  })
 
 export const PARTNERS_SELECT = 'PARTNERS_SELECT'
 export const selectPartner = partner => ({
@@ -29,7 +29,8 @@ export const selectPartner = partner => ({
 })
 
 export const SELECTED_FOR_CHAT = 'SELECTED_FOR_CHAT'
-export const selectForChat = partner => ({
+export const selectForChat = (partner, image) => ({
   type: SELECTED_FOR_CHAT,
   partner,
+  image
 })

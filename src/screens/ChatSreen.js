@@ -1,4 +1,6 @@
 import React from 'react'
+import { View, Image } from 'react-native'
+import { Card, CardItem } from 'native-base'
 import { GiftedChat } from 'react-native-gifted-chat'
 import PropTypes from 'prop-types'
 import { connect } from 'react-redux';
@@ -90,15 +92,29 @@ class ChatSreen extends React.Component {
         this.props.dispatch(addMessages(newMessages, this.props.partner.id))
     }
 
+    image() {
+        console.log(this.props.image)
+        if (this.props.image != undefined)
+            return <Image style={{
+                elevation: 3,
+                height: 200,
+            }} source={{ uri: this.props.image.src }} />
+        else
+            return null
+    }
+
     render() {
         return (
-            <GiftedChat
-                messages={this.props.messages}
-                onSend={messages => this.onSend(messages)}
-                user={{
-                    _id: 0,
-                }}
-            />
+            <View style={{ flex: 1 }}>
+                {this.image()}
+                <GiftedChat
+                    messages={this.props.messages}
+                    onSend={messages => this.onSend(messages)}
+                    user={{
+                        _id: 0,
+                    }}
+                />
+            </View>
         )
     }
 }
@@ -113,8 +129,10 @@ const mapStateToProps = state => {
     if (state.chat.messages.hasOwnProperty(state.partners.partnerSelectedForChat.id)) {
         messages = state.chat.messages[state.partners.partnerSelectedForChat.id]
     }
+    console.log(state.partners.feedItem)
     return ({
         partner: state.partners.partnerSelectedForChat,
+        image: state.partners.image,
         messages: messages
     })
 }

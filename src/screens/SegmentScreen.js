@@ -10,52 +10,54 @@ import {
   TouchableOpacity,
   Alert,
   StyleSheet,
-  Dimensions,
-  StatusBar
+  Dimensions
 } from 'react-native'
-import { Card, CardItem, Body, H1, H2, H3, Subtitle } from 'native-base'
+import { Card, CardItem } from 'native-base'
 import Carousel, { ParallaxImage } from 'react-native-snap-carousel'
 import SplashScreen from 'react-native-splash-screen'
 import { getSegments } from './../actions/segments'
 import { getHighlights } from './../actions/highlights'
 import { selectForChat } from './../actions/partners'
 
-const horizontalMargin = 15
+const horizontalMargin = 3
 const slideWidth = 300
 
 const sliderWidth = Dimensions.get('window').width
 const itemWidth = slideWidth + horizontalMargin * 2
-const itemHeight = 200
+const itemHeight = 152
 
 const styles = StyleSheet.create({
+  viewContainer: {
+    flex: 1,
+  },
   slideContainer: {
     paddingTop: 5,
-    paddingBottom: 5,
     elevation: 4,
-    backgroundColor: '#ffff'
+    backgroundColor: '#ffff',
+    height: 172
   },
   slide: {
     width: itemWidth,
     height: itemHeight,
     paddingHorizontal: horizontalMargin,
-    borderRadius: 50,
+    borderRadius: 70,
   },
   slideSubtitle: {
     backgroundColor: '#1a1919',
-    height: 70,
-    borderBottomLeftRadius: 5,
-    borderBottomRightRadius: 5,
+    height: 50,
+    borderBottomLeftRadius: 10,
+    borderBottomRightRadius: 10
   },
   slideSubtitleText: {
-    marginTop: 7,
+    marginTop: 2,
     marginLeft: 10,
-    fontSize: 20,
+    fontSize: 17,
     color: '#fff',
   },
   slideSubtitleText2: {
-    marginTop: 7,
+    marginTop: 2,
     marginLeft: 10,
-    fontSize: 15,
+    fontSize: 11,
     color: '#fff',
   },
   slideInnerContainer: {
@@ -107,15 +109,8 @@ class SegmentScreen extends React.PureComponent {
     </TouchableOpacity>
   )
 
-  renderFooter = (isFatching) => {
-    const horizontalMargin = 20
-    const slideWidth = 280
-
-    const sliderWidth = Dimensions.get('window').width
-    const itemWidth = slideWidth + horizontalMargin * 2
-    const itemHeight = 200
-
-    if (!isFatching) return null
+  renderFooter = (isFetching) => {
+    if (!isFetching) return null
 
     return <ActivityIndicator animating size="large" />
   }
@@ -156,7 +151,7 @@ class SegmentScreen extends React.PureComponent {
 
   render() {
     return (
-      <View>
+      <View style={styles.viewContainer}>
         <View style={styles.slideContainer} >
           <Carousel
             ref={(c) => { this._carousel = c }}
@@ -170,10 +165,12 @@ class SegmentScreen extends React.PureComponent {
           />
         </View>
         <FlatList
+          style={styles.list}
           data={this.props.segments}
           keyExtractor={(this.keyExtractor)}
           renderItem={this.renderItem}
-          ListFooterComponent={() => this.renderFooter(this.props.isFetching)}
+          onRefresh={() => this.props.dispatch(getSegments())}
+          refreshing={this.props.isFetching}
         />
       </View>
     )
