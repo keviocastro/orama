@@ -7,7 +7,9 @@ import {
   FlatList,
   ActivityIndicator,
   TouchableOpacity,
-  Alert, Dimensions
+  Alert,
+  Dimensions,
+  ImageBackground
 } from 'react-native'
 import {
   Card,
@@ -33,15 +35,22 @@ const styles = {
     flex: 1,
   },
   emptyState: {
-    cardItemImage: {
-      justifyContent: 'center'
+    background: {
+      resizeMode: 'stretch',
+      height: '100%',
+      width: '100%',
+      flex: 1,
+      justifyContent: 'flex-end',
     },
-    cardItemMessages: {
+    containerMessages: {
       flexDirection: 'column',
       alignContent: 'center',
-      texts: {
+      paddingLeft: 15,
+      paddingRight: 15,
+      text: {
         textAlign: 'center'
-      }
+      },
+      paddingBottom: 50,
     },
     cardItemMessagesText: {
       textAlign: 'center'
@@ -148,22 +157,19 @@ class PartnerScreen extends React.PureComponent {
   }
 
   renderEmptyState = () => (
-    <Card>
-      <CardItem cardBody style={styles.emptyState.cardItemImage}>
-        <Image source={require('./../static/empty-state.png')} />
-      </CardItem>
-      <CardItem style={styles.emptyState.cardItemMessages}>
-        <Text style={styles.emptyState.cardItemMessages.texts}>
+    <ImageBackground style={styles.emptyState.background} source={require('./../static/empty-state.png')} >
+      <View style={styles.emptyState.containerMessages}>
+        <Text style={styles.emptyState.containerMessages.text}>
           Esta categoria ainda está sem parceiros.
         </Text>
-        <Text style={styles.emptyState.cardItemMessages.texts}>
+        <Text style={styles.emptyState.containerMessages.text}>
           Estamos correndo para inclui-los.
         </Text>
-        <Text style={styles.emptyState.cardItemMessages.texts}>
+        <Text style={styles.emptyState.containerMessages.text}>
           Em breve teremos várias empresas no segmento de {this.segment.name}.
         </Text>
-      </CardItem>
-    </Card>
+      </View>
+    </ImageBackground >
   )
 
   render() {
