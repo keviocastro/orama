@@ -13,18 +13,19 @@ import {
   Dimensions
 } from 'react-native'
 import { Card, CardItem } from 'native-base'
-import Carousel, { ParallaxImage } from 'react-native-snap-carousel'
+import LinearGradient from 'react-native-linear-gradient'
+import Carousel from 'react-native-snap-carousel'
 import SplashScreen from 'react-native-splash-screen'
 import { getSegments } from './../actions/segments'
 import { getHighlights } from './../actions/highlights'
 import { selectForChat } from './../actions/partners'
 
-const horizontalMargin = 3
+const horizontalMargin = 0
 const slideWidth = 300
 
 const sliderWidth = Dimensions.get('window').width
 const itemWidth = slideWidth + horizontalMargin * 2
-const itemHeight = 152
+const itemHeight = 100
 
 const styles = StyleSheet.create({
   viewContainer: {
@@ -34,37 +35,41 @@ const styles = StyleSheet.create({
     paddingTop: 5,
     elevation: 4,
     backgroundColor: '#ffff',
-    height: 172
+    height: 112
   },
   slide: {
     width: itemWidth,
     height: itemHeight,
     paddingHorizontal: horizontalMargin,
-    borderRadius: 70,
   },
   slideSubtitle: {
+    height: 25,
     backgroundColor: '#1a1919',
-    height: 50,
     borderBottomLeftRadius: 10,
-    borderBottomRightRadius: 10
+    borderBottomRightRadius: 10,
   },
   slideSubtitleText: {
     marginTop: 2,
     marginLeft: 10,
-    fontSize: 17,
+    fontSize: 14,
     color: '#fff',
-  },
-  slideSubtitleText2: {
-    marginTop: 2,
-    marginLeft: 10,
-    fontSize: 11,
-    color: '#fff',
+    alignSelf: 'center',
   },
   slideInnerContainer: {
     width: slideWidth,
     flex: 1,
-    borderTopLeftRadius: 5,
-    borderTopRightRadius: 5,
+    borderTopLeftRadius: 10,
+    borderTopRightRadius: 10,
+  },
+  slideImage: {
+    width: slideWidth,
+    height: '100%',
+    borderRadius: 10,
+  },
+  segmentImage: {
+    height: 100,
+    width: null,
+    flex: 1
   }
 })
 
@@ -102,7 +107,7 @@ class SegmentScreen extends React.PureComponent {
             <Text>{item.name}</Text>
           </CardItem>
           <CardItem cardBody>
-            <Image source={{ uri: item.image }} style={{ height: 100, width: null, flex: 1 }} />
+            <Image source={{ uri: item.image }} style={styles.segmentImage} />
           </CardItem>
         </Card>
       </View>
@@ -127,22 +132,10 @@ class SegmentScreen extends React.PureComponent {
       : item.logo
 
     return (
-      <TouchableOpacity onPress={() => console.log(this.onPressCarousel(item))}>
+      <TouchableOpacity onPress={() => this.onPressCarousel(item)}>
         <View style={styles.slide}>
-          <ParallaxImage
-            source={{ uri: img }}
-            containerStyle={styles.slideInnerContainer}
-            style={styles.image}
-            parallaxFactor={0.4}
-            {...parallaxProps}
-          />
-          <View style={styles.slideSubtitle}>
-            <Text style={styles.slideSubtitleText} numberOfLines={2}>
-              {item.subtitle}
-            </Text>
-            <Text style={styles.slideSubtitleText2}>
-              {item.highlight_message}
-            </Text>
+          <View style={styles.slideInnerContainer}>
+            <Image source={{ uri: img }} style={styles.slideImage} />
           </View>
         </View>
       </TouchableOpacity>
@@ -152,18 +145,26 @@ class SegmentScreen extends React.PureComponent {
   render() {
     return (
       <View style={styles.viewContainer}>
-        <View style={styles.slideContainer} >
+        <LinearGradient
+          colors={['#008cff', '#ffffff']}
+          style={styles.slideContainer}
+        >
           <Carousel
             ref={(c) => { this._carousel = c }}
             data={this.props.highlights}
             renderItem={this.renderItemCarousel}
-            hasParallaxImages={true}
             sliderWidth={sliderWidth}
             itemWidth={itemWidth}
             autoplay={true}
+            autoplayDelay={3000}
+            autoplayInterval={3000}
             loop={true}
+            loopClonesPerSide={3}
+            firstItem={1}
+            enableMomentum={true}
+            enableSnap={true}
           />
-        </View>
+        </LinearGradient>
         <FlatList
           style={styles.list}
           data={this.props.segments}

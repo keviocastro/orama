@@ -1,5 +1,5 @@
 import React from 'react'
-import { View, Image } from 'react-native'
+import { View, Image, FlatList, Text } from 'react-native'
 import { Card, CardItem } from 'native-base'
 import { GiftedChat } from 'react-native-gifted-chat'
 import PropTypes from 'prop-types'
@@ -92,22 +92,35 @@ class ChatSreen extends React.Component {
         this.props.dispatch(addMessages(newMessages, this.props.partner.id))
     }
 
-    image() {
-        console.log(this.props.image)
-        if (this.props.image != undefined)
-            return <Image style={{
-                elevation: 3,
-                height: 200,
-            }} source={{ uri: this.props.image.src }} />
-        else
+    renderImage(image) {
+        return <Image style={{
+            height: 100,
+            width: 200
+        }} source={{ uri: image.src }} />
+    }
+
+    renderImages() {
+        if (this.props.hasOwnProperty('images') && this.props.images.length > 0) {
+            return <View style={{ height: 100 }}>
+                <FlatList
+                    horizontal={true}
+                    data={this.props.images}
+                    keyExtractor={(image, index) => index.toString()}
+                    renderItem={({ item }) => this.renderImage(item)}
+                />
+            </View>
+        } else {
             return null
+        }
     }
 
     render() {
         return (
             <View style={{ flex: 1 }}>
-                {this.image()}
+                {this.renderImages()}
                 <GiftedChat
+                    contentContainerStyle={{ height: 100 }}
+                    style={{ height: 500 }}
                     messages={this.props.messages}
                     onSend={messages => this.onSend(messages)}
                     user={{
@@ -121,18 +134,26 @@ class ChatSreen extends React.Component {
 
 ChatSreen.propTypes = {
     partner: PropTypes.object,
-    navigation: PropTypes.object,
+    navigation: PropTypes.object
 };
 
+//@todo Refatore imagesChatByPartner for chat state
 const mapStateToProps = state => {
     let messages = []
+    let images = []
+
     if (state.chat.messages.hasOwnProperty(state.partners.partnerSelectedForChat.id)) {
         messages = state.chat.messages[state.partners.partnerSelectedForChat.id]
     }
-    console.log(state.partners.feedItem)
+
+
+    if (state.partners.imagesChatByPartner.hasOwnProperty(state.partners.partnerSelectedForChat.id)) {
+        images = state.partners.imagesChatByPartner[state.partners.partnerSelectedForChat.id]
+    }
+
     return ({
         partner: state.partners.partnerSelectedForChat,
-        image: state.partners.image,
+        images: images,
         messages: messages
     })
 }

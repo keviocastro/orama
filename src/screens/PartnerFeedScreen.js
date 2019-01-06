@@ -7,17 +7,25 @@ import {
   Image,
   StyleSheet,
   TouchableOpacity,
-  Linking,
+  Dimensions
 } from 'react-native'
 import PropTypes from 'prop-types'
 import { connect } from 'react-redux'
 import { Card, CardItem, Body } from 'native-base'
 import PartnerFeedService from './../services/PartnerFeedService'
 import { selectForChat } from './../actions/partners'
+import { Header } from 'react-navigation'
+
+const viewportHeight = Dimensions.get('window').height - Header.HEIGHT
+const mainFeedImageHeight = viewportHeight - (viewportHeight * 0.3)
 
 const styles = StyleSheet.create({
   cardImage: { height: 200, width: null, flex: 1 },
   cardItem: { paddingBottom: 2 },
+  mainFeedImage: {
+    resizeMode: 'stretch',
+    height: mainFeedImageHeight
+  }
 })
 
 class PartnerFeedScreen extends React.Component {
@@ -93,7 +101,7 @@ class PartnerFeedScreen extends React.Component {
     </TouchableOpacity>
   )
 
-  renderCardItemByMeidaType = (media, key) => {
+  renderCardItemByMediaType = (media, key) => {
     let cardItem = null
     switch (media.type) {
       case 'photo':
@@ -101,7 +109,7 @@ class PartnerFeedScreen extends React.Component {
         break
       case 'album':
         cardItem = media.subattachments.data.map((albumMedia, index) =>
-          this.renderCardItemByMeidaType(albumMedia, index))
+          this.renderCardItemByMediaType(albumMedia, index))
         break
       case 'video':
       case 'video_autoplay':
@@ -118,23 +126,33 @@ class PartnerFeedScreen extends React.Component {
   }
 
   /**
-   * Todas as midias associadas com o post
+   * Todas as mídias associadas com o post
    * @see https://developers.facebook.com/docs/graph-api/reference/v2.10/post section Edges
    */
-  renderCardItensAttachments = attachments =>
-    attachments.map((attachment, index) => this.renderCardItemByMeidaType(attachment, index))
+  renderCardItemsAttachments = attachments =>
+    attachments.map((attachment, index) => this.renderCardItemByMediaType(attachment, index))
 
-  renderItem = ({ item }) => (
-    <Card>
-      {item.message && this.renderCardItemMessage(item)}
-      {item.attachments && this.renderCardItensAttachments(item.attachments.data)}
-    </Card>
-  )
+  renderItem = ({ item, index }) => {
+    console.log(this.partner.feed_image)
+    if (index === 0 && this.partner.feed_image) {
+      return <Image style={styles.mainFeedImage} source={{ uri: this.partner.feed_image }} />
+    }
+    else {
+      let message = item.message ? this.renderCardItemMessage(item) : false
+      let attachments = item.attachments ? this.renderCardItemsAttachments(item.attachments.data) : false
+      if (message && attachments) {
+        return <Card>
+          {message}
+          {attachments}
+        </Card>
+      }
+    }
+  }
 
   render = () => (
     <FlatList
       data={this.state.feed}
-      keyExtractor={item => item.id}
+      keyExtractor={(item, index) => { return item.id + index.toString() }}
       renderItem={this.renderItem}
       ListFooterComponent={this.renderFooter}
     />

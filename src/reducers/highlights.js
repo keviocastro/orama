@@ -9,9 +9,9 @@ const initialState = {
     requestError: '',
     partners: [],
 }
- 
+
 const reducer = (state = initialState, action) => {
-    switch(action.type){
+    switch (action.type) {
         case HIGHLIGHTS_REQUEST:
             return {
                 ...state,

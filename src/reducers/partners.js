@@ -12,14 +12,23 @@ const initialState = {
     requestError: '',
     data: [],
   },
+  imagesChatByPartner: [],
   currentSegmentId: null,
   partnerSelectedForChat: {},
+  images: [],
   chatType: null,
 }
 
 const setPartnersBySegment = (state, action) => {
   const bySegment = { ...state.bySegment }
 
+  action.partners = action.partners.filter((partner) => {
+    //@todo To correct an api error. Remove after upgrading an api
+    if (partner.hasOwnProperty('segmentIds') &&
+      partner.segmentIds.indexOf(action.segmentId) != -1) {
+      return partner
+    }
+  })
   bySegment[action.segmentId] = {
     isFetching: false,
     requestError: '',
@@ -29,7 +38,22 @@ const setPartnersBySegment = (state, action) => {
   return bySegment
 }
 
+const setChatImagesByPartner = (state, action) => {
+  const imagesChatByPartner = { ...state.imagesChatByPartner }
+
+  if (action.image != undefined) {
+    if (imagesChatByPartner.hasOwnProperty(action.partner.id)) {
+      imagesChatByPartner[action.partner.id] = [...imagesChatByPartner[action.partner.id], action.image]
+    } else {
+      imagesChatByPartner[action.partner.id] = [action.image]
+    }
+  }
+
+  return imagesChatByPartner
+}
+
 const reducer = (state = initialState, action) => {
+
   switch (action.type) {
     case PARTNERS_RECEIVED:
       return {
@@ -56,7 +80,7 @@ const reducer = (state = initialState, action) => {
       return {
         ...state,
         partnerSelectedForChat: action.partner,
-        image: action.image
+        imagesChatByPartner: setChatImagesByPartner(state, action)
       }
     default:
       return state
