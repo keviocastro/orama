@@ -28,39 +28,6 @@ const slideWidth = Dimensions.get('window').width - 10
 const sliderWidth = Dimensions.get('window').width
 const itemWidth = slideWidth + horizontalMargin * 2
 
-const styles = {
-  image: {
-    height: 200,
-    width: null,
-    flex: 1,
-  },
-  emptyState: {
-    background: {
-      resizeMode: 'stretch',
-      height: '100%',
-      width: '100%',
-      flex: 1,
-      justifyContent: 'flex-end',
-    },
-    containerMessages: {
-      flexDirection: 'column',
-      alignContent: 'center',
-      paddingLeft: 15,
-      paddingRight: 15,
-      text: {
-        textAlign: 'center'
-      },
-      paddingBottom: 50,
-    },
-    cardItemMessagesText: {
-      textAlign: 'center'
-    }
-  },
-  chatIcon: {
-    fontSize: 37,
-  },
-}
-
 class PartnerScreen extends React.PureComponent {
   static navigationOptions = ({ navigation }) => ({
     title: navigation.state.params.segment.name,
@@ -187,6 +154,39 @@ class PartnerScreen extends React.PureComponent {
       />
     )
   }
+}
+
+const styles = {
+  image: {
+    height: 200,
+    width: null,
+    flex: 1,
+  },
+  emptyState: {
+    background: {
+      resizeMode: 'stretch',
+      height: '100%',
+      width: '100%',
+      flex: 1,
+      justifyContent: 'flex-end',
+    },
+    containerMessages: {
+      flexDirection: 'column',
+      alignContent: 'center',
+      paddingLeft: 15,
+      paddingRight: 15,
+      text: {
+        textAlign: 'center'
+      },
+      paddingBottom: 50,
+    },
+    cardItemMessagesText: {
+      textAlign: 'center'
+    }
+  },
+  chatIcon: {
+    fontSize: 37,
+  },
 }
 
 PartnerScreen.propTypes = {

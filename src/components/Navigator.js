@@ -7,12 +7,16 @@ import PartnerScreen from './../screens/PartnerScreen'
 import PartnerFeedScreen from './../screens/PartnerFeedScreen'
 import ExternalChatScreen from './../screens/ExternalChatScreen'
 import ChatSreen from './../screens/ChatSreen'
+import LoginScreen from './../screens/LoginScreen'
+import PartnerChatScreen from './../screens/PartnerChatScreen'
 
 export const ModeCardStack = createStackNavigator({
   Home: { screen: SegmentScreen },
   Partner: { screen: PartnerScreen },
   PartnerFeed: { screen: PartnerFeedScreen },
-  Chat: { screen: ChatSreen }
+  Chat: { screen: ChatSreen },
+  Login: { screen: LoginScreen },
+  PartnerChat: { screen: PartnerChatScreen }
 });
 
 export const Navigator = createStackNavigator(

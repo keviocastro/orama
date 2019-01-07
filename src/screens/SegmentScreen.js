@@ -27,52 +27,6 @@ const sliderWidth = Dimensions.get('window').width
 const itemWidth = slideWidth + horizontalMargin * 2
 const itemHeight = 100
 
-const styles = StyleSheet.create({
-  viewContainer: {
-    flex: 1,
-  },
-  slideContainer: {
-    paddingTop: 5,
-    elevation: 4,
-    backgroundColor: '#ffff',
-    height: 112
-  },
-  slide: {
-    width: itemWidth,
-    height: itemHeight,
-    paddingHorizontal: horizontalMargin,
-  },
-  slideSubtitle: {
-    height: 25,
-    backgroundColor: '#1a1919',
-    borderBottomLeftRadius: 10,
-    borderBottomRightRadius: 10,
-  },
-  slideSubtitleText: {
-    marginTop: 2,
-    marginLeft: 10,
-    fontSize: 14,
-    color: '#fff',
-    alignSelf: 'center',
-  },
-  slideInnerContainer: {
-    width: slideWidth,
-    flex: 1,
-    borderTopLeftRadius: 10,
-    borderTopRightRadius: 10,
-  },
-  slideImage: {
-    width: slideWidth,
-    height: '100%',
-    borderRadius: 10,
-  },
-  segmentImage: {
-    height: 100,
-    width: null,
-    flex: 1
-  }
-})
-
 class SegmentScreen extends React.PureComponent {
   static navigationOptions = {
     header: null
@@ -93,14 +47,18 @@ class SegmentScreen extends React.PureComponent {
     }
   }
 
-  onPressItem = (item) => {
-    this.props.navigation.navigate('Partner', { segment: item })
+  onPressSegment = (segment) => {
+    if (segment.id === 17) {
+      this.props.navigation.navigate('Login', { segment: segment })
+    } else {
+      this.props.navigation.navigate('Partner', { segment: segment })
+    }
   }
 
   keyExtractor = item => item.id.toString()
 
   renderItem = ({ item }) => (
-    <TouchableOpacity onPress={() => this.onPressItem(item)}>
+    <TouchableOpacity onPress={() => this.onPressSegment(item)}>
       <View>
         <Card>
           <CardItem>
@@ -177,6 +135,52 @@ class SegmentScreen extends React.PureComponent {
     )
   }
 }
+
+const styles = StyleSheet.create({
+  viewContainer: {
+    flex: 1,
+  },
+  slideContainer: {
+    paddingTop: 5,
+    elevation: 4,
+    backgroundColor: '#ffff',
+    height: 112
+  },
+  slide: {
+    width: itemWidth,
+    height: itemHeight,
+    paddingHorizontal: horizontalMargin,
+  },
+  slideSubtitle: {
+    height: 25,
+    backgroundColor: '#1a1919',
+    borderBottomLeftRadius: 10,
+    borderBottomRightRadius: 10,
+  },
+  slideSubtitleText: {
+    marginTop: 2,
+    marginLeft: 10,
+    fontSize: 14,
+    color: '#fff',
+    alignSelf: 'center',
+  },
+  slideInnerContainer: {
+    width: slideWidth,
+    flex: 1,
+    borderTopLeftRadius: 10,
+    borderTopRightRadius: 10,
+  },
+  slideImage: {
+    width: slideWidth,
+    height: '100%',
+    borderRadius: 10,
+  },
+  segmentImage: {
+    height: 100,
+    width: null,
+    flex: 1
+  }
+})
 
 SegmentScreen.propTypes = {
   navigation: PropTypes.object,

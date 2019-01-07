@@ -1,4 +1,4 @@
-import {FB_APP_ACCESS_TOKEN} from './../config';
+import { FB_APP_ACCESS_TOKEN } from './../config';
 
 /**
  * @todo Não está sendo utilizado o package react-native-fbsdk
@@ -12,6 +12,7 @@ export default class PartnerFeedService {
     const fields =
       'type,story,picture,full_picture,message,message_tags,attachments{type,media,url,subattachments}';
     const url = `${baseUrl + endPoint}?access_token=${token}&fields=${fields}`;
+    console.log(url)
     fetch(url)
       .then(response => response.json())
       .then(responseJson => callback(responseJson, false))
