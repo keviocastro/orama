@@ -1,7 +1,7 @@
 import React, { Component } from 'react'
-import { StyleSheet, Text, View, ImageBackground } from 'react-native'
+import { StyleSheet, ImageBackground } from 'react-native'
 import { connect } from 'react-redux'
-import FBLoginButton from './../components/FBLoginButton'
+import { LoginButton, AccessToken } from 'react-native-fbsdk'
 import PropTypes from 'prop-types'
 
 class LoginScreen extends Component {
@@ -12,7 +12,24 @@ class LoginScreen extends Component {
   render() {
     return (
       <ImageBackground style={styles.container} source={require('./../static/empty-state.png')} >
-        <FBLoginButton />
+        <LoginButton
+          readPermissions={["email", "user_posts"]}
+          onLoginFinished={
+            (error, result) => {
+              if (error) {
+                alert('Não é possível comunicar com facebook agora. Verifique sua conexão e tente novamente.')
+              } else if (result.isCancelled) {
+                alert("login is cancelled.")
+              } else {
+                AccessToken.getCurrentAccessToken().then(
+                  (data) => {
+                    this.props.navigation.navigate('PartnerChat')
+                  }
+                )
+              }
+            }
+          }
+        />
       </ImageBackground >
     )
   }

@@ -3,6 +3,8 @@ package com.orama2;
 import android.app.Application;
 
 import com.facebook.react.ReactApplication;
+import io.invertase.firebase.RNFirebasePackage;
+import io.invertase.firebase.database.RNFirebaseDatabasePackage;
 import org.devio.rn.splashscreen.SplashScreenReactPackage;
 import com.dieam.reactnativepushnotification.ReactNativePushNotificationPackage;
 import com.BV.LinearGradient.LinearGradientPackage;
@@ -35,8 +37,9 @@ public class MainApplication extends Application implements ReactApplication {
 
     @Override
     protected List<ReactPackage> getPackages() {
-      return Arrays.<ReactPackage>asList(new MainReactPackage(), new FBSDKPackage(mCallbackManager),
-          new SplashScreenReactPackage(), new ReactNativePushNotificationPackage(), new LinearGradientPackage());
+      return Arrays.<ReactPackage>asList(new MainReactPackage(), new RNFirebasePackage(),
+          new RNFirebaseDatabasePackage(), new FBSDKPackage(mCallbackManager), new SplashScreenReactPackage(),
+          new ReactNativePushNotificationPackage(), new LinearGradientPackage());
     }
 
     @Override

@@ -19,6 +19,7 @@ import SplashScreen from 'react-native-splash-screen'
 import { getSegments } from './../actions/segments'
 import { getHighlights } from './../actions/highlights'
 import { selectForChat } from './../actions/partners'
+import { AccessToken } from 'react-native-fbsdk'
 
 const horizontalMargin = 0
 const slideWidth = 300
@@ -49,7 +50,13 @@ class SegmentScreen extends React.PureComponent {
 
   onPressSegment = (segment) => {
     if (segment.id === 17) {
-      this.props.navigation.navigate('Login', { segment: segment })
+      AccessToken.getCurrentAccessToken().then((data) => {
+        if (data) {
+          this.props.navigation.navigate('PartnerChat')
+        } else {
+          this.props.navigation.navigate('Login', { segment: segment })
+        }
+      })
     } else {
       this.props.navigation.navigate('Partner', { segment: segment })
     }

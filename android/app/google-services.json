@@ -1,0 +1,55 @@
+{
+  "project_info": {
+    "project_number": "1056578137439",
+    "firebase_url": "https://orama.firebaseio.com",
+    "project_id": "orama-199921",
+    "storage_bucket": "orama-199921.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:1056578137439:android:1e7903b6113c682c",
+        "android_client_info": {
+          "package_name": "com.orama2"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "1056578137439-aesdbr80rpse2128v92uae2iu9jd1hif.apps.googleusercontent.com",
+          "client_type": 1,
+          "android_info": {
+            "package_name": "com.orama2",
+            "certificate_hash": "f7a08c9901bfcd8ad3922ef8223db38c58b45f57"
+          }
+        },
+        {
+          "client_id": "1056578137439-bemahghofmls8hi861l2lr6ekmqe6o0h.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyBztPBVtcCJnGLSkMrt10ZaVPIKsHJSu6Y"
+        }
+      ],
+      "services": {
+        "analytics_service": {
+          "status": 1
+        },
+        "appinvite_service": {
+          "status": 2,
+          "other_platform_oauth_client": [
+            {
+              "client_id": "1056578137439-bemahghofmls8hi861l2lr6ekmqe6o0h.apps.googleusercontent.com",
+              "client_type": 3
+            }
+          ]
+        },
+        "ads_service": {
+          "status": 2
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}

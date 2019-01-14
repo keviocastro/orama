@@ -4,3 +4,9 @@ export const addMessages = (messages, partnerId) => ({
     messages,
     partnerId
 })
+
+export const RECEIVE_MESSAGES = 'RECEIVE_MESSAGES'
+export const receiveMessages = (conversations) => ({
+    type: RECEIVE_MESSAGES,
+    conversations
+})

@@ -9,7 +9,7 @@ import AppWithNavigationState from './components/Navigator'
 import reducers from './reducers'
 import getTheme from './theme/components'
 import material from './theme/variables/material'
-import PushNotification from 'react-native-push-notification'
+import PushNotification from 'react-native-push-notification' // @todo migrate to react-native-firebase
 import { DEBUG, SENDER_ID } from './config'
 
 const middleware = [thunkMiddleware]
