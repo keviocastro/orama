@@ -12,6 +12,13 @@ const mergeMessages = (state, action) => {
     return messages
 }
 
+const sortConversations = (conversations) => {
+    let conversationsOrderedByNoRead = {}
+    return Object.keys(conversations).sort((a, b) => {
+        return (conversations[a].meta.read === conversations[b].meta.read) ? 0 : a ? -1 : 1
+    })
+}
+
 const reducer = (state = initialState, action) => {
     switch (action.type) {
         case ADD_MESSAGES:
@@ -22,7 +29,7 @@ const reducer = (state = initialState, action) => {
         case RECEIVE_MESSAGES:
             return {
                 ...state,
-                conversations: action.conversations
+                conversations: sortConversations(action.conversations)
             }
         default:
             return state

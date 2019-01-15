@@ -2,6 +2,7 @@ import React from 'react'
 import { Text, FlatList } from 'react-native'
 import { connect } from 'react-redux'
 import { ListItem, Left, Right, Body, Thumbnail, Content } from 'native-base'
+import Moment from 'moment'
 import firebase from 'react-native-firebase'
 import { receiveMessages } from './../actions/chat'
 
@@ -15,16 +16,18 @@ class PartnerChatScreen extends React.PureComponent {
   constructor(props) {
     super(props)
 
-    firebase.database().ref('conversations')
-      .orderByKey()
-      .startAt(partnerId + "_")
-      .endAt(partnerId + "_\uf8ff")
-      .on('value', (dataSnapshot) => {
-        this.props.dispatch(receiveMessages(dataSnapshot.val()))
+    this.ref = firebase.firestore().collection('conversations')
+      .onSnapshot((querySnapshot) => {
+        querySnapshot.forEach((doc) => {
+          console.log(doc)
+        })
       })
+
+    this.unsubscribe = null
   }
 
   renderListItem(conversation) {
+    let fontWeight = conversation.meta.read === true ? 'bold' : 'normal'
     return (
       <ListItem avatar>
         <Left>
@@ -32,10 +35,10 @@ class PartnerChatScreen extends React.PureComponent {
         </Left>
         <Body>
           <Text>Kévio Castro</Text>
-          <Text note>Olá, eu gostaria de...</Text>
+          <Text style={{ fontWeight: fontWeight }}>{conversation.meta.last_message}</Text>
         </Body>
         <Right>
-          <Text note>15:02</Text>
+          <Text note>{Moment(conversation.meta.time * 1000).fromNow()}</Text>
         </Right>
       </ListItem>
     )

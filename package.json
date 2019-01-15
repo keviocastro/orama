@@ -8,6 +8,7 @@
     "input-fb-login": "adb shell input text 'open_zbyqcak_user@tfbnw.net' && adb shell input keyevent 61 && adb shell input text 'Ma@123654' && adb shell input keyevent 66"
   },
   "dependencies": {
+    "moment": "^2.23.0",
     "native-base": "^2.8.1",
     "prop-types": "^15.6.2",
     "react": "16.6.0-alpha.8af6728",
