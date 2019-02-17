@@ -1,4 +1,4 @@
-import search from './api'
+import { search } from './api'
 
 export const HIGHLIGHTS_RECEIVED = 'HIGHLIGHTS_RECEIVED'
 export const received = (partners) => ({
@@ -18,4 +18,4 @@ export const getHighlights = () => dispatch =>
   search('partners', dispatch, received, request, requestError, {
     field: 'highlighted',
     value: true,
-})
+  })

@@ -1,9 +1,10 @@
-import { ADD_MESSAGES, RECEIVE_MESSAGES } from "./../actions/chat"
+import { ADD_MESSAGES, RECEIVE_MESSAGES, ADD_CHATS } from "./../actions/chat"
 import { GiftedChat } from 'react-native-gifted-chat'
 
 const initialState = {
     messages: {},
-    conversations: {}
+    conversations: {},
+    chats: []
 }
 
 const mergeMessages = (state, action) => {
@@ -13,7 +14,6 @@ const mergeMessages = (state, action) => {
 }
 
 const sortConversations = (conversations) => {
-    let conversationsOrderedByNoRead = {}
     return Object.keys(conversations).sort((a, b) => {
         return (conversations[a].meta.read === conversations[b].meta.read) ? 0 : a ? -1 : 1
     })
@@ -30,6 +30,11 @@ const reducer = (state = initialState, action) => {
             return {
                 ...state,
                 conversations: sortConversations(action.conversations)
+            }
+        case ADD_CHATS:
+            return {
+                ...state,
+                chats: Array.isArray(action.chats) ? action.chats : [action.chats]
             }
         default:
             return state

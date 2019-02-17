@@ -5,7 +5,6 @@ import { connect } from 'react-redux'
 import SegmentScreen from './../screens/SegmentScreen'
 import PartnerScreen from './../screens/PartnerScreen'
 import PartnerFeedScreen from './../screens/PartnerFeedScreen'
-import ExternalChatScreen from './../screens/ExternalChatScreen'
 import ChatSreen from './../screens/ChatSreen'
 import LoginScreen from './../screens/LoginScreen'
 import PartnerChatScreen from './../screens/PartnerChatScreen'
@@ -21,8 +20,7 @@ export const ModeCardStack = createStackNavigator({
 
 export const Navigator = createStackNavigator(
   {
-    Home: { screen: ModeCardStack, navigationOptions: { header: null } },
-    ExternalChat: { screen: ExternalChatScreen, navigationOptions: { header: null } }
+    Home: { screen: ModeCardStack, navigationOptions: { header: null } }
   },
   { mode: 'modal' }
 );

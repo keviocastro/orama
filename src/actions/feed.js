@@ -1,4 +1,4 @@
-import feed from './fbapi'
+import { feed } from './fbapi'
 
 export const FEED_REQUEST = 'FEED_REQUEST'
 export const request = partner => ({

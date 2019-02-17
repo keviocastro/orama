@@ -90,7 +90,7 @@ class SegmentScreen extends React.PureComponent {
     this.props.navigation.navigate('Chat', { partner })
   }
 
-  renderItemCarousel = ({ item, index }, parallaxProps) => {
+  renderItemCarousel = ({ item }) => {
 
     const img = (item.highligh_image !== undefined && item.highligh_image.length !== 0)
       ? item.highligh_image

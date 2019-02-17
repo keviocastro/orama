@@ -10,3 +10,9 @@ export const receiveMessages = (conversations) => ({
     type: RECEIVE_MESSAGES,
     conversations
 })
+
+export const ADD_CHATS = 'ADD_CHATS'
+export const addChats = (chats) => ({
+    type: ADD_CHATS,
+    chats
+})

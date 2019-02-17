@@ -56,7 +56,7 @@ class PartnerFeedScreen extends React.Component {
   }
 
   getFeed() {
-    PartnerFeedService.getPartnerFeed(this.partner.fb_id, (result, error) => {
+    PartnerFeedService.getPartnerFeed(this.partner, (result, error) => {
       if (error) {
         console.log('PartnerFeedScreen error: ', error)
         return false

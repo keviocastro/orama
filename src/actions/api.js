@@ -1,6 +1,6 @@
 import { API_URL } from './../config'
 
-const search = (resource, dispatch, receiveAction, initRequestAction, errorAction, filter = []) => {
+export const search = (resource, dispatch, receiveAction, initRequestAction, errorAction, filter = []) => {
   dispatch(initRequestAction(filter))
   let query = ''
 
@@ -12,21 +12,41 @@ const search = (resource, dispatch, receiveAction, initRequestAction, errorActio
 
   const url = `${API_URL}/${resource}${query}`
 
-  return fetch(url)
-    .then((response) => {
-      if (!response.ok) dispatch(errorAction(`Request error with status ${response.status}`))
-      return response.json()
-    })
-    .then((result) => {
-      dispatch(receiveAction(result, filter))
-    })
-    .catch((err) => {
-      if (__DEV__) {
-        throw err
-      } else {
-        //@todo tratar erro e exibir mensagem pro usuáio
-      }
-    })
+  return fetch(url).then((response) => {
+    if (!response.ok) dispatch(errorAction(`Request error with status ${response.status}`))
+    return response.json()
+  }).then((result) => {
+    dispatch(receiveAction(result, filter))
+  }).catch(err => requestError(error))
 }
 
-export default search
+export const partnerUpdateFbAcessToken = (dispatch, fbId, fbAcessToken) => {
+  const urlPartnerByFbId = `${API_URL}/partners?fb_id=${fbId}`
+
+  return fetch(urlPartnerByFbId).then((response) => {
+    if (response.ok) return response.json()
+  }).then((result) => {
+    let partner = Array.isArray(result) && result.length > 0
+      ? result[0]
+      : false
+
+    if (partner) {
+      const urlUpdate = `${API_URL}/partners/${partner.id}`
+      partner.fb_token = fbAcessToken
+
+      fetch(urlUpdate, {
+        body: JSON.stringify(partner),
+        method: 'PUT',
+        headers: new Headers({
+          'Content-Type': 'application/json'
+        })
+      }).catch(err => requestError(error))
+    }
+  }).catch(err => requestError(error))
+}
+
+const requestError = (error) = {
+  if(__DEV__) {
+    throw err
+  }
+}

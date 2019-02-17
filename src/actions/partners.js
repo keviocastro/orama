@@ -1,4 +1,4 @@
-import search from './api'
+import { search, partnerUpdateFbAcessToken } from './api'
 
 export const PARTNERS_RECEIVED = 'PARTNERS_RECEIVED'
 export const received = (partners, filter) => ({
@@ -29,8 +29,10 @@ export const selectPartner = partner => ({
 })
 
 export const SELECTED_FOR_CHAT = 'SELECTED_FOR_CHAT'
-export const selectForChat = (partner, image) => ({
+export const selectForChat = partner => ({
   type: SELECTED_FOR_CHAT,
   partner,
-  image
 })
+
+export const updateFbAcessToken = (fbId, fbAcessToken) => dispatch =>
+  partnerUpdateFbAcessToken(dispatch, fbId, fbAcessToken)

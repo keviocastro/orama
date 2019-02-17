@@ -1,4 +1,4 @@
-import search from './api';
+import { search } from './api';
 
 export const SEGMENTS_RECEIVED = 'SEGMENTS_RECEIVED';
 export const received = segments => ({

@@ -3,6 +3,7 @@ import { StyleSheet, ImageBackground } from 'react-native'
 import { connect } from 'react-redux'
 import { LoginButton, AccessToken } from 'react-native-fbsdk'
 import PropTypes from 'prop-types'
+import { updateFbAcessToken } from './../actions/partners'
 
 class LoginScreen extends Component {
   static navigationOptions = ({ navigation }) => ({
@@ -23,6 +24,7 @@ class LoginScreen extends Component {
               } else {
                 AccessToken.getCurrentAccessToken().then(
                   (data) => {
+                    this.props.dispatch(updateFbAcessToken(data.userID, data.accessToken))
                     this.props.navigation.navigate('PartnerChat')
                   }
                 )

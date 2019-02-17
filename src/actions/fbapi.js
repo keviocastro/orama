@@ -1,6 +1,6 @@
 import { FB_APP_ACCESS_TOKEN } from './../config'
 
-const feed = (partner, dispatch, receiveAction, requestAction, errorAction) => {
+export const feed = (partner, dispatch, receiveAction, requestAction, errorAction) => {
   dispatch(requestAction(partner))
 
   const token = encodeURIComponent(FB_APP_ACCESS_TOKEN)
@@ -28,5 +28,3 @@ const feed = (partner, dispatch, receiveAction, requestAction, errorAction) => {
       }
     })
 }
-
-export default feed

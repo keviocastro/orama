@@ -10,10 +10,10 @@ import reducers from './reducers'
 import getTheme from './theme/components'
 import material from './theme/variables/material'
 import PushNotification from 'react-native-push-notification' // @todo migrate to react-native-firebase
-import { DEBUG, SENDER_ID } from './config'
+import { SENDER_ID } from './config'
 
 const middleware = [thunkMiddleware]
-if (process.env.NODE_ENV === 'development' && DEBUG === true) {
+if (process.env.NODE_ENV === 'development' && __DEV__ === true) {
   middleware.push(logger)
 }
 
