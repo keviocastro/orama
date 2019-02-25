@@ -1,13 +1,13 @@
 import React, { Component } from 'react'
-import { StyleSheet, ImageBackground } from 'react-native'
+import { StyleSheet, ImageBackground, Text } from 'react-native'
 import { connect } from 'react-redux'
 import { LoginButton, AccessToken } from 'react-native-fbsdk'
 import PropTypes from 'prop-types'
-import { updateFbAcessToken } from './../actions/partners'
+import { updateFbAcessToken, checkLoggedInIsPartner } from './../actions/partners'
 
 class LoginScreen extends Component {
   static navigationOptions = ({ navigation }) => ({
-    title: navigation.state.params.segment.name,
+    header: null,
   })
 
   render() {
@@ -20,12 +20,13 @@ class LoginScreen extends Component {
               if (error) {
                 alert('Não é possível comunicar com facebook agora. Verifique sua conexão e tente novamente.')
               } else if (result.isCancelled) {
-                alert("login is cancelled.")
+                // "login is cancelled."
               } else {
                 AccessToken.getCurrentAccessToken().then(
                   (data) => {
+                    //this.props.navigation.navigate('Home')
                     this.props.dispatch(updateFbAcessToken(data.userID, data.accessToken))
-                    this.props.navigation.navigate('PartnerChat')
+                    this.props.dispatch(checkLoggedInIsPartner(data.userID))
                   }
                 )
               }

@@ -3,7 +3,8 @@ import {
   PARTNERS_REQUEST,
   PARTNERS_REQUEST_ERROR,
   PARTNERS_SELECT,
-  SELECTED_FOR_CHAT
+  SELECTED_FOR_CHAT,
+  LOGIN
 } from './../actions/partners'
 
 const initialState = {
@@ -81,6 +82,11 @@ const reducer = (state = initialState, action) => {
         ...state,
         partnerSelectedForChat: action.partner,
         imagesChatByPartner: setChatImagesByPartner(state, action)
+      }
+    case LOGIN:
+      return {
+        ...state,
+        logged_in_is_partner: true
       }
     default:
       return state

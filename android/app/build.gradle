@@ -103,8 +103,8 @@ android {
         applicationId "com.orama2"
         minSdkVersion rootProject.ext.minSdkVersion
         targetSdkVersion rootProject.ext.targetSdkVersion
-        versionCode 4
-        versionName "1.4"
+        versionCode 5
+        versionName "1.5"
         ndk {
             abiFilters "armeabi-v7a", "x86"
         }
@@ -154,6 +154,7 @@ dependencies {
     implementation project(':react-native-firebase')
     implementation "com.google.android.gms:play-services-base:16.0.1"
     implementation "com.google.firebase:firebase-core:16.0.6"
+    implementation "com.google.firebase:firebase-database:16.0.5" // @todo remove
     // compile project(':react-native-fbsdk')
     implementation 'com.facebook.android:facebook-android-sdk:4.34.0'
     implementation project(':react-native-fbsdk')

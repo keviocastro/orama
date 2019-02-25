@@ -18,7 +18,7 @@ import Carousel from 'react-native-snap-carousel'
 import SplashScreen from 'react-native-splash-screen'
 import { getSegments } from './../actions/segments'
 import { getHighlights } from './../actions/highlights'
-import { selectForChat } from './../actions/partners'
+import { selectForChat, checkLoggedInIsPartner } from './../actions/partners'
 import { AccessToken } from 'react-native-fbsdk'
 
 const horizontalMargin = 0
@@ -33,9 +33,18 @@ class SegmentScreen extends React.PureComponent {
     header: null
   }
 
-  componentWillMount() {
-    this.props.dispatch(getSegments())
-    this.props.dispatch(getHighlights())
+  constructor() {
+    super()
+
+    AccessToken.getCurrentAccessToken().then((data) => {
+      if (data === null) {
+        this.props.navigation.navigate('Login')
+      } else {
+        this.props.dispatch(checkLoggedInIsPartner(data.userID))
+        this.props.dispatch(getSegments())
+        this.props.dispatch(getHighlights())
+      }
+    })
   }
 
   componentDidMount() {
@@ -49,14 +58,9 @@ class SegmentScreen extends React.PureComponent {
   }
 
   onPressSegment = (segment) => {
+    // @todo Fix. Remove fixed code id
     if (segment.id === 17) {
-      AccessToken.getCurrentAccessToken().then((data) => {
-        if (data) {
-          this.props.navigation.navigate('PartnerChat')
-        } else {
-          this.props.navigation.navigate('Login', { segment: segment })
-        }
-      })
+      this.props.navigation.navigate('PartnerChat')
     } else {
       this.props.navigation.navigate('Partner', { segment: segment })
     }
@@ -121,13 +125,9 @@ class SegmentScreen extends React.PureComponent {
             sliderWidth={sliderWidth}
             itemWidth={itemWidth}
             autoplay={true}
-            autoplayDelay={3000}
-            autoplayInterval={3000}
             loop={true}
-            loopClonesPerSide={3}
-            firstItem={1}
-            enableMomentum={true}
             enableSnap={true}
+            loopClonesPerSide={3}
           />
         </LinearGradient>
         <FlatList

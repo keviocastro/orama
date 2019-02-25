@@ -5,6 +5,7 @@ import PropTypes from 'prop-types'
 import { ListItem, Left, Right, Body, Thumbnail, Content } from 'native-base'
 import firebase from 'react-native-firebase'
 import { addChats } from './../actions/chat'
+import { LoginButton, AccessToken } from 'react-native-fbsdk'
 
 import moment from 'moment'
 import momentPt from 'moment/locale/pt-br'

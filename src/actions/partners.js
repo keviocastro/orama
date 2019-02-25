@@ -1,4 +1,4 @@
-import { search, partnerUpdateFbAcessToken } from './api'
+import { search, partnerUpdateFbAcessToken, checkIsPartner } from './api'
 
 export const PARTNERS_RECEIVED = 'PARTNERS_RECEIVED'
 export const received = (partners, filter) => ({
@@ -36,3 +36,13 @@ export const selectForChat = partner => ({
 
 export const updateFbAcessToken = (fbId, fbAcessToken) => dispatch =>
   partnerUpdateFbAcessToken(dispatch, fbId, fbAcessToken)
+
+export const LOGIN = 'LOGIN'
+export const login = partner => ({
+  type: LOGIN,
+  partner,
+})
+
+export const checkLoggedInIsPartner = (fbId) => dispatch => {
+  return checkIsPartner(dispatch, fbId)
+}

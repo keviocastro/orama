@@ -6,12 +6,22 @@ const initialState = {
   requestError: '',
 };
 
+const filterSegments = (segments, state) => {
+  return segments.filter(segment => {
+    if (state.logged_in_is_partner !== true && segment.id === 17) {
+      return
+    }
+
+    return segment
+  })
+}
+
 const reducer = (state = initialState, action) => {
   switch (action.type) {
     case SEGMENTS_RECEIVED:
       return {
         ...state,
-        data: Array.isArray(action.segments) ? action.segments : [],
+        data: Array.isArray(action.segments) ? filterSegments(action.segments, state) : [],
         isFetching: false,
       };
     case SEGMENTS_REQUEST:

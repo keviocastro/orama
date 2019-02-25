@@ -1,4 +1,10 @@
 import { API_URL } from './../config'
+import { login } from './partners'
+
+const requestError = error => {
+  if (__DEV__)
+    throw error
+}
 
 export const search = (resource, dispatch, receiveAction, initRequestAction, errorAction, filter = []) => {
   dispatch(initRequestAction(filter))
@@ -45,8 +51,18 @@ export const partnerUpdateFbAcessToken = (dispatch, fbId, fbAcessToken) => {
   }).catch(err => requestError(error))
 }
 
-const requestError = (error) = {
-  if(__DEV__) {
-    throw err
-  }
+export const checkIsPartner = (dispatch, fbId) => {
+  const urlPartnerByFbId = `${API_URL}/partners?fb_id=${fbId}`
+
+  return fetch(urlPartnerByFbId).then((response) => {
+    if (response.ok) return response.json()
+  }).then((result) => {
+    let partner = Array.isArray(result) && result.length > 0
+      ? result[0]
+      : false
+
+    if (partner) {
+      dispatch(login(partner))
+    }
+  })
 }
