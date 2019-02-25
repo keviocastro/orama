@@ -10,10 +10,10 @@ import reducers from './reducers'
 import getTheme from './theme/components'
 import material from './theme/variables/material'
 import PushNotification from 'react-native-push-notification' // @todo migrate to react-native-firebase
-import { SENDER_ID } from './config'
+import { SENDER_ID, LOG_REDUX } from './config'
 
 const middleware = [thunkMiddleware]
-if (process.env.NODE_ENV === 'development' && __DEV__ === true) {
+if (process.env.NODE_ENV === 'development' && __DEV__ && LOG_REDUX) {
   middleware.push(logger)
 }
 
@@ -23,17 +23,18 @@ export default class App extends Component {
   componentDidMount() {
     PushNotification.configure({
       onNotification: function (notification) {
-        if (DEBUG)
+        if (__DEV__)
           console.log('NOTIFICATION:', notification)
 
       },
       onRegister: function (token) {
-        if (DEBUG)
+        if (__DEV__)
           console.log('TOKEN:', token);
 
       },
       senderID: SENDER_ID
     })
+    PushNotification.subscribeToTopic('orama')
     // AppState.addEventListener('change', this.handleAppStateChange);
   }
 
