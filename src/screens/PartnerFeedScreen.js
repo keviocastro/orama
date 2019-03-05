@@ -133,7 +133,7 @@ class PartnerFeedScreen extends React.Component {
     attachments.map((attachment, index) => this.renderCardItemByMediaType(attachment, index))
 
   renderItem = ({ item, index }) => {
-    if (index === 0 && this.partner.feed_image) {
+    if (index === 0 && this.partner.feed_image && !Array.isArray(this.partner.feed_image)) {
       return <Image style={styles.mainFeedImage} source={{ uri: this.partner.feed_image }} />
     }
     else {
