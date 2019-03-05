@@ -57,3 +57,5 @@ buck-out/
 src/config.js
 src/config.js
 src/config.js
+.vscode/.react/index.bundle
+.vscode/.react/index.map
