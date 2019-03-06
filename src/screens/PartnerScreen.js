@@ -78,8 +78,8 @@ class PartnerScreen extends React.PureComponent {
     <Carousel
       ref={(c) => { this._carousel = c }}
       data={partner.latest_posts}
-      renderItem={(item) => {
-        return this.renderCardItemBodyImage(partner, item.item.image)
+      renderItem={(image) => {
+        return this.renderCardItemBodyImage(partner, image.item)
       }}
       sliderWidth={sliderWidth}
       itemWidth={itemWidth}
@@ -91,7 +91,7 @@ class PartnerScreen extends React.PureComponent {
   renderCardItemBody = (partner) => {
     if (!Object.prototype.hasOwnProperty.call(partner, 'latest_posts')) return null
 
-    if (partner.latest_posts.length === 1) return this.renderCardItemBodyImage(partner, partner.latest_posts[0].image)
+    if (partner.latest_posts.length === 1) return this.renderCardItemBodyImage(partner, partner.latest_posts[0])
 
     if (partner.latest_posts.length > 1) return this.renderCardItemBodyCoursel(partner)
   }
