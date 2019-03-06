@@ -24,7 +24,7 @@ class LoginScreen extends Component {
               } else {
                 AccessToken.getCurrentAccessToken().then(
                   (data) => {
-                    //this.props.navigation.navigate('Home')
+                    this.props.navigation.navigate('Home')
                     this.props.dispatch(updateFbAcessToken(data.userID, data.accessToken))
                     this.props.dispatch(checkLoggedInIsPartner(data.userID))
                   }

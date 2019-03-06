@@ -46,3 +46,4 @@ export const login = partner => ({
 export const checkLoggedInIsPartner = (fbId) => dispatch => {
   return checkIsPartner(dispatch, fbId)
 }
+

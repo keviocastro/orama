@@ -35,31 +35,27 @@ class SegmentScreen extends React.PureComponent {
 
   constructor() {
     super()
+  }
 
+  componentWillMount() {
     AccessToken.getCurrentAccessToken().then((data) => {
       if (data === null) {
         this.props.navigation.navigate('Login')
       } else {
         this.props.dispatch(checkLoggedInIsPartner(data.userID))
-        this.props.dispatch(getSegments())
-        this.props.dispatch(getHighlights())
       }
     })
+
+    this.props.dispatch(getSegments())
+    this.props.dispatch(getHighlights())
   }
 
   componentDidMount() {
     SplashScreen.hide()
   }
 
-  componentWillReceiveProps(nextProps) {
-    if (nextProps.requestError) {
-      Alert.alert('Request Error', nextProps.requestError)
-    }
-  }
-
   onPressSegment = (segment) => {
-    // @todo Fix. Remove fixed code id
-    if (segment.id === 17) {
+    if (segment.id === 0) {
       this.props.navigation.navigate('PartnerChat')
     } else {
       this.props.navigation.navigate('Partner', { segment: segment })

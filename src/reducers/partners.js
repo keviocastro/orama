@@ -18,6 +18,8 @@ const initialState = {
   partnerSelectedForChat: {},
   images: [],
   chatType: null,
+  logged_in_is_partner: false,
+  logged_in_partner: {}
 }
 
 const setPartnersBySegment = (state, action) => {
@@ -86,7 +88,8 @@ const reducer = (state = initialState, action) => {
     case LOGIN:
       return {
         ...state,
-        logged_in_is_partner: true
+        logged_in_is_partner: true,
+        logged_in_partner: action.partner
       }
     default:
       return state

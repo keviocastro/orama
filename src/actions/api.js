@@ -1,68 +1,60 @@
 import { API_URL } from './../config'
 import { login } from './partners'
+import firebase from 'react-native-firebase'
+const db = firebase.firestore()
 
-const requestError = error => {
-  if (__DEV__)
-    throw error
+const convertSnapshot = (snapshot) => {
+  let docs = []
+  snapshot.docs.forEach(doc => {
+    docs.push(doc.data())
+  })
+  return docs
 }
 
 export const search = (resource, dispatch, receiveAction, initRequestAction, errorAction, filter = []) => {
   dispatch(initRequestAction(filter))
-  let query = ''
+  docRef = db.collection(resource)
 
   if (Object.keys(filter).length > 0) {
-    query = `?${filter.field}_like=${filter.value}&_sort=priority,name`
-  } else {
-    query = `?_sort=priority,name`
+    docRef.where(filter.field, filter.value)
   }
+  docRef.orderBy('priority')
 
-  const url = `${API_URL}/${resource}${query}`
-
-  return fetch(url).then((response) => {
-    if (!response.ok) dispatch(errorAction(`Request error with status ${response.status}`))
-    return response.json()
-  }).then((result) => {
-    dispatch(receiveAction(result, filter))
-  }).catch(err => requestError(error))
+  return docRef.get().then(snapshot => {
+    let docs = convertSnapshot(snapshot)
+    dispatch(receiveAction(docs, filter))
+  })
 }
 
 export const partnerUpdateFbAcessToken = (dispatch, fbId, fbAcessToken) => {
-  const urlPartnerByFbId = `${API_URL}/partners?fb_id=${fbId}`
 
-  return fetch(urlPartnerByFbId).then((response) => {
-    if (response.ok) return response.json()
-  }).then((result) => {
-    let partner = Array.isArray(result) && result.length > 0
-      ? result[0]
-      : false
-
-    if (partner) {
-      const urlUpdate = `${API_URL}/partners/${partner.id}`
-      partner.fb_token = fbAcessToken
-
-      fetch(urlUpdate, {
-        body: JSON.stringify(partner),
-        method: 'PUT',
-        headers: new Headers({
-          'Content-Type': 'application/json'
-        })
-      }).catch(err => requestError(error))
-    }
-  }).catch(err => requestError(error))
+  return db.collection('partners')
+    .where('fb_id', '==', fbId)
+    .get()
+    .then(snapshot => {
+      let batch = db.batch()
+      snapshot.docs.forEach(doc => {
+        let docRef = db.collection('partners').doc(doc.id)
+        batch.update(docRef, { fb_token: fbAcessToken })
+        batch.commit()
+      })
+    })
 }
 
 export const checkIsPartner = (dispatch, fbId) => {
   const urlPartnerByFbId = `${API_URL}/partners?fb_id=${fbId}`
 
-  return fetch(urlPartnerByFbId).then((response) => {
-    if (response.ok) return response.json()
-  }).then((result) => {
-    let partner = Array.isArray(result) && result.length > 0
-      ? result[0]
-      : false
+  return db.collection('partners')
+    .where('fb_id', '==', fbId)
+    .get()
+    .then(snapshot => {
+      if (snapshot.docs.length > 0) {
+        return dispatch(login(snapshot.docs[0].data()))
+      }
+    })
+}
 
-    if (partner) {
-      dispatch(login(partner))
-    }
-  })
+const requestError = error => {
+  if (__DEV__)
+    throw error
 }
