@@ -89,11 +89,25 @@ class PartnerScreen extends React.PureComponent {
   )
 
   renderCardItemBody = (partner) => {
-    if (!Object.prototype.hasOwnProperty.call(partner, 'latest_posts')) return null
+    if (!Object.prototype.hasOwnProperty.call(partner, 'latest_posts')) {
+      return null
+    } else if (Array.isArray(partner.latest_posts) &&
+      typeof partner.last_post === 'string' &&
+      partner.last_post.length > 1) {
+      // latest_posts é integrado com redes sociais.
+      // last_post é cadastrado no administrativo
+      partner.latest_posts.push(partner.last_post);
+    }
 
-    if (partner.latest_posts.length === 1) return this.renderCardItemBodyImage(partner, partner.latest_posts[0])
+    // latest_posts pode ser array ou string
+    if (Array.isArray(partner.latest_posts) && partner.latest_posts.length === 1)
+      return this.renderCardItemBodyImage(partner, partner.latest_posts[0])
 
-    if (partner.latest_posts.length > 1) return this.renderCardItemBodyCoursel(partner)
+    if (typeof partner.latest_posts === 'string' && partner.latest_posts.length > 1)
+      return this.renderCardItemBodyImage(partner, partner.latest_posts)
+
+    if (Array.isArray(partner.latest_posts) && partner.latest_posts.length > 1)
+      return this.renderCardItemBodyCoursel(partner)
   }
 
   renderItem = ({ item }) => (

@@ -92,8 +92,8 @@ class SegmentScreen extends React.PureComponent {
 
   renderItemCarousel = ({ item }) => {
 
-    const img = (item.highligh_image !== undefined && item.highligh_image.length !== 0)
-      ? item.highligh_image
+    const img = (item.highlight_image !== undefined && item.highlight_image.length !== 0)
+      ? item.highlight_image
       : item.logo
 
     return (

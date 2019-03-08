@@ -15,9 +15,11 @@ import { Card, CardItem, Body } from 'native-base'
 import PartnerFeedService from './../services/PartnerFeedService'
 import { selectForChat } from './../actions/partners'
 import { Header } from 'react-navigation'
+import ImageZoom from 'react-native-image-pan-zoom';
 
 const viewportHeight = Dimensions.get('window').height - Header.HEIGHT
 const mainFeedImageHeight = viewportHeight - (viewportHeight * 0.3)
+const mainFeedImageWidth = Dimensions.get('window').width
 
 const styles = StyleSheet.create({
   cardImage: { height: 200, width: null, flex: 1 },
@@ -60,6 +62,14 @@ class PartnerFeedScreen extends React.Component {
       if (error) {
         console.log('PartnerFeedScreen error: ', error)
         return false
+      }
+
+      if (typeof result.error === 'object') {
+        if (result.error.code === 190) {
+          alert('Esta empresa precisa logar no facebook através do O-rama para autorizar leitura do seu feed.');
+        }
+
+        result.data = [null];
       }
 
       this.setState({
@@ -134,9 +144,14 @@ class PartnerFeedScreen extends React.Component {
 
   renderItem = ({ item, index }) => {
     if (index === 0 && this.partner.feed_image && !Array.isArray(this.partner.feed_image)) {
-      return <Image style={styles.mainFeedImage} source={{ uri: this.partner.feed_image }} />
-    }
-    else {
+      return <ImageZoom cropWidth={mainFeedImageWidth}
+        cropHeight={mainFeedImageHeight}
+        imageWidth={mainFeedImageWidth}
+        imageHeight={mainFeedImageHeight}>
+        <Image style={styles.mainFeedImage}
+          source={{ uri: this.partner.feed_image }} />
+      </ImageZoom>
+    } else {
       let message = item.message ? this.renderCardItemMessage(item) : false
       let attachments = item.attachments ? this.renderCardItemsAttachments(item.attachments.data) : false
       if (message && attachments) {
@@ -151,7 +166,7 @@ class PartnerFeedScreen extends React.Component {
   render = () => (
     <FlatList
       data={this.state.feed}
-      keyExtractor={(item, index) => { return item.id + index.toString() }}
+      keyExtractor={(item, index) => { return index.toString() }}
       renderItem={this.renderItem}
       ListFooterComponent={this.renderFooter}
     />

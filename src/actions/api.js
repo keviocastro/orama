@@ -14,13 +14,13 @@ const convertSnapshot = (snapshot) => {
 export const search = (resource, dispatch, receiveAction, initRequestAction, errorAction, filter = []) => {
   dispatch(initRequestAction(filter))
   docRef = db.collection(resource)
+  query = docRef.orderBy('priority')
 
   if (Object.keys(filter).length > 0) {
-    docRef.where(filter.field, filter.value)
+    query.where(filter.field, filter.value)
   }
-  docRef.orderBy('priority')
 
-  return docRef.get().then(snapshot => {
+  return query.get().then(snapshot => {
     let docs = convertSnapshot(snapshot)
     dispatch(receiveAction(docs, filter))
   })
