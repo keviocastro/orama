@@ -59,3 +59,5 @@ src/config.js
 src/config.js
 .vscode/.react/index.bundle
 .vscode/.react/index.map
+.vscode/.react/index.bundle
+.vscode/.react/index.map
