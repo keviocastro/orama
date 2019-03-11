@@ -4,6 +4,7 @@ import { connect } from 'react-redux'
 import { LoginButton, AccessToken } from 'react-native-fbsdk'
 import PropTypes from 'prop-types'
 import { updateFbAcessToken, checkLoggedInIsPartner } from './../actions/partners'
+import { addLoggedUser, removeLoggedUser } from './../actions/auth'
 
 class LoginScreen extends Component {
   static navigationOptions = ({ navigation }) => ({
@@ -14,7 +15,7 @@ class LoginScreen extends Component {
     return (
       <ImageBackground style={styles.container} source={require('./../static/empty-state.png')} >
         <LoginButton
-          readPermissions={["email", "user_posts"]}
+          readPermissions={["user_posts"]}
           onLoginFinished={
             (error, result) => {
               if (error) {
@@ -24,9 +25,14 @@ class LoginScreen extends Component {
               } else {
                 AccessToken.getCurrentAccessToken().then(
                   (data) => {
+                    if (data === null) {
+                      this.props.dispatch(removeLoggedUser())
+                    } else {
+                      this.props.dispatch(updateFbAcessToken(data.userID, data.accessToken))
+                      this.props.dispatch(checkLoggedInIsPartner(data.userID))
+                      this.props.dispatch(addLoggedUser(data.userID, data.accessToken))
+                    }
                     this.props.navigation.navigate('Home')
-                    this.props.dispatch(updateFbAcessToken(data.userID, data.accessToken))
-                    this.props.dispatch(checkLoggedInIsPartner(data.userID))
                   }
                 )
               }

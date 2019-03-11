@@ -1,4 +1,3 @@
-import { API_URL } from './../config'
 import { login } from './partners'
 import firebase from 'react-native-firebase'
 const db = firebase.firestore()
@@ -26,6 +25,25 @@ export const search = (resource, dispatch, receiveAction, initRequestAction, err
   })
 }
 
+// @todo Refator to batch
+export const add = function (resource, data, dispatch, receiveAction, errorAction) {
+  docRef = db.collection(resource)
+  data = Array.isArray(data) ? data : [data]
+
+  data.forEach(item => {
+    docRef.add(item)
+      .then(snapshot => {
+        if (typeof receiveAction === 'function') {
+          dispatch(receiveAction(resource, snapshot.data()));
+        }
+      }).catch(err => {
+        if (typeof errorAction === 'function') {
+          dispatch(errorAction(err));
+        }
+      })
+  })
+}
+
 export const partnerUpdateFbAcessToken = (dispatch, fbId, fbAcessToken) => {
 
   return db.collection('partners')
@@ -42,7 +60,6 @@ export const partnerUpdateFbAcessToken = (dispatch, fbId, fbAcessToken) => {
 }
 
 export const checkIsPartner = (dispatch, fbId) => {
-  const urlPartnerByFbId = `${API_URL}/partners?fb_id=${fbId}`
 
   return db.collection('partners')
     .where('fb_id', '==', fbId)

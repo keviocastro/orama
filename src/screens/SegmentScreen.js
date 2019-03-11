@@ -18,8 +18,9 @@ import Carousel from 'react-native-snap-carousel'
 import SplashScreen from 'react-native-splash-screen'
 import { getSegments } from './../actions/segments'
 import { getHighlights } from './../actions/highlights'
-import { selectForChat, checkLoggedInIsPartner } from './../actions/partners'
-import { AccessToken } from 'react-native-fbsdk'
+import { addLoggedUser, removeLoggedUser } from './../actions/auth'
+import { selectForChat, checkLoggedInIsPartner, updateFbAcessToken } from './../actions/partners'
+import { LoginButton, AccessToken, LoginManager } from 'react-native-fbsdk'
 
 const horizontalMargin = 0
 const slideWidth = 300
@@ -28,26 +29,28 @@ const sliderWidth = Dimensions.get('window').width
 const itemWidth = slideWidth + horizontalMargin * 2
 const itemHeight = 100
 
+const itemListWidth = Dimensions.get('window').width - 10
+
 class SegmentScreen extends React.PureComponent {
   static navigationOptions = {
     header: null
   }
 
-  constructor() {
-    super()
-  }
-
   componentWillMount() {
     AccessToken.getCurrentAccessToken().then((data) => {
       if (data === null) {
+        this.props.loggedIn = false;
         this.props.navigation.navigate('Login')
+        this.props.dispatch(removeLoggedUser())
       } else {
+        this.props.dispatch(addLoggedUser(data.userID, data.accessToken))
         this.props.dispatch(checkLoggedInIsPartner(data.userID))
       }
+
+      this.props.dispatch(getSegments())
+      this.props.dispatch(getHighlights())
     })
 
-    this.props.dispatch(getSegments())
-    this.props.dispatch(getHighlights())
   }
 
   componentDidMount() {
@@ -64,20 +67,51 @@ class SegmentScreen extends React.PureComponent {
 
   keyExtractor = item => item.id.toString()
 
-  renderItem = ({ item }) => (
-    <TouchableOpacity onPress={() => this.onPressSegment(item)}>
-      <View>
-        <Card>
-          <CardItem>
-            <Text>{item.name}</Text>
-          </CardItem>
-          <CardItem cardBody>
-            <Image source={{ uri: item.image }} style={styles.segmentImage} />
-          </CardItem>
-        </Card>
+  renderItem = ({ item }, loggedUserFbId) => {
+    if (item.logoff === true && loggedUserFbId !== undefined && loggedUserFbId !== null) {
+      return (<View style={{ flex: 1, justifyContent: 'center', flexDirection: 'column', alignItems: 'center' }}>
+        <LoginButton
+          style={{ width: itemListWidth, height: 30, marginBottom: 10, marginTop: 10 }}
+          readPermissions={["email", "user_posts"]}
+          onLoginFinished={
+            (error, result) => {
+              if (error) {
+                alert('Não é possível comunicar com facebook agora. Verifique sua conexão e tente novamente.')
+              } else if (result.isCancelled) {
+                // "login is cancelled."
+              } else {
+                AccessToken.getCurrentAccessToken().then(
+                  (data) => {
+                    if (data === null) {
+                      this.props.dispatch(removeLoggedUser())
+                    } else {
+                      this.props.dispatch(updateFbAcessToken(data.userID, data.accessToken))
+                      this.props.dispatch(checkLoggedInIsPartner(data.userID))
+                      this.props.dispatch(addLoggedUser(data.userID, data.accessToken))
+                    }
+                  }
+                )
+              }
+            }
+          }
+        />
       </View>
-    </TouchableOpacity>
-  )
+      )
+    } else {
+      return (<TouchableOpacity onPress={() => this.onPressSegment(item)}>
+        <View>
+          <Card>
+            <CardItem>
+              <Text>{item.name}</Text>
+            </CardItem>
+            <CardItem cardBody>
+              <Image source={{ uri: item.image }} style={styles.segmentImage} />
+            </CardItem>
+          </Card>
+        </View>
+      </TouchableOpacity>)
+    }
+  }
 
   renderFooter = (isFetching) => {
     if (!isFetching) return null
@@ -130,7 +164,7 @@ class SegmentScreen extends React.PureComponent {
           style={styles.list}
           data={this.props.segments}
           keyExtractor={(this.keyExtractor)}
-          renderItem={this.renderItem}
+          renderItem={({ item }) => this.renderItem({ item }, this.props.loggedUserFbId)}
           onRefresh={() => this.props.dispatch(getSegments())}
           refreshing={this.props.isFetching}
         />
@@ -194,11 +228,14 @@ SegmentScreen.propTypes = {
   highlights: PropTypes.array
 }
 
-const mapStateToProps = state => ({
-  isFetching: state.segments.isFetching,
-  segments: state.segments.data,
-  requestError: state.segments.requestError,
-  highlights: state.highlights.partners
-})
+const mapStateToProps = state => {
+  return ({
+    isFetching: state.segments.isFetching,
+    segments: state.segments.data,
+    requestError: state.segments.requestError,
+    highlights: state.highlights.partners,
+    loggedUserFbId: state.auth.fbId
+  })
+}
 
 export default connect(mapStateToProps)(SegmentScreen)

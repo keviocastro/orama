@@ -29,9 +29,10 @@ export const selectPartner = partner => ({
 })
 
 export const SELECTED_FOR_CHAT = 'SELECTED_FOR_CHAT'
-export const selectForChat = partner => ({
+export const selectForChat = (partner, image) => ({
   type: SELECTED_FOR_CHAT,
   partner,
+  image
 })
 
 export const updateFbAcessToken = (fbId, fbAcessToken) => dispatch =>

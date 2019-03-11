@@ -52,8 +52,7 @@ class PartnerScreen extends React.PureComponent {
   }
 
   onPressLogo(partner) {
-    this.props.dispatch(selectForChat(partner))
-    this.props.navigation.navigate('Chat', { partner })
+    this.props.navigation.navigate('PartnerFeed', { partner })
   }
 
   get segment() {
@@ -91,12 +90,6 @@ class PartnerScreen extends React.PureComponent {
   renderCardItemBody = (partner) => {
     if (!Object.prototype.hasOwnProperty.call(partner, 'latest_posts')) {
       return null
-    } else if (Array.isArray(partner.latest_posts) &&
-      typeof partner.last_post === 'string' &&
-      partner.last_post.length > 1) {
-      // latest_posts é integrado com redes sociais.
-      // last_post é cadastrado no administrativo
-      partner.latest_posts.push(partner.last_post);
     }
 
     // latest_posts pode ser array ou string
@@ -219,6 +212,23 @@ const mapStateToProps = (state) => {
     state.partners.bySegment,
     segmentId,
   )
+
+  if (hasPartnersBySegment) {
+
+    state.partners.bySegment[segmentId].data = state.partners.bySegment[segmentId].data.map(partner => {
+
+      if (typeof partner.last_post === 'string' && partner.last_post.length > 0) {
+        if (!Array.isArray(partner.latest_posts)) {
+          partner.latest_posts = []
+        }
+        partner.latest_posts.push(partner.last_post);
+      }
+
+      return partner;
+    })
+
+  }
+
 
   props = hasPartnersBySegment
     ? {

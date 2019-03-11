@@ -4,7 +4,7 @@ import { Card, CardItem } from 'native-base'
 import { GiftedChat } from 'react-native-gifted-chat'
 import PropTypes from 'prop-types'
 import { connect } from 'react-redux';
-import { addMessages } from '../actions/chat';
+import { sendMessage } from '../actions/chat';
 
 class ChatSreen extends React.Component {
     static navigationOptions = ({ navigation }) => ({
@@ -45,7 +45,7 @@ class ChatSreen extends React.Component {
 
         if (!recentMessage) {
             if (this.props.partner.welcome_messages == undefined) {
-                this.props.dispatch(addMessages(defaultMessages, this.props.partner.id))
+                this.props.dispatch(sendMessage(defaultMessages, this.props.partner.id))
             } else {
                 messages = defaultMessages
 
@@ -83,13 +83,13 @@ class ChatSreen extends React.Component {
                     }).reverse()
                 }
 
-                this.props.dispatch(addMessages(messages, this.props.partner.id))
+                this.props.dispatch(sendMessage(messages, this.props.partner.id))
             }
         }
     }
 
     onSend(newMessages = []) {
-        this.props.dispatch(addMessages(newMessages, this.props.partner.id))
+        this.props.dispatch(sendMessage(newMessages, this.props.partner.id))
     }
 
     renderImage(image) {
@@ -137,7 +137,6 @@ ChatSreen.propTypes = {
     navigation: PropTypes.object
 };
 
-//@todo Refatore imagesChatByPartner for chat state
 const mapStateToProps = state => {
     let messages = []
     let images = []

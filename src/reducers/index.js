@@ -6,6 +6,7 @@ import nav from './nav'
 import chat from './chat'
 import highlights from './highlights'
 import dimensions from './dimensions'
+import auth from './auth'
 
 export default combineReducers({
   segments,
@@ -13,5 +14,6 @@ export default combineReducers({
   nav,
   chat,
   highlights,
-  dimensions
+  dimensions,
+  auth
 });

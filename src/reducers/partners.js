@@ -32,6 +32,7 @@ const setPartnersBySegment = (state, action) => {
       return partner
     }
   })
+
   bySegment[action.segmentId] = {
     isFetching: false,
     requestError: '',
