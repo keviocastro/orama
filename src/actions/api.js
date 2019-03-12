@@ -1,5 +1,5 @@
-import { login } from './partners'
 import firebase from 'react-native-firebase'
+import { addLoggedUser, invalidPass } from './auth'
 const db = firebase.firestore()
 
 const convertSnapshot = (snapshot) => {
@@ -42,6 +42,23 @@ export const add = function (resource, data, dispatch, receiveAction, errorActio
         }
       })
   })
+}
+
+export const partnerLogin = (pass, dispatch) => {
+  docRef = db.collection('partners')
+
+  return db.collection('partners')
+    .where('pass', '==', pass)
+    .get()
+    .then(snapshot => {
+      let docs = snapshot.docs
+      if (docs.length == 1) {
+        dispatch(addLoggedUser(null, null, docs[0].data()))
+        dispatch(invalidPass(false))
+      } else {
+        dispatch(invalidPass(true))
+      }
+    })
 }
 
 export const partnerUpdateFbAcessToken = (dispatch, fbId, fbAcessToken) => {

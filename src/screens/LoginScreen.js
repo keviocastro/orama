@@ -1,45 +1,46 @@
 import React, { Component } from 'react'
-import { StyleSheet, ImageBackground, Text } from 'react-native'
+import { StyleSheet, TextInput, Dimensions, View } from 'react-native'
+import { H3, Button, Text } from 'native-base'
 import { connect } from 'react-redux'
-import { LoginButton, AccessToken } from 'react-native-fbsdk'
 import PropTypes from 'prop-types'
-import { updateFbAcessToken, checkLoggedInIsPartner } from './../actions/partners'
-import { addLoggedUser, removeLoggedUser } from './../actions/auth'
+import { partnerLogin } from './../actions/auth'
+
+const contentWidth = Dimensions.get('window').width - 10
 
 class LoginScreen extends Component {
   static navigationOptions = ({ navigation }) => ({
-    header: null,
+    title: 'Login',
   })
+
+  componentWillReceiveProps(nextProps) {
+    if (nextProps.partner !== null) {
+      this.props.navigation.navigate('PartnerAccount', { partner: nextProps.partner })
+    }
+  }
+
+  onPressLogin() {
+    this.props.dispatch(partnerLogin(this.state.pass))
+  }
 
   render() {
     return (
-      <ImageBackground style={styles.container} source={require('./../static/empty-state.png')} >
-        <LoginButton
-          readPermissions={["user_posts"]}
-          onLoginFinished={
-            (error, result) => {
-              if (error) {
-                alert('Não é possível comunicar com facebook agora. Verifique sua conexão e tente novamente.')
-              } else if (result.isCancelled) {
-                // "login is cancelled."
-              } else {
-                AccessToken.getCurrentAccessToken().then(
-                  (data) => {
-                    if (data === null) {
-                      this.props.dispatch(removeLoggedUser())
-                    } else {
-                      this.props.dispatch(updateFbAcessToken(data.userID, data.accessToken))
-                      this.props.dispatch(checkLoggedInIsPartner(data.userID))
-                      this.props.dispatch(addLoggedUser(data.userID, data.accessToken))
-                    }
-                    this.props.navigation.navigate('Home')
-                  }
-                )
-              }
-            }
-          }
+      <View style={styles.container}>
+        <H3>Sua senha</H3>
+        <TextInput
+          label="Sua senha"
+          value={this.props.pass}
+          style={{ height: 40, width: contentWidth, borderColor: 'gray', borderWidth: 1 }}
+          autoComplete="password"
+          onChangeText={(text) => {
+            this.setState({ pass: text })
+          }}
+          secureTextEntry={true}
         />
-      </ImageBackground >
+        {this.props.invalidPass === true && <Text style={{ color: 'red' }}>Senha inválida</Text>}
+        <View style={{ alignItems: 'center', justifyContent: 'center', height: 100 }}>
+          <Button info onPress={() => this.onPressLogin()}><Text>Entrar</Text></Button>
+        </View>
+      </View>
     )
   }
 }
@@ -65,7 +66,9 @@ LoginScreen.propTypes = {
 }
 
 const mapStateToProps = (state) => ({
-
+  pass: state.auth.pass,
+  invalidPass: state.auth.invalidPass,
+  partner: state.auth.partner
 })
 
 export default connect(mapStateToProps)(LoginScreen)

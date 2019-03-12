@@ -38,12 +38,6 @@ export const selectForChat = (partner, image) => ({
 export const updateFbAcessToken = (fbId, fbAcessToken) => dispatch =>
   partnerUpdateFbAcessToken(dispatch, fbId, fbAcessToken)
 
-export const LOGIN = 'LOGIN'
-export const login = partner => ({
-  type: LOGIN,
-  partner,
-})
-
 export const checkLoggedInIsPartner = (fbId) => dispatch => {
   return checkIsPartner(dispatch, fbId)
 }

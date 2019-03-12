@@ -8,7 +8,6 @@ import {
   ActivityIndicator,
   Image,
   TouchableOpacity,
-  Alert,
   StyleSheet,
   Dimensions
 } from 'react-native'
@@ -20,7 +19,6 @@ import { getSegments } from './../actions/segments'
 import { getHighlights } from './../actions/highlights'
 import { addLoggedUser, removeLoggedUser } from './../actions/auth'
 import { selectForChat, checkLoggedInIsPartner, updateFbAcessToken } from './../actions/partners'
-import { LoginButton, AccessToken, LoginManager } from 'react-native-fbsdk'
 
 const horizontalMargin = 0
 const slideWidth = 300
@@ -37,20 +35,8 @@ class SegmentScreen extends React.PureComponent {
   }
 
   componentWillMount() {
-    AccessToken.getCurrentAccessToken().then((data) => {
-      if (data === null) {
-        this.props.loggedIn = false;
-        this.props.navigation.navigate('Login')
-        this.props.dispatch(removeLoggedUser())
-      } else {
-        this.props.dispatch(addLoggedUser(data.userID, data.accessToken))
-        this.props.dispatch(checkLoggedInIsPartner(data.userID))
-      }
-
-      this.props.dispatch(getSegments())
-      this.props.dispatch(getHighlights())
-    })
-
+    this.props.dispatch(getSegments())
+    this.props.dispatch(getHighlights())
   }
 
   componentDidMount() {
@@ -59,7 +45,11 @@ class SegmentScreen extends React.PureComponent {
 
   onPressSegment = (segment) => {
     if (segment.id === 0) {
-      this.props.navigation.navigate('PartnerChat')
+      if (this.props.loggedPartner == null) {
+        this.props.navigation.navigate('Login')
+      } else {
+        this.props.navigation.navigate('PartnerAccount', { partner: this.props.loggedPartner })
+      }
     } else {
       this.props.navigation.navigate('Partner', { segment: segment })
     }
@@ -68,49 +58,19 @@ class SegmentScreen extends React.PureComponent {
   keyExtractor = item => item.id.toString()
 
   renderItem = ({ item }, loggedUserFbId) => {
-    if (item.logoff === true && loggedUserFbId !== undefined && loggedUserFbId !== null) {
-      return (<View style={{ flex: 1, justifyContent: 'center', flexDirection: 'column', alignItems: 'center' }}>
-        <LoginButton
-          style={{ width: itemListWidth, height: 30, marginBottom: 10, marginTop: 10 }}
-          readPermissions={["email", "user_posts"]}
-          onLoginFinished={
-            (error, result) => {
-              if (error) {
-                alert('Não é possível comunicar com facebook agora. Verifique sua conexão e tente novamente.')
-              } else if (result.isCancelled) {
-                // "login is cancelled."
-              } else {
-                AccessToken.getCurrentAccessToken().then(
-                  (data) => {
-                    if (data === null) {
-                      this.props.dispatch(removeLoggedUser())
-                    } else {
-                      this.props.dispatch(updateFbAcessToken(data.userID, data.accessToken))
-                      this.props.dispatch(checkLoggedInIsPartner(data.userID))
-                      this.props.dispatch(addLoggedUser(data.userID, data.accessToken))
-                    }
-                  }
-                )
-              }
-            }
-          }
-        />
+    return (<TouchableOpacity onPress={() => this.onPressSegment(item)}>
+      <View>
+        <Card>
+          <CardItem>
+            <Text>{item.name}</Text>
+          </CardItem>
+          <CardItem cardBody>
+            <Image source={{ uri: item.image }} style={styles.segmentImage} />
+          </CardItem>
+        </Card>
       </View>
-      )
-    } else {
-      return (<TouchableOpacity onPress={() => this.onPressSegment(item)}>
-        <View>
-          <Card>
-            <CardItem>
-              <Text>{item.name}</Text>
-            </CardItem>
-            <CardItem cardBody>
-              <Image source={{ uri: item.image }} style={styles.segmentImage} />
-            </CardItem>
-          </Card>
-        </View>
-      </TouchableOpacity>)
-    }
+    </TouchableOpacity>)
+
   }
 
   renderFooter = (isFetching) => {
@@ -234,7 +194,8 @@ const mapStateToProps = state => {
     segments: state.segments.data,
     requestError: state.segments.requestError,
     highlights: state.highlights.partners,
-    loggedUserFbId: state.auth.fbId
+    loggedUserFbId: state.auth.fbId,
+    loggedPartner: state.auth.partner
   })
 }
 

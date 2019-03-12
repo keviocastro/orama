@@ -12,10 +12,6 @@ const addFixedSegmentOrama = (segments, state) => {
     name: 'O-rama Fast Commerce',
     image: 'https://us-central1-o-rama2.cloudfunctions.net/api/images/segments/BotaoOrama.JPG'
   });
-  segments.push({
-    logoff: true,
-    id: new Date().getTime()
-  });
 }
 
 const reducer = (state = initialState, action) => {
