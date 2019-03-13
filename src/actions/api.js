@@ -26,19 +26,28 @@ export const search = (resource, dispatch, receiveAction, initRequestAction, err
 }
 
 // @todo Refator to batch
-export const add = function (resource, data, dispatch, receiveAction, errorAction) {
+export const add = function (resource, data, dispatch, receiveAction, errorAction, loadingAction) {
   docRef = db.collection(resource)
   data = Array.isArray(data) ? data : [data]
+  let countTerminated = 0
+
+  dispatch(loadingAction(true))
 
   data.forEach(item => {
     docRef.add(item)
       .then(snapshot => {
+        countTerminated++
+        if (countTerminated === data.length && typeof loadingAction === 'function') {
+          dispatch(loadingAction(false))
+        }
         if (typeof receiveAction === 'function') {
-          dispatch(receiveAction(resource, snapshot.data()));
+          item.id = snapshot.id;
+          dispatch(receiveAction(item));
         }
       }).catch(err => {
         if (typeof errorAction === 'function') {
           dispatch(errorAction(err));
+          countTerminated++
         }
       })
   })

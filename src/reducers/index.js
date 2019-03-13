@@ -7,6 +7,7 @@ import chat from './chat'
 import highlights from './highlights'
 import dimensions from './dimensions'
 import auth from './auth'
+import posts from './posts'
 
 export default combineReducers({
   segments,
@@ -15,5 +16,6 @@ export default combineReducers({
   chat,
   highlights,
   dimensions,
-  auth
+  auth,
+  posts
 });

@@ -3,6 +3,7 @@ package com.orama2;
 import android.app.Application;
 
 import com.facebook.react.ReactApplication;
+import com.imagepicker.ImagePickerPackage;
 import io.invertase.firebase.RNFirebasePackage;
 import io.invertase.firebase.database.RNFirebaseDatabasePackage; // @todo remover
 import io.invertase.firebase.firestore.RNFirebaseFirestorePackage;
@@ -38,7 +39,8 @@ public class MainApplication extends Application implements ReactApplication {
 
     @Override
     protected List<ReactPackage> getPackages() {
-      return Arrays.<ReactPackage>asList(new MainReactPackage(), new RNFirebasePackage(),
+      return Arrays.<ReactPackage>asList(new MainReactPackage(),
+            new ImagePickerPackage(), new RNFirebasePackage(),
           new RNFirebaseDatabasePackage(), new FBSDKPackage(mCallbackManager), new SplashScreenReactPackage(),
           new ReactNativePushNotificationPackage(), new LinearGradientPackage(), new RNFirebaseFirestorePackage());
     }

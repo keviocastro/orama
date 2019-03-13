@@ -17,8 +17,7 @@ import Carousel from 'react-native-snap-carousel'
 import SplashScreen from 'react-native-splash-screen'
 import { getSegments } from './../actions/segments'
 import { getHighlights } from './../actions/highlights'
-import { addLoggedUser, removeLoggedUser } from './../actions/auth'
-import { selectForChat, checkLoggedInIsPartner, updateFbAcessToken } from './../actions/partners'
+import { selectForChat } from './../actions/partners'
 
 const horizontalMargin = 0
 const slideWidth = 300
@@ -35,6 +34,7 @@ class SegmentScreen extends React.PureComponent {
   }
 
   componentWillMount() {
+    this.props.navigation.navigate('PartnerAccount', { partner: { name: 'teste' } }) // @todo remover teste
     this.props.dispatch(getSegments())
     this.props.dispatch(getHighlights())
   }
