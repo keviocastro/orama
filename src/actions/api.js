@@ -1,13 +1,58 @@
 import firebase from 'react-native-firebase'
 import { addLoggedUser, invalidPass } from './auth'
+import { firebaseError } from './erros'
 const db = firebase.firestore()
 
 const convertSnapshot = (snapshot) => {
   let docs = []
   snapshot.docs.forEach(doc => {
-    docs.push(doc.data())
+    docs.push({ ...doc.data(), id: doc.id })
   })
   return docs
+}
+
+export const on = (resource, filter = {}, orderBy = {}, dispatch, initRequestAction, receiveAction, errorAction) => {
+  if (typeof initRequestAction === 'function') {
+    dispatch(initRequestAction())
+  }
+
+  let query = db.collection(resource)
+
+  let orderFields = Object.keys(orderBy)
+  if (orderFields.length > 0) {
+    orderFields.forEach(field => {
+      query = query.orderBy(field, orderBy[field])
+    })
+  }
+
+  let filterFields = Object.keys(filter)
+  if (filterFields.length > 0) {
+    filterFields.forEach(field => {
+      query = query.where(field, '==', filter[field])
+    })
+  }
+
+  return query.onSnapshot(snapshot => {
+    let docs = convertSnapshot(snapshot)
+    dispatch(receiveAction(docs, filter))
+  })
+}
+
+export const get = (resource, filter = [], dispatch, initRequestAction, receiveAction, errorAction) => {
+  if (typeof initRequestAction === 'function') {
+    dispatch(initRequestAction())
+  }
+
+  docRef = db.collection(resource)
+
+  if (Object.keys(filter).length > 0) {
+    query.where(filter.field, filter.value)
+  }
+
+  return query.get().then(snapshot => {
+    let docs = convertSnapshot(snapshot)
+    dispatch(receiveAction(docs, filter))
+  })
 }
 
 export const search = (resource, dispatch, receiveAction, initRequestAction, errorAction, filter = []) => {
@@ -34,6 +79,8 @@ export const add = function (resource, data, dispatch, receiveAction, errorActio
   dispatch(loadingAction(true))
 
   data.forEach(item => {
+    const timestamp = firebase.firestore.FieldValue.serverTimestamp()
+    item['created_at'] = timestamp
     docRef.add(item)
       .then(snapshot => {
         countTerminated++

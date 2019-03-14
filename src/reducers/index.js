@@ -8,6 +8,7 @@ import highlights from './highlights'
 import dimensions from './dimensions'
 import auth from './auth'
 import posts from './posts'
+import erros from './erros'
 
 export default combineReducers({
   segments,
@@ -17,5 +18,6 @@ export default combineReducers({
   highlights,
   dimensions,
   auth,
-  posts
+  posts,
+  erros
 });

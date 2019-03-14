@@ -150,6 +150,7 @@ android {
 }
 
 dependencies {
+    compile project(':react-native-image-picker')
     implementation "com.google.firebase:firebase-firestore:17.1.5"
     implementation project(':react-native-firebase')
     implementation "com.google.android.gms:play-services-base:16.0.1"
