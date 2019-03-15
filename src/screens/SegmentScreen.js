@@ -34,7 +34,7 @@ class SegmentScreen extends React.PureComponent {
   }
 
   componentWillMount() {
-    this.props.navigation.navigate('PartnerAccount', { partner: { name: 'teste' } }) // @todo remover teste
+    //this.props.navigation.navigate('PartnerAccount', { partner: { name: 'teste' } }) // @todo remover teste
     this.props.dispatch(getSegments())
     this.props.dispatch(getHighlights())
   }
