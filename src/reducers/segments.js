@@ -10,7 +10,7 @@ const addFixedSegmentOrama = (segments, state) => {
   segments.unshift({
     id: 0,
     name: 'O-rama Fast Commerce',
-    image: 'https://us-central1-o-rama2.cloudfunctions.net/api/images/segments/BotaoOrama.JPG'
+    image: 'https://o-rama-static.firebaseapp.com/segmento-orama.jpg'
   });
 }
 

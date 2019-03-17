@@ -1,8 +1,19 @@
 import { partnerLogin as apiPartnerLogin } from './api'
 
 export const partnerLogin = (pass) => dispatch => {
-  return apiPartnerLogin(pass, dispatch)
+  return apiPartnerLogin(pass, dispatch, loading)
 }
+
+const PARTNER_LOGOFF = 'PARTNER_LOGOFF'
+export const partnerLogoff = () => ({
+  type: PARTNER_LOGOFF
+})
+
+export const LOADING = 'LOADING'
+export const loading = (loading) => ({
+  type: LOADING,
+  loading
+})
 
 export const INVALID_PASS = 'INVALID_PASS'
 export const invalidPass = (invalid) => ({

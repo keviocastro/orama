@@ -1,5 +1,5 @@
 import React, { Component } from 'react'
-import { StyleSheet, TextInput, Dimensions, View } from 'react-native'
+import { StyleSheet, TextInput, Dimensions, View, ActivityIndicator } from 'react-native'
 import { H3, Button, Text } from 'native-base'
 import { connect } from 'react-redux'
 import PropTypes from 'prop-types'
@@ -19,7 +19,7 @@ class LoginScreen extends Component {
   }
 
   onPressLogin() {
-    this.props.dispatch(partnerLogin(this.state.pass))
+    this.props.dispatch(partnerLogin(this.inputPass.value))
   }
 
   render() {
@@ -28,17 +28,19 @@ class LoginScreen extends Component {
         <H3>Sua senha</H3>
         <TextInput
           label="Sua senha"
+          ref={input => { this.inputPass = input }}
           value={this.props.pass}
           style={{ height: 40, width: contentWidth, borderColor: 'gray', borderWidth: 1 }}
           autoComplete="password"
           onChangeText={(text) => {
-            this.setState({ pass: text })
+            this.inputPass.value = text
           }}
           secureTextEntry={true}
         />
         {this.props.invalidPass === true && <Text style={{ color: 'red' }}>Senha inválida</Text>}
         <View style={{ alignItems: 'center', justifyContent: 'center', height: 100 }}>
-          <Button info onPress={() => this.onPressLogin()}><Text>Entrar</Text></Button>
+          {!this.props.loading && <Button info onPress={() => this.onPressLogin()}><Text>Entrar</Text></Button>}
+          {this.props.sending && <ActivityIndicator animating size="large" style={{ marginTop: 40, marginBottom: 40 }} />}
         </View>
       </View>
     )
@@ -68,7 +70,8 @@ LoginScreen.propTypes = {
 const mapStateToProps = (state) => ({
   pass: state.auth.pass,
   invalidPass: state.auth.invalidPass,
-  partner: state.auth.partner
+  partner: state.auth.partner,
+  loading: state.auth.loading
 })
 
 export default connect(mapStateToProps)(LoginScreen)

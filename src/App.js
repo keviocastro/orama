@@ -7,7 +7,6 @@ import thunkMiddleware from 'redux-thunk'
 import logger from 'redux-logger'
 import AppWithNavigationState from './components/Navigator'
 import reducers from './reducers'
-import { persistStore, persistReducer } from 'redux-persist'
 import storage from 'redux-persist/lib/storage'
 import getTheme from './theme/components'
 import material from './theme/variables/material'
@@ -23,9 +22,9 @@ const persistConfig = {
   key: 'root',
   storage,
 }
-const persistedReducer = persistReducer(persistConfig, reducers)
+//const persistedReducer = persistReducer(persistConfig, reducers)
 
-const store = createStore(persistedReducer, applyMiddleware(...middleware))
+const store = createStore(reducers, applyMiddleware(...middleware))
 export default class App extends Component {
 
   componentDidMount() {

@@ -1,7 +1,10 @@
-import { add, on } from './api'
+import { add, get } from './api'
 
-export const getOnUpdate = (partnerId) => dispatch =>
-  on('posts', { partner_id: partnerId }, { 'created_at': 'desc' }, dispatch, loading, received)
+export const getRealtimeByPartner = (partnerId) => dispatch =>
+  get('posts', { partner_id: partnerId }, { 'created_at': 'desc' }, dispatch, true, loading, received)
+
+export const getByPartner = (partnerId) => dispatch =>
+  get('posts', { partner_id: partnerId }, { 'created_at': 'desc' }, dispatch, false, loading, received)
 
 export const sendPost = (text, image, partnerId) => dispatch =>
   add('posts', { text, image, partner_id: partnerId }, dispatch, postCreated, errorPostCreate, sending)

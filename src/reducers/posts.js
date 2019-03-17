@@ -14,7 +14,7 @@ const initialState = {
   sending: false,
   text: '',
   image: null,
-  partnerId: '4ehDYoJxRPuSRgiecN02', // @todo remover. Somente debug
+  partnerId: null,
   clearForm: false,
   loading: true
 }
@@ -39,6 +39,7 @@ export default (state = initialState, action) => {
     case POST_CREATED:
       return {
         ...state,
+        posts: [action.post, ...state.posts],
         postCreated: true,
         clearForm: false
       }

@@ -14,7 +14,7 @@ import PropTypes from 'prop-types'
 import { connect } from 'react-redux'
 import ImagePicker from 'react-native-image-picker'
 import { Button, Text } from 'native-base'
-import { sendPost, clearForm, getOnUpdate, selectImage } from './../actions/posts'
+import { sendPost, clearForm, getOnUpdate, selectImage, getByPartner } from './../actions/posts'
 
 const contentWidth = Dimensions.get('window').width - 10
 const fullWidth = Dimensions.get('window').width
@@ -35,11 +35,11 @@ export class PartnerPostScreen extends Component {
     dispatch: PropTypes.func
   }
   static navigationOptions = ({ navigation }) => ({
-    title: 'Seus posts'
+    title: navigation.state.params.partner.name + ' posts'
   })
 
   componentWillMount() {
-    this.props.dispatch(getOnUpdate(this.props.partnerId))
+    this.props.dispatch(getByPartner(this.props.partnerId))
     this.setState({
       image: null,
     });
@@ -55,14 +55,13 @@ export class PartnerPostScreen extends Component {
   }
 
   onPressUploadPhoto() {
-    let text = this.postText
     ImagePicker.showImagePicker(options, (response) => {
       if (response.didCancel) {
-        console.log('User cancelled image picker');
+
       } else if (response.error) {
-        console.log('ImagePicker Error: ', response.error);
+
       } else if (response.customButton) {
-        console.log('User tapped custom button: ', response.customButton);
+
       } else {
         const base64 = 'data:image/jpeg;base64,' + response.data;
 
@@ -152,6 +151,7 @@ export class PartnerPostScreen extends Component {
           numberOfLines={2}
         />
         <FlatList
+          ref={list => { this.postList = list }}
           ListHeaderComponent={() => this.renderForm()}
           data={this.props.posts}
           keyExtractor={(item) => item.id}

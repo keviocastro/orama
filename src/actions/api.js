@@ -11,7 +11,7 @@ const convertSnapshot = (snapshot) => {
   return docs
 }
 
-export const on = (resource, filter = {}, orderBy = {}, dispatch, initRequestAction, receiveAction, errorAction) => {
+export const get = (resource, filter = {}, orderBy = {}, dispatch, realtime, initRequestAction, receiveAction) => {
   if (typeof initRequestAction === 'function') {
     dispatch(initRequestAction())
   }
@@ -32,27 +32,17 @@ export const on = (resource, filter = {}, orderBy = {}, dispatch, initRequestAct
     })
   }
 
-  return query.onSnapshot(snapshot => {
-    let docs = convertSnapshot(snapshot)
-    dispatch(receiveAction(docs, filter))
-  })
-}
-
-export const get = (resource, filter = [], dispatch, initRequestAction, receiveAction, errorAction) => {
-  if (typeof initRequestAction === 'function') {
-    dispatch(initRequestAction())
+  if (realtime) {
+    return query.onSnapshot(snapshot => {
+      let docs = convertSnapshot(snapshot)
+      dispatch(receiveAction(docs, filter))
+    })
+  } else {
+    return query.get().then(snapshot => {
+      let docs = convertSnapshot(snapshot)
+      dispatch(receiveAction(docs, filter))
+    })
   }
-
-  docRef = db.collection(resource)
-
-  if (Object.keys(filter).length > 0) {
-    query.where(filter.field, filter.value)
-  }
-
-  return query.get().then(snapshot => {
-    let docs = convertSnapshot(snapshot)
-    dispatch(receiveAction(docs, filter))
-  })
 }
 
 export const search = (resource, dispatch, receiveAction, initRequestAction, errorAction, filter = []) => {
@@ -100,8 +90,9 @@ export const add = function (resource, data, dispatch, receiveAction, errorActio
   })
 }
 
-export const partnerLogin = (pass, dispatch) => {
+export const partnerLogin = (pass, dispatch, loadingAction) => {
   docRef = db.collection('partners')
+  dispatch(loadingAction(true))
 
   return db.collection('partners')
     .where('pass', '==', pass)
@@ -114,6 +105,7 @@ export const partnerLogin = (pass, dispatch) => {
       } else {
         dispatch(invalidPass(true))
       }
+      dispatch(loadingAction(false))
     })
 }
 

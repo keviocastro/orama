@@ -4,6 +4,7 @@ import PropTypes from 'prop-types'
 import { Text, Button } from 'native-base'
 import { View, StyleSheet } from 'react-native'
 import { HeaderBackButton } from 'react-navigation'
+import { partnerLogoff } from './../actions/auth'
 
 const styles = StyleSheet.create({
   lineButtons: {
@@ -34,7 +35,7 @@ class PartnerAccountScreen extends React.Component {
   }
 
   onPressPost() {
-    this.props.navigation.navigate('PartnerPost')
+    this.props.navigation.navigate('PartnerPost', { partner: this.props.partner })
   }
 
   onPressNotfy() {
@@ -42,7 +43,8 @@ class PartnerAccountScreen extends React.Component {
   }
 
   onPressLogout() {
-
+    this.props.dispatch(partnerLogoff())
+    this.props.navigation.navigate('Login')
   }
 
   render() {
@@ -67,7 +69,7 @@ PartnerAccountScreen.propTypes = {
 }
 
 const mapToProps = state => ({
-  loggedPartner: state.auth.partner
+  partner: state.auth.partner
 })
 
 export default connect(mapToProps)(PartnerAccountScreen)
