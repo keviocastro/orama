@@ -1,5 +1,5 @@
 import React, { Component } from 'react'
-import { StyleSheet, TextInput, Dimensions, View, ActivityIndicator } from 'react-native'
+import { StyleSheet, TextInput, Dimensions, View, ActivityIndicator, ImageBackground } from 'react-native'
 import { H3, Button, Text } from 'native-base'
 import { connect } from 'react-redux'
 import PropTypes from 'prop-types'
@@ -24,25 +24,27 @@ class LoginScreen extends Component {
 
   render() {
     return (
-      <View style={styles.container}>
-        <H3>Sua senha</H3>
-        <TextInput
-          label="Sua senha"
-          ref={input => { this.inputPass = input }}
-          value={this.props.pass}
-          style={{ height: 40, width: contentWidth, borderColor: 'gray', borderWidth: 1 }}
-          autoComplete="password"
-          onChangeText={(text) => {
-            this.inputPass.value = text
-          }}
-          secureTextEntry={true}
-        />
-        {this.props.invalidPass === true && <Text style={{ color: 'red' }}>Senha inválida</Text>}
-        <View style={{ alignItems: 'center', justifyContent: 'center', height: 100 }}>
-          {!this.props.loading && <Button info onPress={() => this.onPressLogin()}><Text>Entrar</Text></Button>}
-          {this.props.sending && <ActivityIndicator animating size="large" style={{ marginTop: 40, marginBottom: 40 }} />}
+      <ImageBackground style={styles.imageBackground} source={require('./../static/background-pass.png')} >
+        <View style={styles.container}>
+          <TextInput
+            label="Sua senha"
+            placeholder="SENHA"
+            ref={input => { this.inputPass = input }}
+            value={this.props.pass}
+            style={{ height: 40, width: contentWidth, borderColor: '#3787c4', borderWidth: 2 }}
+            autoComplete="password"
+            onChangeText={(text) => {
+              this.inputPass.value = text
+            }}
+            secureTextEntry={true}
+          />
+          {this.props.invalidPass === true && <Text style={{ color: 'red' }}>Senha inválida</Text>}
+          <View style={{ alignItems: 'center', justifyContent: 'center', height: 100 }}>
+            {!this.props.loading && <Button info onPress={() => this.onPressLogin()}><Text>Entrar</Text></Button>}
+            {this.props.sending && <ActivityIndicator animating size="large" style={{ marginTop: 40, marginBottom: 40 }} />}
+          </View>
         </View>
-      </View>
+      </ImageBackground>
     )
   }
 }
@@ -52,14 +54,21 @@ const styles = StyleSheet.create({
     flex: 1,
     flexDirection: 'column',
     justifyContent: 'center',
-    alignItems: 'center',
-    backgroundColor: '#F5FCFF',
+    alignItems: 'center'
+  },
+  imageBackground: {
+    resizeMode: 'center',
+    position: 'absolute',
+    top: 0,
+    left: 0,
+    width: '100%',
+    height: '100%',
   },
   label: {
     fontSize: 16,
     fontWeight: 'bold',
     color: 'blue',
-  },
+  }
 })
 
 LoginScreen.propTypes = {

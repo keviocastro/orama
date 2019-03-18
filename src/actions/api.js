@@ -66,7 +66,9 @@ export const add = function (resource, data, dispatch, receiveAction, errorActio
   data = Array.isArray(data) ? data : [data]
   let countTerminated = 0
 
-  dispatch(loadingAction(true))
+  if (typeof loadingAction === 'string') {
+    dispatch(loadingAction(true))
+  }
 
   data.forEach(item => {
     const timestamp = firebase.firestore.FieldValue.serverTimestamp()

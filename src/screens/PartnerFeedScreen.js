@@ -15,7 +15,7 @@ import { Card, CardItem, Body } from 'native-base'
 import { selectForChat } from './../actions/partners'
 import { Header } from 'react-navigation'
 import ImageZoom from 'react-native-image-pan-zoom'
-import { getRealtimeByPartner } from './../actions/posts'
+import { getByPartner } from './../actions/posts'
 
 const viewportHeight = Dimensions.get('window').height - Header.HEIGHT
 const mainFeedImageHeight = viewportHeight - (viewportHeight * 0.3)
@@ -36,7 +36,13 @@ class PartnerFeedScreen extends React.Component {
   })
 
   componentWillMount() {
-    this.props.dispatch(getRealtimeByPartner(this.props.partnerId))
+    if (this.props.posts.length === 0) {
+      this.props.dispatch(getByPartner(this.props.partnerId))
+    }
+  }
+
+  get partner() {
+    return this.props.navigation.state.params.partner
   }
 
   onClickItemCard = (image) => {
@@ -45,13 +51,14 @@ class PartnerFeedScreen extends React.Component {
   }
 
   renderLoading = () => {
-    if (!this.props.loading) return null
-
-    return (
-      <View>
-        <ActivityIndicator animating size="large" />
-      </View>
-    )
+    if (this.props.loading)
+      return (
+        <View>
+          <ActivityIndicator animating size="large" />
+        </View>
+      )
+    else
+      return null
   }
 
   renderItemPost({ item, index }) {
@@ -78,7 +85,8 @@ class PartnerFeedScreen extends React.Component {
     if (this.props.navigation.state.params.partner !== undefined &&
       typeof this.props.navigation.state.params.partner.feed_image === 'string' &&
       this.props.navigation.state.params.partner.feed_image.length > 0)
-      return <ImageZoom cropWidth={mainFeedImageWidth}
+      return <ImageZoom
+        cropWidth={mainFeedImageWidth}
         cropHeight={mainFeedImageHeight}
         imageWidth={mainFeedImageWidth}
         imageHeight={mainFeedImageHeight}>
@@ -90,14 +98,16 @@ class PartnerFeedScreen extends React.Component {
   }
 
   render = () => (
-    <View>
+    <View style={{ flex: 1, flexDirection: 'column' }}>
       <FlatList
         ListHeaderComponent={() => this.renderFeedImage()}
         data={this.props.posts}
         keyExtractor={(item) => item.id}
         renderItem={({ item, index }) => this.renderItemPost({ item, index })}
+        onRefresh={() => getByPartner(this.props.partnerId)}
+        refreshing={this.props.loading}
+        ListFooterComponent={() => this.renderLoading()}
       />
-      {this.renderLoading()}
     </View>
   )
 }
@@ -107,9 +117,12 @@ PartnerFeedScreen.propTypes = {
   dispatch: PropTypes.func
 }
 
-const mapStateToProps = (state) => ({
-  loading: state.posts.loading,
-  posts: state.posts.posts
-})
+const mapStateToProps = (state) => {
+  let loading = state.posts.loading === true ? true : false;
+  return ({
+    loading: loading,
+    posts: state.posts.posts
+  })
+}
 
 export default connect(mapStateToProps)(PartnerFeedScreen)

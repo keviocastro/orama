@@ -73,7 +73,7 @@ export class PartnerPostScreen extends Component {
   }
 
   onPressSendPost() {
-    this.props.dispatch(sendPost(this.state.text, this.state.image, this.props.partnerId))
+    this.props.dispatch(sendPost(this.inputText.value, this.state.image, this.props.partnerId))
   }
 
   renderMessageSended() {
@@ -143,16 +143,14 @@ export class PartnerPostScreen extends Component {
           label="Texto do post"
           style={{ height: 40, width: fullWidth, borderColor: 'gray', borderWidth: 1, marginTop: 2 }}
           onChangeText={(text) => {
-            this.setState({
-              text: text
-            })
+            this.inputText.value = text
           }}
           multiline={true}
           numberOfLines={2}
         />
+        {this.renderForm()}
         <FlatList
           ref={list => { this.postList = list }}
-          ListHeaderComponent={() => this.renderForm()}
           data={this.props.posts}
           keyExtractor={(item) => item.id}
           renderItem={({ item, index }) => this.renderItemPost({ item, index })} />
