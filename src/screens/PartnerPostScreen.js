@@ -7,7 +7,8 @@ import {
   TouchableOpacity,
   ActivityIndicator,
   FlatList,
-  StyleSheet
+  StyleSheet,
+  ImageBackground
 } from 'react-native'
 import { Card, CardItem, Body } from 'native-base'
 import PropTypes from 'prop-types'
@@ -15,6 +16,7 @@ import { connect } from 'react-redux'
 import ImagePicker from 'react-native-image-picker'
 import { Button, Text } from 'native-base'
 import { sendPost, clearForm, getOnUpdate, selectImage, getByPartner } from './../actions/posts'
+import { backgroundImage } from './styles';
 
 const contentWidth = Dimensions.get('window').width - 10
 const fullWidth = Dimensions.get('window').width
@@ -39,7 +41,9 @@ export class PartnerPostScreen extends Component {
   })
 
   componentWillMount() {
-    this.props.dispatch(getByPartner(this.props.partnerId))
+    if (this.props.posts.length === 0) {
+      this.props.dispatch(getByPartner(this.props.partnerId))
+    }
     this.setState({
       image: null,
     });
@@ -133,7 +137,7 @@ export class PartnerPostScreen extends Component {
 
   render() {
     return (
-      <View>
+      <ImageBackground style={backgroundImage} source={require('./../static/background.png')} >
         <TextInput
           ref={input => { this.inputText = input }}
           clearButtonMode='always'
@@ -154,7 +158,7 @@ export class PartnerPostScreen extends Component {
           data={this.props.posts}
           keyExtractor={(item) => item.id}
           renderItem={({ item, index }) => this.renderItemPost({ item, index })} />
-      </View>
+      </ImageBackground>
     )
   }
 }

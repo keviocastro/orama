@@ -41,7 +41,7 @@ class LoginScreen extends Component {
           {this.props.invalidPass === true && <Text style={{ color: 'red' }}>Senha inválida</Text>}
           <View style={{ alignItems: 'center', justifyContent: 'center', height: 100 }}>
             {!this.props.loading && <Button info onPress={() => this.onPressLogin()}><Text>Entrar</Text></Button>}
-            {this.props.sending && <ActivityIndicator animating size="large" style={{ marginTop: 40, marginBottom: 40 }} />}
+            {this.props.loading && <ActivityIndicator animating size="large" style={{ marginTop: 40, marginBottom: 40 }} />}
           </View>
         </View>
       </ImageBackground>

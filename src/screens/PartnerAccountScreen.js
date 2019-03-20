@@ -2,9 +2,10 @@ import React from 'react'
 import { connect } from 'react-redux'
 import PropTypes from 'prop-types'
 import { Text, Button } from 'native-base'
-import { View, StyleSheet } from 'react-native'
+import { View, StyleSheet, ImageBackground } from 'react-native'
 import { HeaderBackButton } from 'react-navigation'
 import { partnerLogoff } from './../actions/auth'
+import { backgroundImage } from './styles';
 
 const styles = StyleSheet.create({
   lineButtons: {
@@ -49,16 +50,18 @@ class PartnerAccountScreen extends React.Component {
 
   render() {
     return (
-      <View style={{ flex: 1, paddingTop: 40 }} >
-        <View style={styles.lineButtons}  >
-          <Button style={styles.button} info onPress={() => this.onPressChat()}><Text style={styles.buttonText}>Atendimento</Text></Button>
-          <Button style={styles.button} info onPress={() => this.onPressPost()}><Text style={styles.buttonText}>Postagens</Text></Button>
-        </View>
-        <View style={styles.lineButtons}>
-          <Button style={styles.button} info onPress={() => this.onPressNotfy()}><Text style={styles.buttonText}>Notificações</Text></Button>
-          <Button style={styles.button} info onPress={() => this.onPressLogout()}><Text style={styles.buttonText}>Sair da conta</Text></Button>
-        </View>
-      </ View >
+      <ImageBackground style={backgroundImage} source={require('./../static/background.png')} >
+        <View style={{ flex: 1, paddingTop: 40 }} >
+          <View style={styles.lineButtons}  >
+            <Button style={styles.button} info onPress={() => this.onPressChat()}><Text style={styles.buttonText}>Atendimento</Text></Button>
+            <Button style={styles.button} info onPress={() => this.onPressPost()}><Text style={styles.buttonText}>Postagens</Text></Button>
+          </View>
+          <View style={styles.lineButtons}>
+            <Button style={styles.button} info onPress={() => this.onPressNotfy()}><Text style={styles.buttonText}>Notificações</Text></Button>
+            <Button style={styles.button} info onPress={() => this.onPressLogout()}><Text style={styles.buttonText}>Sair da conta</Text></Button>
+          </View>
+        </ View >
+      </ImageBackground>
     )
   }
 }
