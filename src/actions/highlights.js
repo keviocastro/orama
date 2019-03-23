@@ -1,4 +1,4 @@
-import { search } from './api'
+import { get } from './api'
 
 export const HIGHLIGHTS_RECEIVED = 'HIGHLIGHTS_RECEIVED'
 export const received = (partners) => ({
@@ -15,7 +15,4 @@ export const requestError = error => ({
   error,
 })
 export const getHighlights = () => dispatch =>
-  search('partners', dispatch, received, request, requestError, {
-    field: 'highlighted',
-    value: true,
-  })
+  get('partners', { 'highlighted': true }, {}, dispatch, false, request, received)

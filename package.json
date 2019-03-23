@@ -5,6 +5,7 @@
   "scripts": {
     "start": "node node_modules/react-native/local-cli/cli.js start",
     "test": "jest",
+    "dev-menu": "adb shell input keyevent 82",
     "emulador": "emulator -avd nexus",
     "release": "cd android && ./gradlew assembleRelease",
     "fb-login": "adb shell input text 'origamis.app.9' && adb shell input keyevent 61 && adb shell input text 'castro@2281' && adb shell input keyevent 66"
@@ -43,5 +44,10 @@
   },
   "jest": {
     "preset": "react-native"
+  },
+  "rnpm": {
+    "assets": [
+      "./res/fonts/"
+    ]
   }
 }

@@ -5,19 +5,30 @@ import {
   CLEAR_FORM,
   RECEIVED,
   LOADING,
-  SELECT_IMAGE
+  SELECT_IMAGE,
+  CLEAR_POSTS,
+  SELECTED_PARTNER_FOR_FEED
 } from './../actions/posts'
 
 const initialState = {
   posts: [],
+  postsByPartner: {},
   postCreated: false,
   sending: false,
   text: '',
   image: null,
   partnerId: null,
   clearForm: false,
-  loading: true
+  loading: true,
+  partnerSelectedForFeed: {}
 }
+
+const setPostsByPartner = (state, action) => {
+  const postsByPartner = { ...state.posts }
+  postsByPartner[action.filter.partner_id] = action.posts
+  return postsByPartner
+}
+
 
 export default (state = initialState, action) => {
   switch (action.type) {
@@ -29,7 +40,13 @@ export default (state = initialState, action) => {
     case RECEIVED:
       return {
         ...state,
-        posts: action.posts
+        posts: action.posts,
+        postsByPartner: setPostsByPartner(state, action)
+      }
+    case CLEAR_POSTS:
+      return {
+        ...state,
+        posts: []
       }
     case LOADING:
       return {
@@ -63,6 +80,11 @@ export default (state = initialState, action) => {
         image: null,
         postCreated: false,
         clearForm: true
+      }
+    case SELECTED_PARTNER_FOR_FEED:
+      return {
+        ...state,
+        partnerSelectedForFeed: action.partner
       }
     default:
       return state

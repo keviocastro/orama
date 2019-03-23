@@ -2,10 +2,13 @@ import React from 'react'
 import { connect } from 'react-redux'
 import PropTypes from 'prop-types'
 import { Text, Button } from 'native-base'
-import { View, StyleSheet, ImageBackground } from 'react-native'
+import { View, StyleSheet, ImageBackground, Dimensions } from 'react-native'
 import { HeaderBackButton } from 'react-navigation'
 import { partnerLogoff } from './../actions/auth'
 import { backgroundImage } from './styles';
+import { clearPosts } from '../actions/posts';
+
+const contentWidth = Dimensions.get('window').width - 20
 
 const styles = StyleSheet.create({
   lineButtons: {
@@ -17,7 +20,11 @@ const styles = StyleSheet.create({
     marginRight: 20
   },
   button: {
-    width: 150,
+    justifyContent: 'center',
+    width: contentWidth
+  },
+  buttonExit: {
+    width: 100
   },
   buttonText: {
     textAlign: 'center',
@@ -45,22 +52,21 @@ class PartnerAccountScreen extends React.Component {
 
   onPressLogout() {
     this.props.dispatch(partnerLogoff())
+    this.props.dispatch(clearPosts())
     this.props.navigation.navigate('Login')
   }
 
   render() {
     return (
       <ImageBackground style={backgroundImage} source={require('./../static/background.png')} >
-        <View style={{ flex: 1, paddingTop: 40 }} >
-          <View style={styles.lineButtons}  >
-            <Button style={styles.button} info onPress={() => this.onPressChat()}><Text style={styles.buttonText}>Atendimento</Text></Button>
-            <Button style={styles.button} info onPress={() => this.onPressPost()}><Text style={styles.buttonText}>Postagens</Text></Button>
+        <View style={{ flex: 1, flexDirection: 'column', justifyContent: 'space-evenly', alignItems: 'center', paddingTop: 40, paddingLeft: 10 }} >
+          <Button style={styles.button} info onPress={() => this.onPressChat()}><Text style={styles.buttonText}>Atendimento</Text></Button>
+          <Button style={styles.button} info onPress={() => this.onPressPost()}><Text style={styles.buttonText}>Postagens</Text></Button>
+          <Button style={styles.button} info onPress={() => this.onPressNotfy()}><Text style={styles.buttonText}>Notificações</Text></Button>
+          <View style={{ justifyContent: 'center', alignItems: 'center' }}>
+            <Button style={styles.buttonExit} info onPress={() => this.onPressLogout()}><Text style={styles.buttonText}>Sair da conta</Text></Button>
           </View>
-          <View style={styles.lineButtons}>
-            <Button style={styles.button} info onPress={() => this.onPressNotfy()}><Text style={styles.buttonText}>Notificações</Text></Button>
-            <Button style={styles.button} info onPress={() => this.onPressLogout()}><Text style={styles.buttonText}>Sair da conta</Text></Button>
-          </View>
-        </ View >
+        </View>
       </ImageBackground>
     )
   }

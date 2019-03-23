@@ -4,5 +4,6 @@
 export const API_URL = "https://us-central1-o-rama2.cloudfunctions.net/api";
 export const FB_APP_ACCESS_TOKEN = "410996659284985|7Xr3cNTZce1h1m2iJFEQQdBXpYg";
 export const CHAT = 'orama'
-export const LOG_REDUX = true
+export const LOG_REDUX = false
+export const LOG_NOTIFICATION = false
 export const SENDER_ID = '227774758672'

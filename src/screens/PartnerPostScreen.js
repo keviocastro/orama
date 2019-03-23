@@ -1,4 +1,4 @@
-import React, { Component } from 'react'
+import React from 'react'
 import {
   View,
   Image,
@@ -15,7 +15,7 @@ import PropTypes from 'prop-types'
 import { connect } from 'react-redux'
 import ImagePicker from 'react-native-image-picker'
 import { Button, Text } from 'native-base'
-import { sendPost, clearForm, getOnUpdate, selectImage, getByPartner } from './../actions/posts'
+import { sendPost, clearForm, getByPartner, updateLatestPosts } from './../actions/posts'
 import { backgroundImage } from './styles';
 
 const contentWidth = Dimensions.get('window').width - 10
@@ -31,7 +31,7 @@ const options = {
   },
 };
 
-export class PartnerPostScreen extends Component {
+export class PartnerPostScreen extends React.PureComponent {
   static propTypes = {
     navigation: PropTypes.object,
     dispatch: PropTypes.func
@@ -40,25 +40,34 @@ export class PartnerPostScreen extends Component {
     title: navigation.state.params.partner.name + ' posts'
   })
 
+  constructor(props) {
+    super(props)
+
+    this.imagePicker = ImagePicker
+  }
+
+  get partner() {
+    return this.props.navigation.state.params.partner
+  }
+
   componentWillMount() {
     if (this.props.posts.length === 0) {
-      this.props.dispatch(getByPartner(this.props.partnerId))
+      this.props.dispatch(getByPartner(this.partner.id))
     }
-    this.setState({
-      image: null,
-    });
   }
 
   componentWillReceiveProps(props) {
     if (props.clearForm) {
-      this.setState({
-        image: null
-      })
+      if (typeof this.imagePicker.image === 'string' && this.imagePicker.image.length > 0) {
+        this.props.dispatch(updateLatestPosts(this.partner.id, this.imagePicker.image))
+      }
       this.inputText.clear()
+      this.imagePicker.image = null
     }
   }
 
   onPressUploadPhoto() {
+    console.log('upload foto')
     ImagePicker.showImagePicker(options, (response) => {
       if (response.didCancel) {
 
@@ -67,17 +76,16 @@ export class PartnerPostScreen extends Component {
       } else if (response.customButton) {
 
       } else {
-        const base64 = 'data:image/jpeg;base64,' + response.data;
-
-        this.setState({
-          image: base64
-        });
+        const base64 = 'data:image/jpeg;base64,' + response.data
+        this.imagePicker.image = base64
+        this.forceUpdate()
       }
     });
   }
 
   onPressSendPost() {
-    this.props.dispatch(sendPost(this.inputText.value, this.state.image, this.props.partnerId))
+    console.log('pess send posts')
+    this.props.dispatch(sendPost(this.inputText.value, this.imagePicker.image, this.partner.id))
   }
 
   renderMessageSended() {
@@ -92,7 +100,7 @@ export class PartnerPostScreen extends Component {
 
   renderForm(post) {
     return <View style={{ flexDirerection: 'column', justifyContent: 'center', alignItens: 'center', marginTop: 20 }} >
-      {this.state.image === null &&
+      {typeof this.imagePicker.image !== 'string' &&
         <Button style={{ width: fullWidth, justifyContent: 'center', alignItens: 'start', height: 200 }}
           info
           onPress={() => this.onPressUploadPhoto()}
@@ -100,15 +108,15 @@ export class PartnerPostScreen extends Component {
           <Text>Photo</Text>
         </Button>
       }
-      {this.state !== null && this.state.image !== null &&
+      {typeof this.imagePicker.image === 'string' &&
         <TouchableOpacity onPress={() => this.onPressUploadPhoto()} >
-          <Image source={{ uri: this.state.image }} style={{ width: fullWidth, height: 200 }} />
+          <Image source={{ uri: this.imagePicker.image }} style={{ width: fullWidth, height: 200 }} />
         </TouchableOpacity>
       }
       {this.renderMessageSended()}
       {!this.props.sending && !this.props.postCreated &&
         <Button style={{ width: fullWidth, justifyContent: 'center', marginTop: 2, marginBottom: 40 }}
-          success
+          info
           onPress={() => this.onPressSendPost()}>
           <Text>Enviar post</Text>
         </Button>
@@ -136,6 +144,7 @@ export class PartnerPostScreen extends Component {
   }
 
   render() {
+    console.log('render post list')
     return (
       <ImageBackground style={backgroundImage} source={require('./../static/background.png')} >
         <TextInput
@@ -152,8 +161,8 @@ export class PartnerPostScreen extends Component {
           multiline={true}
           numberOfLines={2}
         />
-        {this.renderForm()}
         <FlatList
+          ListHeaderComponent={this.renderForm()}
           ref={list => { this.postList = list }}
           data={this.props.posts}
           keyExtractor={(item) => item.id}
@@ -173,8 +182,6 @@ const mapStateToProps = (state) => {
     loading: state.posts.loading,
     sending: state.posts.sending,
     posts: state.posts.posts,
-    text: state.posts.text,
-    image: state.posts.image,
     partnerId: state.posts.partnerId,
     postCreated: state.posts.postCreated,
     clearForm: state.posts.clearForm

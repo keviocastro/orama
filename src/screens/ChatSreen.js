@@ -1,10 +1,10 @@
 import React from 'react'
-import { View, Image, FlatList, Text } from 'react-native'
-import { Card, CardItem } from 'native-base'
+import { View, Image, FlatList, ImageBackground } from 'react-native'
 import { GiftedChat } from 'react-native-gifted-chat'
 import PropTypes from 'prop-types'
 import { connect } from 'react-redux';
 import { sendMessage } from '../actions/chat';
+import { backgroundImage } from './styles';
 
 class ChatSreen extends React.Component {
     static navigationOptions = ({ navigation }) => ({
@@ -116,18 +116,20 @@ class ChatSreen extends React.Component {
 
     render() {
         return (
-            <View style={{ flex: 1 }}>
-                {this.renderImages()}
-                <GiftedChat
-                    contentContainerStyle={{ height: 100 }}
-                    style={{ height: 500 }}
-                    messages={this.props.messages}
-                    onSend={messages => this.onSend(messages)}
-                    user={{
-                        _id: 0,
-                    }}
-                />
-            </View>
+            <ImageBackground style={backgroundImage} source={require('./../static/background.png')} >
+                <View style={{ flex: 1 }}>
+                    {this.renderImages()}
+                    <GiftedChat
+                        contentContainerStyle={{ height: 100 }}
+                        style={{ height: 500 }}
+                        messages={this.props.messages}
+                        onSend={messages => this.onSend(messages)}
+                        user={{
+                            _id: 0,
+                        }}
+                    />
+                </View>
+            </ImageBackground>
         )
     }
 }

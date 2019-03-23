@@ -3,7 +3,7 @@ import { StyleSheet, TextInput, Dimensions, View, ActivityIndicator, ImageBackgr
 import { H3, Button, Text } from 'native-base'
 import { connect } from 'react-redux'
 import PropTypes from 'prop-types'
-import { partnerLogin } from './../actions/auth'
+import { partnerLogin, redirectToAccount } from './../actions/auth'
 
 const contentWidth = Dimensions.get('window').width - 10
 
@@ -13,8 +13,9 @@ class LoginScreen extends Component {
   })
 
   componentWillReceiveProps(nextProps) {
-    if (nextProps.partner !== null) {
+    if (nextProps.partner !== null && nextProps.redirectToAccount) {
       this.props.navigation.navigate('PartnerAccount', { partner: nextProps.partner })
+      this.props.dispatch(redirectToAccount(false))
     }
   }
 
@@ -80,7 +81,8 @@ const mapStateToProps = (state) => ({
   pass: state.auth.pass,
   invalidPass: state.auth.invalidPass,
   partner: state.auth.partner,
-  loading: state.auth.loading
+  loading: state.auth.loading,
+  redirectToAccount: state.auth.redirectToAccount
 })
 
 export default connect(mapStateToProps)(LoginScreen)

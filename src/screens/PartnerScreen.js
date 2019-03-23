@@ -21,6 +21,7 @@ import {
 } from 'native-base'
 import Carousel from 'react-native-snap-carousel'
 import { getPartners, selectForChat } from '../actions/partners'
+import { selectedPartnerForFeed, getRealtimeByPartner } from '../actions/posts';
 
 const horizontalMargin = 5
 const slideWidth = Dimensions.get('window').width - 10
@@ -47,12 +48,17 @@ class PartnerScreen extends React.PureComponent {
     }
   }
 
-  onPressPost(partner) {
+  navigationForFeed(partner) {
+    this.props.dispatch(selectedPartnerForFeed(partner))
     this.props.navigation.navigate('PartnerFeed', { partner })
   }
 
+  onPressPost(partner) {
+    this.navigationForFeed(partner)
+  }
+
   onPressLogo(partner) {
-    this.props.navigation.navigate('PartnerFeed', { partner })
+    this.navigationForFeed(partner)
   }
 
   get segment() {
@@ -131,7 +137,7 @@ class PartnerScreen extends React.PureComponent {
   }
 
   renderEmptyState = () => (
-    <ImageBackground style={styles.emptyState.background} source={require('./../static/empty-state.png')} >
+    <ImageBackground style={styles.emptyState.background} source={require('./../static/background.png')} >
       <View style={styles.emptyState.containerMessages}>
         <Text style={styles.emptyState.containerMessages.text}>
           Esta categoria ainda está sem parceiros.
@@ -175,7 +181,7 @@ const styles = {
       height: '100%',
       width: '100%',
       flex: 1,
-      justifyContent: 'flex-end',
+      justifyContent: 'center',
     },
     containerMessages: {
       flexDirection: 'column',

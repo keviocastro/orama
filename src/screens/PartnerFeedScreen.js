@@ -7,7 +7,8 @@ import {
   Image,
   StyleSheet,
   TouchableOpacity,
-  Dimensions
+  Dimensions,
+  ImageBackground
 } from 'react-native'
 import PropTypes from 'prop-types'
 import { connect } from 'react-redux'
@@ -15,7 +16,8 @@ import { Card, CardItem, Body } from 'native-base'
 import { selectForChat } from './../actions/partners'
 import { Header } from 'react-navigation'
 import ImageZoom from 'react-native-image-pan-zoom'
-import { getByPartner } from './../actions/posts'
+import { getRealtimeByPartner, getByPartner } from './../actions/posts'
+import { backgroundImage } from './styles';
 
 const viewportHeight = Dimensions.get('window').height - Header.HEIGHT
 const mainFeedImageHeight = viewportHeight - (viewportHeight * 0.3)
@@ -30,14 +32,16 @@ const styles = StyleSheet.create({
   }
 })
 
-class PartnerFeedScreen extends React.Component {
+class PartnerFeedScreen extends React.PureComponent {
   static navigationOptions = ({ navigation }) => ({
     title: navigation.state.params.partner.name,
   })
 
-  componentWillMount() {
+  constructor(props) {
+    super(props)
+
     if (this.props.posts.length === 0) {
-      this.props.dispatch(getByPartner(this.props.partnerId))
+      this.props.dispatch(getRealtimeByPartner(this.partner.id))
     }
   }
 
@@ -65,13 +69,13 @@ class PartnerFeedScreen extends React.Component {
     return (
       <TouchableOpacity onPress={() => this.onClickItemCard(item.image)}>
         <Card styles={styles.card}>
-          {item.text !== undefined && item.text !== null > 0 &&
+          {item.text !== undefined && item.text !== null &&
             <CardItem >
               <Body>
                 <Text>{item.text}</Text>
               </Body>
             </CardItem>}
-          {item.image !== undefined && item.text !== null > 0 &&
+          {item.image !== undefined && item.text !== null &&
             <CardItem cardBody style={styles.card}>
               <Image source={{ uri: item.image }} style={styles.image} />
             </CardItem>
@@ -98,17 +102,18 @@ class PartnerFeedScreen extends React.Component {
   }
 
   render = () => (
-    <View style={{ flex: 1, flexDirection: 'column' }}>
-      <FlatList
-        ListHeaderComponent={() => this.renderFeedImage()}
-        data={this.props.posts}
-        keyExtractor={(item) => item.id}
-        renderItem={({ item, index }) => this.renderItemPost({ item, index })}
-        onRefresh={() => getByPartner(this.props.partnerId)}
-        refreshing={this.props.loading}
-        ListFooterComponent={() => this.renderLoading()}
-      />
-    </View>
+    <ImageBackground style={backgroundImage} source={require('./../static/background.png')} >
+      <View style={{ flex: 1, flexDirection: 'column' }}>
+        <FlatList
+          ListHeaderComponent={() => this.renderFeedImage()}
+          data={this.props.posts}
+          keyExtractor={(item) => item.id}
+          renderItem={({ item, index }) => this.renderItemPost({ item, index })}
+          onRefresh={() => { getByPartner(this.partner.id) }}
+          refreshing={this.props.loading}
+        />
+      </View>
+    </ImageBackground>
   )
 }
 
@@ -118,10 +123,17 @@ PartnerFeedScreen.propTypes = {
 }
 
 const mapStateToProps = (state) => {
-  let loading = state.posts.loading === true ? true : false;
+  let posts = []
+  if (typeof state.posts.partnerSelectedForFeed === 'object' &&
+    Object.keys(state.posts.partnerSelectedForFeed).length > 0) {
+    if (state.posts.postsByPartner.hasOwnProperty(state.posts.partnerSelectedForFeed.id)) {
+      posts = state.posts.postsByPartner[state.posts.partnerSelectedForFeed.id]
+    }
+  }
+
   return ({
-    loading: loading,
-    posts: state.posts.posts
+    loading: state.posts.loading,
+    posts: posts
   })
 }
 

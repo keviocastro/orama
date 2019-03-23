@@ -1,5 +1,4 @@
 import React, { Component } from 'react'
-import { AppState, Platform } from 'react-native'
 import { createStore, applyMiddleware } from 'redux'
 import { Provider } from 'react-redux'
 import { StyleProvider } from 'native-base'
@@ -7,22 +6,15 @@ import thunkMiddleware from 'redux-thunk'
 import logger from 'redux-logger'
 import AppWithNavigationState from './components/Navigator'
 import reducers from './reducers'
-import storage from 'redux-persist/lib/storage'
 import getTheme from './theme/components'
 import material from './theme/variables/material'
 import PushNotification from 'react-native-push-notification' // @todo migrate to react-native-firebase
-import { SENDER_ID, LOG_REDUX } from './config'
+import { SENDER_ID, LOG_REDUX, LOG_NOTIFICATION } from './config'
 
 const middleware = [thunkMiddleware]
 if (process.env.NODE_ENV === 'development' && __DEV__ && LOG_REDUX) {
   middleware.push(logger)
 }
-
-const persistConfig = {
-  key: 'root',
-  storage,
-}
-//const persistedReducer = persistReducer(persistConfig, reducers)
 
 const store = createStore(reducers, applyMiddleware(...middleware))
 export default class App extends Component {
@@ -30,12 +22,12 @@ export default class App extends Component {
   componentDidMount() {
     PushNotification.configure({
       onNotification: function (notification) {
-        if (__DEV__)
+        if (__DEV__ && LOG_NOTIFICATION)
           console.log('NOTIFICATION:', notification)
 
       },
       onRegister: function (token) {
-        if (__DEV__)
+        if (__DEV__ && LOG_NOTIFICATION)
           console.log('TOKEN:', token)
 
       },

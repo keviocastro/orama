@@ -1,8 +1,14 @@
 import { partnerLogin as apiPartnerLogin } from './api'
 
 export const partnerLogin = (pass) => dispatch => {
-  return apiPartnerLogin(pass, dispatch, loading)
+  return apiPartnerLogin(pass, dispatch, loading, redirectToAccount)
 }
+
+export const REDIRECT_TO_ACCOUNT = 'REDIRECT_TO_ACCOUNT'
+export const redirectToAccount = (redirect) => ({
+  type: REDIRECT_TO_ACCOUNT,
+  redirect
+})
 
 const PARTNER_LOGOFF = 'PARTNER_LOGOFF'
 export const partnerLogoff = () => ({

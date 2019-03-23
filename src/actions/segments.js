@@ -1,4 +1,4 @@
-import { search } from './api';
+import { get } from './api';
 
 export const SEGMENTS_RECEIVED = 'SEGMENTS_RECEIVED';
 export const received = segments => ({
@@ -18,4 +18,4 @@ export const requestError = error => ({
 });
 
 export const getSegments = () => dispatch =>
-  search('segments', dispatch, received, request, requestError);
+  get('segments', {}, { 'priority': 'asc' }, dispatch, false, request, received)

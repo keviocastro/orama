@@ -1,6 +1,5 @@
 import firebase from 'react-native-firebase'
-import { addLoggedUser, invalidPass } from './auth'
-import { firebaseError } from './erros'
+import { addLoggedUser, invalidPass, redirectToAccount } from './auth'
 const db = firebase.firestore()
 
 const convertSnapshot = (snapshot) => {
@@ -11,9 +10,29 @@ const convertSnapshot = (snapshot) => {
   return docs
 }
 
-export const get = (resource, filter = {}, orderBy = {}, dispatch, realtime, initRequestAction, receiveAction) => {
-  if (typeof initRequestAction === 'function') {
-    dispatch(initRequestAction())
+// @todo refactore to gcloud functions
+export const updateLatestPostsByPartner = (partnerId, image) => {
+  // let query = db.collection('posts')
+  //   .where('partner_id', '==', partnerId)
+  //   .orderBy('created_at', 'desc')
+  //   .limit(3)
+
+  // query.get().then(snapshot => {
+  //   let images = []
+  //   snapshot.docs.forEach(doc => {
+  //     let data = doc.data()
+  //     if (typeof data.image === 'string' && data.image.length > 0) {
+  //       images.push(data.image)
+  //     }
+  //   })
+
+  db.collection('partners').doc(partnerId).update({ last_post: image })
+  // })
+}
+
+export const get = (resource, filter = {}, orderBy = {}, dispatch, realtime, loadingAction, receiveAction) => {
+  if (typeof loadingAction === 'function') {
+    dispatch(loadingAction(true))
   }
 
   let query = db.collection(resource)
@@ -36,12 +55,23 @@ export const get = (resource, filter = {}, orderBy = {}, dispatch, realtime, ini
     return query.onSnapshot(snapshot => {
       let docs = convertSnapshot(snapshot)
       dispatch(receiveAction(docs, filter))
+      if (typeof loadingAction === 'function') {
+        dispatch(loadingAction(false))
+      }
+    }).catch(err => {
+      console.log('Firestore error', err)
     })
   } else {
-    return query.get().then(snapshot => {
-      let docs = convertSnapshot(snapshot)
-      dispatch(receiveAction(docs, filter))
-    })
+    return query.get()
+      .then(snapshot => {
+        let docs = convertSnapshot(snapshot)
+        dispatch(receiveAction(docs, filter))
+        if (typeof loadingAction === 'function') {
+          dispatch(loadingAction(false))
+        }
+      }).catch(err => {
+        console.log('Firestore error', err)
+      })
   }
 }
 
@@ -101,13 +131,13 @@ export const partnerLogin = (pass, dispatch, loadingAction) => {
     .get()
     .then(snapshot => {
       let docs = snapshot.docs
-      if (docs.length == 1) {
+      if (docs.length >= 1) {
         dispatch(addLoggedUser(null, null, docs[0].data()))
         dispatch(invalidPass(false))
-      } else {
-        dispatch(invalidPass(true))
+        dispatch(redirectToAccount(true))
       }
       dispatch(loadingAction(false))
+      dispatch(redirectToAccount(false))
     })
 }
 

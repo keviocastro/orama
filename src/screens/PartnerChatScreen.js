@@ -1,11 +1,11 @@
 import React from 'react'
-import { Text, FlatList, TouchableOpacity } from 'react-native'
+import { Text, FlatList, TouchableOpacity, ImageBackground } from 'react-native'
 import { connect } from 'react-redux'
 import PropTypes from 'prop-types'
 import { ListItem, Left, Right, Body, Thumbnail, Content } from 'native-base'
 import firebase from 'react-native-firebase'
 import { addChats } from './../actions/chat'
-import { LoginButton, AccessToken } from 'react-native-fbsdk'
+import { backgroundImage } from './styles';
 
 import moment from 'moment'
 import momentPt from 'moment/locale/pt-br'
@@ -39,7 +39,7 @@ class PartnerChatScreen extends React.PureComponent {
 
     return (
       <TouchableOpacity onPress={() => { console.log('chat') }} >
-        <ListItem avatar>
+        <ListItem avatar style={{ backgroundColor: 'transparent' }}>
           <Left>
             {avatar}
           </Left>
@@ -57,12 +57,12 @@ class PartnerChatScreen extends React.PureComponent {
 
   render() {
     return (
-      <Content style={{ backgroundColor: 'white' }}>
+      <ImageBackground style={backgroundImage} source={require('./../static/background.png')} >
         <FlatList
           data={this.props.chats}
           keyExtractor={(item, index) => index.toString()}
           renderItem={({ item }) => this.renderListItem(item)} />
-      </Content>
+      </ImageBackground>
     )
   }
 }

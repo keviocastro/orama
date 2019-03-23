@@ -1,11 +1,19 @@
-import { ADD_LOGGED_USER, REMOVE_LOGGED_USER, INVALID_PASS, LOADING, PARTNER_LOGOFF } from "./../actions/auth"
+import {
+  ADD_LOGGED_USER,
+  REMOVE_LOGGED_USER,
+  INVALID_PASS,
+  LOADING,
+  PARTNER_LOGOFF,
+  REDIRECT_TO_ACCOUNT
+} from "./../actions/auth"
 
 const initialState = {
   fbId: null,
   fbAcessToken: null,
   partner: null,
   invalidPass: false,
-  loading: false
+  loading: false,
+  redirectToAccount: false
 }
 
 const reducer = (state = initialState, action) => {
@@ -41,6 +49,11 @@ const reducer = (state = initialState, action) => {
       return {
         ...state,
         loading: action.loading
+      }
+    case REDIRECT_TO_ACCOUNT:
+      return {
+        ...state,
+        redirectToAccount: action.redirect
       }
     default:
       return state

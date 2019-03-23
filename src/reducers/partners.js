@@ -13,7 +13,7 @@ const initialState = {
     requestError: '',
     data: [],
   },
-  imagesChatByPartner: [],
+  imagesChatByPartner: {},
   currentSegmentId: null,
   partnerSelectedForChat: {},
   images: [],
