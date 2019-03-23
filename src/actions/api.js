@@ -58,8 +58,6 @@ export const get = (resource, filter = {}, orderBy = {}, dispatch, realtime, loa
       if (typeof loadingAction === 'function') {
         dispatch(loadingAction(false))
       }
-    }).catch(err => {
-      console.log('Firestore error', err)
     })
   } else {
     return query.get()
