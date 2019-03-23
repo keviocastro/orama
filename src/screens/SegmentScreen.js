@@ -9,7 +9,8 @@ import {
   Image,
   TouchableOpacity,
   StyleSheet,
-  Dimensions
+  Dimensions,
+  AsyncStorage
 } from 'react-native'
 import { Card, CardItem } from 'native-base'
 import LinearGradient from 'react-native-linear-gradient'
@@ -26,20 +27,19 @@ const sliderWidth = Dimensions.get('window').width
 const itemWidth = slideWidth + horizontalMargin * 2
 const itemHeight = 100
 
-const itemListWidth = Dimensions.get('window').width - 10
-
-class SegmentScreen extends React.PureComponent {
+class SegmentScreen extends React.Component {
   static navigationOptions = {
     header: null
   }
 
-  componentWillMount() {
-    this.props.dispatch(getSegments())
-    this.props.dispatch(getHighlights())
-  }
-
   componentDidMount() {
     SplashScreen.hide()
+
+    if (this.props.segments.length === 0 && this.props.loading === false) {
+      console.log(' this.this.props.dispatch(getSegments())')
+      this.props.dispatch(getSegments())
+      this.props.dispatch(getHighlights())
+    }
   }
 
   onPressSegment = (segment) => {
@@ -56,7 +56,7 @@ class SegmentScreen extends React.PureComponent {
 
   keyExtractor = item => item.id.toString()
 
-  renderItem = ({ item }, loggedUserFbId) => {
+  renderItem = ({ item }) => {
     return (<TouchableOpacity onPress={() => this.onPressSegment(item)}>
       <View>
         <Card>
@@ -72,8 +72,8 @@ class SegmentScreen extends React.PureComponent {
 
   }
 
-  renderFooter = (isFetching) => {
-    if (!isFetching) return null
+  renderFooter = (loading) => {
+    if (!loading) return null
 
     return <ActivityIndicator animating size="large" />
   }
@@ -123,9 +123,9 @@ class SegmentScreen extends React.PureComponent {
           style={styles.list}
           data={this.props.segments}
           keyExtractor={(this.keyExtractor)}
-          renderItem={({ item }) => this.renderItem({ item }, this.props.loggedUserFbId)}
+          renderItem={({ item }) => this.renderItem({ item })}
           onRefresh={() => this.props.dispatch(getSegments())}
-          refreshing={this.props.isFetching}
+          refreshing={this.props.loading}
         />
       </View>
     )
@@ -182,18 +182,15 @@ SegmentScreen.propTypes = {
   navigation: PropTypes.object,
   dispatch: PropTypes.func,
   segments: PropTypes.array,
-  isFetching: PropTypes.bool,
-  requestError: PropTypes.string,
+  loading: PropTypes.bool,
   highlights: PropTypes.array
 }
 
 const mapStateToProps = state => {
   return ({
-    isFetching: state.segments.isFetching,
-    segments: state.segments.data,
-    requestError: state.segments.requestError,
+    loading: state.segments.loading,
+    segments: state.segments.segments,
     highlights: state.highlights.partners,
-    loggedUserFbId: state.auth.fbId,
     loggedPartner: state.auth.partner
   })
 }

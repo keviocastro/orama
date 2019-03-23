@@ -6,16 +6,11 @@ export const received = segments => ({
   segments,
 });
 
-export const SEGMENTS_REQUEST = 'SEGMENTS_REQUEST';
-export const request = () => ({
-  type: SEGMENTS_REQUEST,
-});
-
-export const SEGMENTS_REQUEST_ERROR = 'SEGMENTS_REQUEST_ERROR';
-export const requestError = error => ({
-  type: SEGMENTS_REQUEST_ERROR,
-  error,
+export const SEGMENTS_LOADING = 'SEGMENTS_LOADING';
+export const loading = (loading) => ({
+  type: SEGMENTS_LOADING,
+  loading
 });
 
 export const getSegments = () => dispatch =>
-  get('segments', {}, { 'priority': 'asc' }, dispatch, false, request, received)
+  get('segments', {}, { 'priority': 'asc' }, dispatch, false, loading, received)

@@ -1,16 +1,15 @@
-import { SEGMENTS_RECEIVED, SEGMENTS_REQUEST, SEGMENTS_REQUEST_ERROR } from './../actions/segments';
+import { SEGMENTS_RECEIVED, SEGMENTS_LOADING, SEGMENTS_REQUEST_ERROR } from './../actions/segments';
 
 const initialState = {
-  data: [],
-  isFetching: false,
-  requestError: '',
+  segments: [],
+  loading: false
 };
 
 const addFixedSegmentOrama = (segments, state) => {
   segments.unshift({
     id: 0,
     name: 'O-rama Fast Commerce',
-    image: 'https://o-rama-static.firebaseapp.com/segmento-orama.jpg'
+    image: 'https://i.ibb.co/F3zbXsk/segmento-orama.jpg'
   });
 }
 
@@ -20,19 +19,13 @@ const reducer = (state = initialState, action) => {
       addFixedSegmentOrama(action.segments)
       return {
         ...state,
-        data: Array.isArray(action.segments) ? action.segments : [],
-        isFetching: false,
+        segments: Array.isArray(action.segments) ? action.segments : [],
+        loading: false,
       };
-    case SEGMENTS_REQUEST:
+    case SEGMENTS_LOADING:
       return {
         ...state,
-        isFetching: true,
-      };
-    case SEGMENTS_REQUEST_ERROR:
-      return {
-        ...state,
-        isFetching: false,
-        requestError: action.error,
+        loading: action.loading,
       };
     default:
       return state;

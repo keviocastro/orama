@@ -38,7 +38,7 @@ class PartnerScreen extends React.PureComponent {
     this.props.dispatch(getPartners(this.segment.id))
   }
 
-  componentWillMount() {
+  componentDidMount() {
     this.refrash()
   }
 

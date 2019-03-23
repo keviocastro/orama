@@ -1,11 +1,10 @@
 import {
     HIGHLIGHTS_RECEIVED,
     HIGHLIGHTS_REQUEST,
-    HIGHLIGHTS_REQUEST_ERROR,
 } from './../actions/highlights'
 
 const initialState = {
-    isFetching: true,
+    isFetching: false,
     requestError: '',
     partners: [],
 }
@@ -22,13 +21,7 @@ const reducer = (state = initialState, action) => {
             return {
                 ...state,
                 partners: action.partners,
-                isFetching: true,
-            }
-        case HIGHLIGHTS_REQUEST_ERROR:
-            return {
-                ...state,
-                requestError: action.error,
-                isFetching: false
+                isFetching: false,
             }
         default:
             return state
