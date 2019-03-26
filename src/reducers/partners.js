@@ -47,7 +47,14 @@ const setChatImagesByPartner = (state, action) => {
 
   if (action.image != undefined) {
     if (imagesChatByPartner.hasOwnProperty(action.partner.id)) {
-      imagesChatByPartner[action.partner.id] = [...imagesChatByPartner[action.partner.id], action.image]
+      let imageExists = false
+      imagesChatByPartner[action.partner.id].forEach(image => {
+        if (image === action.image)
+          imageExists = true
+      })
+      if (!imageExists) {
+        imagesChatByPartner[action.partner.id] = [...imagesChatByPartner[action.partner.id], action.image]
+      }
     } else {
       imagesChatByPartner[action.partner.id] = [action.image]
     }

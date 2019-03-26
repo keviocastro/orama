@@ -20,7 +20,7 @@ const styles = StyleSheet.create({
     marginRight: 20
   },
   button: {
-    height: 50,
+    height: 45,
     justifyContent: 'center',
     width: contentWidth
   },
@@ -29,8 +29,9 @@ const styles = StyleSheet.create({
     width: 200,
   },
   buttonText: {
-    height: 50,
+    height: 45,
     fontSize: 25,
+    paddingTop: 10,
     textAlign: 'center',
     textAlignVertical: 'center',
     fontFamily: 'Impact'
