@@ -1,6 +1,6 @@
 import React, { Component } from 'react'
 import { StyleSheet, TextInput, Dimensions, View, ActivityIndicator, ImageBackground } from 'react-native'
-import { H3, Button, Text } from 'native-base'
+import { Button, Text } from 'native-base'
 import { connect } from 'react-redux'
 import PropTypes from 'prop-types'
 import { partnerLogin, redirectToAccount } from './../actions/auth'

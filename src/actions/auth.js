@@ -1,12 +1,40 @@
-import { partnerLogin as apiPartnerLogin } from './api'
+import { partnerLogin as apiPartnerLogin, userLogin as apiUserLogin } from './api'
 
 export const partnerLogin = (pass) => dispatch => {
   return apiPartnerLogin(pass, dispatch, loading, redirectToAccount)
 }
 
+export const userLogin = (phone) => dispatch => {
+  return apiUserLogin(phone, dispatch, loading, loginUser, invalidPhone)
+}
+
+export const LOGIN_USER = 'LOGIN_USER'
+export const loginUser = (user) => ({
+  type: LOGIN_USER,
+  user
+})
+
+const USER_LOGOFF = 'USER_LOGOFF'
+export const userLogoff = () => ({
+  type: USER_LOGOFF
+})
+
+
+export const INVALID_PHONE = 'INVALID_PHONE'
+export const invalidPhone = (invalid) => ({
+  type: INVALID_PHONE,
+  invalid
+})
+
 export const REDIRECT_TO_ACCOUNT = 'REDIRECT_TO_ACCOUNT'
 export const redirectToAccount = (redirect) => ({
   type: REDIRECT_TO_ACCOUNT,
+  redirect
+})
+
+export const REDIRECT_TO_CHAT = 'REDIRECT_TO_CHAT'
+export const redirectToChat = (redirect) => ({
+  type: REDIRECT_TO_CHAT,
   redirect
 })
 

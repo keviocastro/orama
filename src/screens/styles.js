@@ -1,5 +1,3 @@
-import { StyleSheet } from 'react-native';
-
 export const backgroundImage = {
   resizeMode: 'center',
   position: 'absolute',

@@ -121,7 +121,6 @@ export const add = function (resource, data, dispatch, receiveAction, errorActio
 }
 
 export const partnerLogin = (pass, dispatch, loadingAction) => {
-  docRef = db.collection('partners')
   dispatch(loadingAction(true))
 
   return db.collection('partners')
@@ -136,6 +135,27 @@ export const partnerLogin = (pass, dispatch, loadingAction) => {
       }
       dispatch(loadingAction(false))
       dispatch(redirectToAccount(false))
+    })
+}
+
+export const userLogin = (user, dispatch, loadingAction, loginSuccessAction) => {
+  dispatch(loadingAction(true))
+
+  return db.collection('users')
+    .where('phone', '==', user.phone)
+    .get()
+    .then(snapshot => {
+      let docs = snapshot.docs
+      if (docs.length >= 1) {
+        dispatch(loginSuccessAction(docs[0].data()))
+      } else {
+        // FIXME: Confirmar antes de cadastrar o usuário
+        db.collection('users').add(user)
+          .then(snapshot => {
+            user.id = snapshot.id
+            dispatch(loginSuccessAction(user))
+          })
+      }
     })
 }
 

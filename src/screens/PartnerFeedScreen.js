@@ -8,7 +8,8 @@ import {
   StyleSheet,
   TouchableOpacity,
   Dimensions,
-  ImageBackground
+  ImageBackground,
+  AsyncStorage
 } from 'react-native'
 import PropTypes from 'prop-types'
 import { connect } from 'react-redux'
@@ -50,8 +51,14 @@ class PartnerFeedScreen extends React.PureComponent {
   }
 
   onClickItemCard = (image) => {
-    this.props.dispatch(selectForChat(this.partner, image))
-    this.props.navigation.navigate('Chat', { partner: this.partner })
+    AsyncStorage.getItem('user').then(user => {
+      if (user === null || user === undefined) {
+        this.props.navigation.navigate('UserLogin')
+      } else {
+        this.props.dispatch(selectForChat(this.partner, image))
+        this.props.navigation.navigate('Chat', { partner: this.partner })
+      }
+    })
   }
 
   renderLoading = () => {

@@ -4,21 +4,59 @@ import {
   INVALID_PASS,
   LOADING,
   PARTNER_LOGOFF,
-  REDIRECT_TO_ACCOUNT
+  REDIRECT_TO_ACCOUNT,
+  LOGIN_USER,
+  INVALID_PHONE,
+  USER_LOGOFF
 } from "./../actions/auth"
+import { AsyncStorage } from 'react-native'
 
-const initialState = {
+AsyncStorage.getItem('user').then(user => {
+  if (user) {
+    initialState.user = JSON.parse(user)
+  }
+})
+
+AsyncStorage.getItem('partner').then(partner => {
+  if (partner) {
+    initialState.partner = JSON.parse(partner)
+  }
+})
+
+
+let initialState = {
   fbId: null,
   fbAcessToken: null,
   partner: null,
   invalidPass: false,
   loading: false,
-  redirectToAccount: false
+  redirectToAccount: false,
+  invalidPhone: false,
+  user: null,
 }
 
 const reducer = (state = initialState, action) => {
   switch (action.type) {
-    case ADD_LOGGED_USER:
+    case LOGIN_USER:
+      AsyncStorage.setItem('user', JSON.stringify(action.user))
+      return {
+        ...state,
+        user: action.user,
+        loading: false
+      }
+    case USER_LOGOFF:
+      AsyncStorage.removeItem('user')
+      return {
+        ...state,
+        user: null,
+      }
+    case INVALID_PHONE:
+      return {
+        ...state,
+        invalidPhone: action.invalid
+      }
+    case ADD_LOGGED_USER: // FIXME:  Renomear para diferenciar login de parceiros e usuários
+      AsyncStorage.setItem('partner', JSON.stringify(action.partner))
       return {
         ...state,
         fbId: action.fbId,
@@ -27,6 +65,7 @@ const reducer = (state = initialState, action) => {
         loading: false
       }
     case PARTNER_LOGOFF:
+      AsyncStorage.removeItem('partner')
       return {
         ...state,
         fbId: null,

@@ -8,9 +8,10 @@ import PartnerFeedScreen from './../screens/PartnerFeedScreen'
 import ChatSreen from './../screens/ChatSreen'
 import LoginScreen from './../screens/LoginScreen'
 import PartnerChatScreen from './../screens/PartnerChatScreen'
-import FeedImageScreen from '../screens/FeedImageScreen';
-import PartnerAccountScreen from '../screens/PartnerAccountScreen';
+import FeedImageScreen from '../screens/FeedImageScreen'
+import PartnerAccountScreen from '../screens/PartnerAccountScreen'
 import PartnerPostScreen from '../screens/PartnerPostScreen'
+import UserLoginScreen from './../screens/UserLoginScreen';
 
 export const ModeCardStack = createStackNavigator({
   Home: { screen: SegmentScreen },
@@ -20,15 +21,13 @@ export const ModeCardStack = createStackNavigator({
   Login: { screen: LoginScreen },
   PartnerChat: { screen: PartnerChatScreen },
   PartnerAccount: { screen: PartnerAccountScreen },
-  PartnerPost: { screen: PartnerPostScreen }
+  PartnerPost: { screen: PartnerPostScreen },
+  UserLogin: { screen: UserLoginScreen }
 });
 
 export const Navigator = createStackNavigator(
   {
     Home: { screen: ModeCardStack, navigationOptions: { header: null } }
-  },
-  {
-    FeedImage: { screen: FeedImageScreen }
   },
   { mode: 'modal' }
 );
