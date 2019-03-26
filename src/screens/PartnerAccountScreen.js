@@ -20,15 +20,20 @@ const styles = StyleSheet.create({
     marginRight: 20
   },
   button: {
+    height: 50,
     justifyContent: 'center',
     width: contentWidth
   },
   buttonExit: {
-    width: 100
+    justifyContent: 'center',
+    width: 200,
   },
   buttonText: {
+    height: 50,
+    fontSize: 25,
     textAlign: 'center',
-    textAlignVertical: 'center'
+    textAlignVertical: 'center',
+    fontFamily: 'Impact'
   }
 })
 

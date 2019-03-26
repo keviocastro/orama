@@ -96,7 +96,7 @@ class ChatSreen extends React.Component {
         return <Image style={{
             height: 100,
             width: 200
-        }} source={{ uri: image.src }} />
+        }} source={{ uri: image }} />
     }
 
     renderImages() {
