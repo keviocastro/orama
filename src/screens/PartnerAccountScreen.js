@@ -45,7 +45,7 @@ class PartnerAccountScreen extends React.Component {
   })
 
   onPressChat() {
-    this.props.navigation.navigate('PartnerChat')
+    this.props.navigation.navigate('PartnerChat', { partner: this.props.partner })
   }
 
   onPressPost() {

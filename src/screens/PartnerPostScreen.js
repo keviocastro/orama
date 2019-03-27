@@ -67,7 +67,6 @@ export class PartnerPostScreen extends React.PureComponent {
   }
 
   onPressUploadPhoto() {
-    console.log('upload foto')
     ImagePicker.showImagePicker(options, (response) => {
       if (response.didCancel) {
 
@@ -76,6 +75,7 @@ export class PartnerPostScreen extends React.PureComponent {
       } else if (response.customButton) {
 
       } else {
+        console.log(response)
         const base64 = 'data:image/jpeg;base64,' + response.data
         this.imagePicker.image = base64
         this.forceUpdate()
@@ -147,6 +147,11 @@ export class PartnerPostScreen extends React.PureComponent {
     console.log('render post list')
     return (
       <ImageBackground style={backgroundImage} source={require('./../static/background.png')} >
+        <Button style={{ width: fullWidth, justifyContent: 'center', marginTop: 2, marginBottom: 40 }}
+          info
+          onPress={() => { this.props.navigation.navigate('Post') }}>
+          <Text>+</Text>
+        </Button>
         <TextInput
           ref={input => { this.inputText = input }}
           clearButtonMode='always'

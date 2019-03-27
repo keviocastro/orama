@@ -11,7 +11,8 @@ import { Button, Text } from 'native-base'
 import { connect } from 'react-redux';
 import { backgroundImage } from './styles'
 import DeviceInfo from 'react-native-device-info'
-import { userLogin } from './../actions/auth'
+import { selectForChat } from './../actions/partners';
+import { userLogin, redirectToChat } from './../actions/auth'
 
 const contentWidth = Dimensions.get('window').width - 10
 
@@ -19,6 +20,22 @@ class UserLoginScreen extends React.Component {
   static navigationOptions = ({ navigation }) => ({
     title: 'Login',
   })
+
+  get partner() {
+    return this.props.navigation.state.params.partner
+  }
+
+  get chatImage() {
+    return this.props.navigation.state.params.image
+  }
+
+  componentWillReceiveProps(nextProps) {
+    if (nextProps.user !== null && nextProps.redirectToChat) {
+      this.props.dispatch(redirectToChat(false))
+      this.props.dispatch(selectForChat(this.partner, null))
+      this.props.navigation.navigate('Chat', { partner: this.partner, image: this.chatImage })
+    }
+  }
 
   onPressLogin() {
     this.props.dispatch(userLogin({ phone: this.inputPhone.value, name: this.inputName.value }))
@@ -78,7 +95,8 @@ const styles = StyleSheet.create({
 const mapStateToProps = (state) => ({
   invalidPhone: state.auth.invalidPhone,
   loading: state.auth.loading,
-  user: state.auth.user
+  user: state.auth.user,
+  redirectToChat: state.auth.redirectToChat
 })
 
 export default connect(mapStateToProps)(UserLoginScreen)

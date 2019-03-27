@@ -53,7 +53,7 @@ class PartnerFeedScreen extends React.PureComponent {
   onClickItemCard = (image) => {
     AsyncStorage.getItem('user').then(user => {
       if (user === null || user === undefined) {
-        this.props.navigation.navigate('UserLogin')
+        this.props.navigation.navigate('UserLogin', { partner: this.partner, image: image })
       } else {
         this.props.dispatch(selectForChat(this.partner, image))
         this.props.navigation.navigate('Chat', { partner: this.partner })
@@ -139,7 +139,7 @@ const mapStateToProps = (state) => {
   }
 
   return ({
-    loading: state.posts.loading,
+    loading: state.posts.loading, // FIXME: O load não está funcionando
     posts: posts
   })
 }

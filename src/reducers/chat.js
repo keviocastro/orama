@@ -9,7 +9,8 @@ const initialState = {
 
 const mergeMessages = (state, action) => {
     messages = { ...state.messages }
-    messages[action.partnerId] = GiftedChat.append(messages[action.partnerId], action.messages)
+    console.log(action)
+    messages[action.partner.id] = GiftedChat.append(messages[action.partner.id], action.messages)
     return messages
 }
 

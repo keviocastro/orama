@@ -8,10 +8,10 @@ import PartnerFeedScreen from './../screens/PartnerFeedScreen'
 import ChatSreen from './../screens/ChatSreen'
 import LoginScreen from './../screens/LoginScreen'
 import PartnerChatScreen from './../screens/PartnerChatScreen'
-import FeedImageScreen from '../screens/FeedImageScreen'
 import PartnerAccountScreen from '../screens/PartnerAccountScreen'
 import PartnerPostScreen from '../screens/PartnerPostScreen'
-import UserLoginScreen from './../screens/UserLoginScreen';
+import UserLoginScreen from './../screens/UserLoginScreen'
+import PostScreen from './../screens/PostScreen'
 
 export const ModeCardStack = createStackNavigator({
   Home: { screen: SegmentScreen },
@@ -22,7 +22,8 @@ export const ModeCardStack = createStackNavigator({
   PartnerChat: { screen: PartnerChatScreen },
   PartnerAccount: { screen: PartnerAccountScreen },
   PartnerPost: { screen: PartnerPostScreen },
-  UserLogin: { screen: UserLoginScreen }
+  UserLogin: { screen: UserLoginScreen },
+  Post: { screen: PostScreen }
 });
 
 export const Navigator = createStackNavigator(

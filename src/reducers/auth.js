@@ -31,6 +31,7 @@ let initialState = {
   invalidPass: false,
   loading: false,
   redirectToAccount: false,
+  redirectToChat: false,
   invalidPhone: false,
   user: null,
 }
@@ -42,7 +43,8 @@ const reducer = (state = initialState, action) => {
       return {
         ...state,
         user: action.user,
-        loading: false
+        loading: false,
+        redirectToChat: true
       }
     case USER_LOGOFF:
       AsyncStorage.removeItem('user')

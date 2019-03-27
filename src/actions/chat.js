@@ -1,10 +1,10 @@
-import { add } from './api'
+import { add, createChatIfNotExists as createChatIfNotExistsApi } from './api'
 
 export const ADD_MESSAGES = 'ADD_MESSAGES'
-export const addMessages = (messages, partnerId) => ({
+export const addMessages = (messages, partner) => ({
     type: ADD_MESSAGES,
     messages,
-    partnerId
+    partner
 })
 
 export const RECEIVE_MESSAGES = 'RECEIVE_MESSAGES'
@@ -19,7 +19,10 @@ export const addChats = (chats) => ({
     chats
 })
 
-export const sendMessage = (messages, partnerId) => dispatch => {
-    dispatch(addMessages(messages, partnerId))
-    return add('messages', messages, partnerId)
+export const createChatIfNotExists = (partner, user) => dispatch =>
+    createChatIfNotExistsApi(dispatch, partner, user)
+
+export const sendMessages = (messages, partner) => dispatch => {
+    dispatch(addMessages(messages, partner))
+    return add('messages', messages)
 }

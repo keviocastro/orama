@@ -68,7 +68,7 @@ export const get = (resource, filter = {}, orderBy = {}, dispatch, realtime, loa
           dispatch(loadingAction(false))
         }
       }).catch(err => {
-        console.log('Firestore error', err)
+        console.log('get error', err)
       })
   }
 }
@@ -85,6 +85,8 @@ export const search = (resource, dispatch, receiveAction, initRequestAction, err
   return query.get().then(snapshot => {
     let docs = convertSnapshot(snapshot)
     dispatch(receiveAction(docs, filter))
+  }).catch(err => {
+    console.log('search error ', err)
   })
 }
 
@@ -135,6 +137,8 @@ export const partnerLogin = (pass, dispatch, loadingAction) => {
       }
       dispatch(loadingAction(false))
       dispatch(redirectToAccount(false))
+    }).catch(err => {
+      console.log('partnerLogin error ', err)
     })
 }
 
@@ -156,6 +160,8 @@ export const userLogin = (user, dispatch, loadingAction, loginSuccessAction) => 
             dispatch(loginSuccessAction(user))
           })
       }
+    }).catch(err => {
+      console.log('userLogin error ', err)
     })
 }
 
@@ -171,6 +177,8 @@ export const partnerUpdateFbAcessToken = (dispatch, fbId, fbAcessToken) => {
         batch.update(docRef, { fb_token: fbAcessToken })
         batch.commit()
       })
+    }).catch(err => {
+      console.log('partnerUpdateFbAcessToken error ', err)
     })
 }
 
@@ -183,6 +191,31 @@ export const checkIsPartner = (dispatch, fbId) => {
       if (snapshot.docs.length > 0) {
         return dispatch(login(snapshot.docs[0].data()))
       }
+    }).catch(err => {
+      console.log('checkIsPartner error ', err)
+    })
+}
+
+export const createChatIfNotExists = (dispatch, partner, user) => {
+  return db.collection('chats')
+    .where('partner_id', '==', partner.id)
+    .where('user_id', '==', user.id)
+    .get()
+    .then(snapshot => {
+      if (snapshot.docs.length === 0) {
+        db.collection('chats').add({
+          partner_id: partner.id,
+          user_id: user.id,
+          unread: 0,
+          time: firebase.firestore.FieldValue.serverTimestamp(),
+          user_avatar: "https://randomuser.me/api/portraits/women/1.jpg", // FIXME: Criar tela para upload de foto do perfil 
+          user_name: user.name,
+          partner_name: partner.name,
+          partner_avatar: partner.logo,
+        })
+      }
+    }).catch(err => {
+      console.log('createChatIfNotExists error ', err)
     })
 }
 

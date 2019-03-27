@@ -2,14 +2,20 @@ import React from 'react'
 import { View, Image, FlatList, ImageBackground } from 'react-native'
 import { GiftedChat } from 'react-native-gifted-chat'
 import PropTypes from 'prop-types'
-import { connect } from 'react-redux';
-import { sendMessage } from '../actions/chat';
-import { backgroundImage } from './styles';
+import { connect } from 'react-redux'
+import { sendMessages, createChatIfNotExists } from '../actions/chat'
+import { backgroundImage } from './styles'
+import { HeaderBackButton } from 'react-navigation'
 
 class ChatSreen extends React.Component {
     static navigationOptions = ({ navigation }) => ({
-        title: navigation.state.params.partner.name
+        title: navigation.state.params.partner.name,
+        headerLeft: (<HeaderBackButton onPress={() => { navigation.navigate('PartnerFeed', { partner: navigation.state.params.partner }) }} />)
     });
+
+    componentDidMount() {
+        this.props.dispatch(createChatIfNotExists(this.props.partner, this.props.user))
+    }
 
     componentWillMount() {
         let recentMessage = false
@@ -29,7 +35,9 @@ class ChatSreen extends React.Component {
                     _id: this.props.partner.id,
                     name: this.props.partner.name,
                     avatar: this.props.partner.logo
-                }
+                },
+                partner_id: this.props.partner.id,
+                user_id: this.props.user.id
             },
             {
                 _id: Math.random() * 1000,
@@ -39,13 +47,15 @@ class ChatSreen extends React.Component {
                     _id: this.props.partner.id,
                     name: this.props.partner.name,
                     avatar: this.props.partner.logo
-                }
+                },
+                partner_id: this.props.partner.id,
+                user_id: this.props.user.id
             }
         ].reverse()
 
         if (!recentMessage) {
             if (this.props.partner.welcome_messages == undefined) {
-                this.props.dispatch(sendMessage(defaultMessages, this.props.partner.id))
+                this.props.dispatch(sendMessages(defaultMessages, this.props.partner))
             } else {
                 messages = defaultMessages
 
@@ -61,7 +71,9 @@ class ChatSreen extends React.Component {
                                 _id: this.props.partner.id,
                                 name: this.props.partner.name,
                                 avatar: this.props.partner.logo
-                            }
+                            },
+                            partner_id: this.props.partner.id,
+                            user_id: this.props.user.id
                         }
                     })
                     messages = messages.reverse()
@@ -78,18 +90,26 @@ class ChatSreen extends React.Component {
                                 _id: this.props.partner.id,
                                 name: this.props.partner.name,
                                 avatar: this.props.partner.logo
-                            }
+                            },
+                            partner_id: this.props.partner.id,
+                            user_id: this.props.user.id
                         }
                     }).reverse()
                 }
 
-                this.props.dispatch(sendMessage(messages, this.props.partner.id))
+                this.props.dispatch(sendMessages(messages, this.props.partner))
             }
         }
     }
 
     onSend(newMessages = []) {
-        this.props.dispatch(sendMessage(newMessages, this.props.partner.id))
+        newMessages = newMessages.map(message => {
+            message.partner_id = this.props.partner.id
+            message.user_id = this.props.user.id
+
+            return message
+        })
+        this.props.dispatch(sendMessages(newMessages, this.props.partner))
     }
 
     renderImage(image) {
@@ -125,7 +145,7 @@ class ChatSreen extends React.Component {
                         messages={this.props.messages}
                         onSend={messages => this.onSend(messages)}
                         user={{
-                            _id: 0,
+                            _id: this.props.user.id,
                         }}
                     />
                 </View>
@@ -155,7 +175,8 @@ const mapStateToProps = state => {
     return ({
         partner: state.partners.partnerSelectedForChat,
         images: images,
-        messages: messages
+        messages: messages,
+        user: state.auth.user
     })
 }
 

@@ -20,10 +20,14 @@ class PartnerChatScreen extends React.PureComponent {
     firebase
       .firestore()
       .collection('chats')
-      .where("partner_id", "==", 22)
+      .where("partner_id", "==", this.partner.id)
       .onSnapshot(snapshot => {
         this.props.dispatch(addChats(snapshot.docs.map(doc => doc.data())))
       })
+  }
+
+  get partner() {
+    return this.props.navigation.state.params.partner
   }
 
   onPressChat(chat) {
@@ -32,8 +36,8 @@ class PartnerChatScreen extends React.PureComponent {
 
   renderListItem(chat) {
     let fontWeight = chat.unread && chat.unread > 0 ? 'bold' : 'normal'
-    let avatar = chat.client_avatar && chat.client_avatar.lenth > 1
-      ? <Thumbnail source={{ uri: chat.client_avatar }} />
+    let avatar = chat.user_avatar && chat.user_avatar.lenth > 1
+      ? <Thumbnail source={{ uri: chat.user_avatar }} />
       : <Thumbnail source={require('./../static/avatar.png')} />
     let time = chat.time && chat.time > 0 ? chat.time : new Date().getTime()
 
@@ -44,7 +48,7 @@ class PartnerChatScreen extends React.PureComponent {
             {avatar}
           </Left>
           <Body>
-            <Text>Kévio Castro</Text>
+            <Text>{chat.user_name}</Text>
             <Text style={{ fontWeight: fontWeight }}>{chat.last_message}</Text>
           </Body>
           <Right>
