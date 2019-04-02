@@ -12,23 +12,33 @@ import PartnerAccountScreen from '../screens/PartnerAccountScreen'
 import PartnerPostScreen from '../screens/PartnerPostScreen'
 import UserLoginScreen from './../screens/UserLoginScreen'
 import PostScreen from './../screens/PostScreen'
+import ImageViewScreen from '../screens/ImageViewScreen'
 
 export const ModeCardStack = createStackNavigator({
-  Home: { screen: SegmentScreen },
-  Partner: { screen: PartnerScreen },
-  PartnerFeed: { screen: PartnerFeedScreen },
-  Chat: { screen: ChatSreen },
+  Home: { screen: SegmentScreen, navigationOptions: { gesturesEnabled: true } },
+  Partner: { screen: PartnerScreen, navigationOptions: { gesturesEnabled: true } },
+  PartnerFeed: { screen: PartnerFeedScreen, navigationOptions: { gesturesEnabled: true } },
+  Chat: { screen: ChatSreen, navigationOptions: { gesturesEnabled: true } },
   Login: { screen: LoginScreen },
-  PartnerChat: { screen: PartnerChatScreen },
-  PartnerAccount: { screen: PartnerAccountScreen },
-  PartnerPost: { screen: PartnerPostScreen },
-  UserLogin: { screen: UserLoginScreen },
-  Post: { screen: PostScreen }
+  PartnerChat: { screen: PartnerChatScreen, navigationOptions: { gesturesEnabled: true } },
+  PartnerAccount: { screen: PartnerAccountScreen, navigationOptions: { gesturesEnabled: true } },
+  PartnerPost: { screen: PartnerPostScreen, navigationOptions: { gesturesEnabled: true } },
+  UserLogin: { screen: UserLoginScreen, navigationOptions: { gesturesEnabled: true } },
+  Post: { screen: PostScreen, navigationOptions: { gesturesEnabled: true } },
+  ImageView: {
+    screen: ImageViewScreen, navigationOptions: {
+      gesturesEnabled: true,
+      headerTintColor: 'white',
+      headerStyle: {
+        backgroundColor: 'black'
+      }
+    }
+  }
 });
 
 export const Navigator = createStackNavigator(
   {
-    Home: { screen: ModeCardStack, navigationOptions: { header: null } }
+    Home: { screen: ModeCardStack, navigationOptions: { header: null, gesturesEnabled: true } }
   },
   { mode: 'modal' }
 );

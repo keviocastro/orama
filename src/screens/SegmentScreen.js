@@ -35,9 +35,7 @@ class SegmentScreen extends React.Component {
   componentDidMount() {
     SplashScreen.hide()
 
-    console.log('SegmentScreen', 'componentDidMount')
     if (this.props.segments.length === 0 && this.props.loading === false) {
-      console.log(' this.this.props.dispatch(getSegments())')
       this.props.dispatch(getSegments())
       this.props.dispatch(getHighlights())
     }
@@ -125,7 +123,10 @@ class SegmentScreen extends React.Component {
           data={this.props.segments}
           keyExtractor={(this.keyExtractor)}
           renderItem={({ item }) => this.renderItem({ item })}
-          onRefresh={() => this.props.dispatch(getSegments())}
+          onRefresh={() => {
+            this.props.dispatch(getSegments())
+            this.props.dispatch(getHighlights())
+          }}
           refreshing={this.props.loading}
         />
       </View>

@@ -1,17 +1,28 @@
 import React from 'react'
-import { View, Image, FlatList, ImageBackground } from 'react-native'
+import { View, Image, FlatList, ImageBackground, Modal, Text, TouchableOpacity, Alert, Dimensions } from 'react-native'
 import { GiftedChat } from 'react-native-gifted-chat'
 import PropTypes from 'prop-types'
 import { connect } from 'react-redux'
 import { sendMessages, createChatIfNotExists } from '../actions/chat'
-import { backgroundImage } from './styles'
+import { removeChatImage } from './../actions/partners';
+import { backgroundImage, responsiveImageFullScreen } from './styles'
 import { HeaderBackButton } from 'react-navigation'
+import ImageZoom from 'react-native-image-pan-zoom'
 
 class ChatSreen extends React.Component {
     static navigationOptions = ({ navigation }) => ({
         title: navigation.state.params.partner.name,
         headerLeft: (<HeaderBackButton onPress={() => { navigation.navigate('PartnerFeed', { partner: navigation.state.params.partner }) }} />)
     });
+
+    constructor(props) {
+        super(props)
+
+        this.state = {
+            modalVisible: false,
+            modalImage: null
+        }
+    }
 
     componentDidMount() {
         this.props.dispatch(createChatIfNotExists(this.props.partner, this.props.user))
@@ -113,10 +124,17 @@ class ChatSreen extends React.Component {
     }
 
     renderImage(image) {
-        return <Image style={{
-            height: 100,
-            width: 200
-        }} source={{ uri: image }} />
+        return <TouchableOpacity onPress={() => {
+            this.setState({
+                modalVisible: true,
+                modalImage: image
+            })
+        }}>
+            <Image style={{
+                height: 100,
+                width: 200
+            }} source={{ uri: image }} />
+        </TouchableOpacity>
     }
 
     renderImages() {
@@ -137,6 +155,42 @@ class ChatSreen extends React.Component {
     render() {
         return (
             <ImageBackground style={backgroundImage} source={require('./../static/background.png')} >
+                <Modal
+                    animationType="slide"
+                    transparent={false}
+                    visible={this.state.modalVisible}
+                    onRequestClose={() => {
+                        this.setState({
+                            modalVisible: false
+                        })
+                    }}>
+                    <View style={{ flex: 1, justifyContent: "center", alignItems: "center", backgroundColor: "black" }}>
+                        <TouchableOpacity onPress={() => {
+                            this.setState({
+                                modalVisible: false
+                            })
+                            this.props.dispatch(removeChatImage(this.props.partner.id, this.state.modalImage))
+                        }}>
+                            <Image style={{ height: 30, width: 30, marginBottom: 10 }} source={require('./../static/icon-remove.png')} />
+                        </TouchableOpacity>
+                        <ImageZoom
+                            cropWidth={modalImageWidth}
+                            cropHeight={modalImagemHeight}
+                            imageWidth={modalImageWidth}
+                            imageHeight={modalImagemHeight} >
+                            <Image style={{ width: modalImageWidth, height: modalImagemHeight, resizeMode: "stretch" }}
+                                source={{ uri: this.state.modalImage }}
+                            />
+                        </ImageZoom>
+                        <TouchableOpacity onPress={() => {
+                            this.setState({
+                                modalVisible: false
+                            })
+                        }}>
+                            <Image style={{ width: 50, height: 50, marginTop: 10, backgroundColor: 'black' }} source={require('./../static/icon-down.png')} />
+                        </TouchableOpacity>
+                    </View>
+                </Modal>
                 <View style={{ flex: 1 }}>
                     {this.renderImages()}
                     <GiftedChat
@@ -153,6 +207,10 @@ class ChatSreen extends React.Component {
         )
     }
 }
+
+const viewportHeight = Dimensions.get('window').height
+const modalImagemHeight = viewportHeight - (viewportHeight * 0.25)
+const modalImageWidth = Dimensions.get('window').width
 
 ChatSreen.propTypes = {
     partner: PropTypes.object,

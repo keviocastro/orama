@@ -35,6 +35,13 @@ export const selectForChat = (partner, image) => ({
   image
 })
 
+export const REMOVE_CHAT_IMAGE = 'REMOVE_CHAT_IMAGE'
+export const removeChatImage = (partnerId, image) => ({
+  type: REMOVE_CHAT_IMAGE,
+  partnerId,
+  image
+})
+
 export const updateFbAcessToken = (fbId, fbAcessToken) => dispatch =>
   partnerUpdateFbAcessToken(dispatch, fbId, fbAcessToken)
 

@@ -41,9 +41,10 @@ class PartnerFeedScreen extends React.PureComponent {
   constructor(props) {
     super(props)
 
-    if (this.props.posts.length === 0) {
-      this.props.dispatch(getRealtimeByPartner(this.partner.id))
-    }
+  }
+
+  componentDidMount() {
+    this.props.dispatch(getRealtimeByPartner(this.partner.id))
   }
 
   get partner() {
@@ -72,26 +73,6 @@ class PartnerFeedScreen extends React.PureComponent {
       return null
   }
 
-  renderItemPost({ item, index }) {
-    return (
-      <TouchableOpacity onPress={() => this.onClickItemCard(item.image)}>
-        <Card styles={styles.card}>
-          {item.text !== undefined && item.text !== null &&
-            <CardItem >
-              <Body>
-                <Text>{item.text}</Text>
-              </Body>
-            </CardItem>}
-          {item.image !== undefined && item.text !== null &&
-            <CardItem cardBody style={styles.card}>
-              <Image source={{ uri: item.image }} style={styles.image} />
-            </CardItem>
-          }
-        </Card>
-      </TouchableOpacity>
-    )
-  }
-
   renderFeedImage() {
     if (this.props.navigation.state.params.partner !== undefined &&
       typeof this.props.navigation.state.params.partner.feed_image === 'string' &&
@@ -108,11 +89,34 @@ class PartnerFeedScreen extends React.PureComponent {
       return null
   }
 
+  renderItemPost({ item, index }) {
+    if (index === 0 && item.feed_image !== undefined) {
+      return (this.renderFeedImage())
+    } else {
+      return (
+        <TouchableOpacity onPress={() => this.onClickItemCard(item.image)}>
+          <Card styles={styles.card}>
+            {item.text !== undefined && item.text !== null &&
+              <CardItem >
+                <Body>
+                  <Text>{item.text}</Text>
+                </Body>
+              </CardItem>}
+            {item.image !== undefined && item.text !== null &&
+              <CardItem cardBody style={styles.card}>
+                <Image source={{ uri: item.image }} style={styles.image} />
+              </CardItem>
+            }
+          </Card>
+        </TouchableOpacity>
+      )
+    }
+  }
+
   render = () => (
     <ImageBackground style={backgroundImage} source={require('./../static/background.png')} >
       <View style={{ flex: 1, flexDirection: 'column' }}>
         <FlatList
-          ListHeaderComponent={() => this.renderFeedImage()}
           data={this.props.posts}
           keyExtractor={(item) => item.id}
           renderItem={({ item, index }) => this.renderItemPost({ item, index })}
@@ -138,8 +142,15 @@ const mapStateToProps = (state) => {
     }
   }
 
+  if (posts.length === 0 || posts[0].feed_image === undefined) {
+    posts.unshift({
+      id: '1',
+      feed_image: state.posts.partnerSelectedForFeed.feed_image
+    })
+  }
+
   return ({
-    loading: state.posts.loading, // FIXME: O load não está funcionando
+    loading: state.posts.loading,
     posts: posts
   })
 }

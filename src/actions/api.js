@@ -10,24 +10,8 @@ const convertSnapshot = (snapshot) => {
   return docs
 }
 
-// @todo refactore to gcloud functions
 export const updateLatestPostsByPartner = (partnerId, image) => {
-  // let query = db.collection('posts')
-  //   .where('partner_id', '==', partnerId)
-  //   .orderBy('created_at', 'desc')
-  //   .limit(3)
-
-  // query.get().then(snapshot => {
-  //   let images = []
-  //   snapshot.docs.forEach(doc => {
-  //     let data = doc.data()
-  //     if (typeof data.image === 'string' && data.image.length > 0) {
-  //       images.push(data.image)
-  //     }
-  //   })
-
   db.collection('partners').doc(partnerId).update({ last_post: image })
-  // })
 }
 
 export const get = (resource, filter = {}, orderBy = {}, dispatch, realtime, loadingAction, receiveAction) => {
@@ -96,7 +80,7 @@ export const add = function (resource, data, dispatch, receiveAction, errorActio
   data = Array.isArray(data) ? data : [data]
   let countTerminated = 0
 
-  if (typeof loadingAction === 'string') {
+  if (typeof loadingAction === 'function') {
     dispatch(loadingAction(true))
   }
 

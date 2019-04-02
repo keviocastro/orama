@@ -21,7 +21,8 @@ import {
 } from 'native-base'
 import Carousel from 'react-native-snap-carousel'
 import { getPartners, selectForChat } from '../actions/partners'
-import { selectedPartnerForFeed, getRealtimeByPartner } from '../actions/posts';
+import { selectedPartnerForFeed, getRealtimeByPartner } from '../actions/posts'
+import { backgroundImage } from './styles';
 
 const horizontalMargin = 5
 const slideWidth = Dimensions.get('window').width - 10
@@ -158,13 +159,15 @@ class PartnerScreen extends React.PureComponent {
     }
 
     return (
-      <FlatList
-        onRefresh={() => this.refrash()}
-        refreshing={this.props.isFetching}
-        data={this.props.partners}
-        keyExtractor={this.keyExtrator}
-        renderItem={this.renderItem}
-      />
+      <ImageBackground style={backgroundImage} source={require('./../static/background.png')} >
+        <FlatList
+          onRefresh={() => this.refrash()}
+          refreshing={this.props.isFetching}
+          data={this.props.partners}
+          keyExtractor={this.keyExtrator}
+          renderItem={this.renderItem}
+        />
+      </ImageBackground>
     )
   }
 }

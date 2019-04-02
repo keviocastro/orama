@@ -5,8 +5,8 @@ import { Text, Button } from 'native-base'
 import { View, StyleSheet, ImageBackground, Dimensions } from 'react-native'
 import { HeaderBackButton } from 'react-navigation'
 import { partnerLogoff } from './../actions/auth'
-import { backgroundImage } from './styles';
-import { clearPosts } from '../actions/posts';
+import { backgroundImage } from './styles'
+import { clearPosts, getRealtimeByPartner } from '../actions/posts'
 
 const contentWidth = Dimensions.get('window').width - 20
 
@@ -44,6 +44,12 @@ class PartnerAccountScreen extends React.Component {
     headerLeft: (<HeaderBackButton onPress={() => { navigation.navigate('Home') }} />)
   })
 
+  componentDidMount() {
+    if (this.props.posts.length === 0) {
+      this.props.dispatch(getRealtimeByPartner(this.props.partner.id))
+    }
+  }
+
   onPressChat() {
     this.props.navigation.navigate('PartnerChat', { partner: this.props.partner })
   }
@@ -56,6 +62,10 @@ class PartnerAccountScreen extends React.Component {
 
   }
 
+  onPressNewPost() {
+    this.props.navigation.navigate('Post', { partner: this.props.partner })
+  }
+
   onPressLogout() {
     this.props.dispatch(partnerLogoff())
     this.props.dispatch(clearPosts())
@@ -66,11 +76,22 @@ class PartnerAccountScreen extends React.Component {
     return (
       <ImageBackground style={backgroundImage} source={require('./../static/background.png')} >
         <View style={{ flex: 1, flexDirection: 'column', justifyContent: 'space-evenly', alignItems: 'center', paddingTop: 40, paddingLeft: 10 }} >
-          <Button style={styles.button} info onPress={() => this.onPressChat()}><Text style={styles.buttonText}>Atendimento</Text></Button>
-          <Button style={styles.button} info onPress={() => this.onPressPost()}><Text style={styles.buttonText}>Postagens</Text></Button>
-          <Button style={styles.button} info onPress={() => this.onPressNotfy()}><Text style={styles.buttonText}>Notificações</Text></Button>
+          <Button style={styles.button} info onPress={() => this.onPressChat()}>
+            <Text style={styles.buttonText}>Atendimento</Text>
+          </Button>
+          <Button style={styles.button} info onPress={() => this.onPressNewPost()}>
+            <Text style={styles.buttonText}>Nova postagem</Text>
+          </Button>
+          <Button style={styles.button} info onPress={() => this.onPressPost()}>
+            <Text style={styles.buttonText}>Minhs Postagens</Text>
+          </Button>
+          <Button style={styles.button} info onPress={() => this.onPressNotfy()}>
+            <Text style={styles.buttonText}>Notificações</Text>
+          </Button>
           <View style={{ justifyContent: 'center', alignItems: 'center' }}>
-            <Button style={styles.buttonExit} info onPress={() => this.onPressLogout()}><Text style={styles.buttonText}>Sair da conta</Text></Button>
+            <Button style={styles.buttonExit} info onPress={() => this.onPressLogout()}>
+              <Text style={styles.buttonText}>Sair da conta</Text>
+            </Button>
           </View>
         </View>
       </ImageBackground>
@@ -84,7 +105,8 @@ PartnerAccountScreen.propTypes = {
 }
 
 const mapToProps = state => ({
-  partner: state.auth.partner
+  partner: state.auth.partner,
+  posts: state.posts.posts
 })
 
 export default connect(mapToProps)(PartnerAccountScreen)

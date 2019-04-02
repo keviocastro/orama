@@ -4,7 +4,8 @@ import {
   PARTNERS_REQUEST_ERROR,
   PARTNERS_SELECT,
   SELECTED_FOR_CHAT,
-  LOGIN
+  LOGIN,
+  REMOVE_CHAT_IMAGE
 } from './../actions/partners'
 
 const initialState = {
@@ -26,7 +27,6 @@ const setPartnersBySegment = (state, action) => {
   const bySegment = { ...state.bySegment }
 
   action.partners = action.partners.filter((partner) => {
-    //@todo To correct an api error. Remove after upgrading an api
     if (partner.hasOwnProperty('segmentIds') &&
       partner.segmentIds.indexOf(action.segmentId) != -1) {
       return partner
@@ -63,6 +63,18 @@ const setChatImagesByPartner = (state, action) => {
   return imagesChatByPartner
 }
 
+const removeChatImageByPartner = (state, action) => {
+  state.imagesChatByPartner[action.partnerId] = state.imagesChatByPartner[action.partnerId].filter(image => {
+    if (image !== action.image) {
+      return true
+    } else {
+      return false
+    }
+  })
+
+  return state.imagesChatByPartner;
+}
+
 const reducer = (state = initialState, action) => {
 
   switch (action.type) {
@@ -92,6 +104,11 @@ const reducer = (state = initialState, action) => {
         ...state,
         partnerSelectedForChat: action.partner,
         imagesChatByPartner: setChatImagesByPartner(state, action)
+      }
+    case REMOVE_CHAT_IMAGE:
+      return {
+        ...state,
+        imagesChatByPartner: removeChatImageByPartner(state, action)
       }
     case LOGIN:
       return {

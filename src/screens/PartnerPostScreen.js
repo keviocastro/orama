@@ -28,12 +28,6 @@ export class PartnerPostScreen extends React.PureComponent {
     return this.props.navigation.state.params.partner
   }
 
-  componentWillMount() {
-    if (this.props.posts.length === 0) {
-      this.props.dispatch(getByPartner(this.partner.id))
-    }
-  }
-
   renderItemPost({ item, index }) {
     return (
       <Card styles={styles.card}>
@@ -55,11 +49,12 @@ export class PartnerPostScreen extends React.PureComponent {
   render() {
     return (
       <ImageBackground style={backgroundImage} source={require('./../static/background.png')} >
-        <Button style={{ width: fullWidth, justifyContent: 'center', marginTop: 10, marginBottom: 10 }}
-          info
-          onPress={() => { this.props.navigation.navigate('Post', { partner: this.partner }) }}>
-          <Text>Novo post</Text>
-        </Button>
+        {!this.props.loading &&
+          <Button style={{ width: fullWidth, justifyContent: 'center', marginTop: 10, marginBottom: 10 }}
+            info
+            onPress={() => { this.props.navigation.navigate('Post', { partner: this.partner }) }}>
+            <Text>Novo post</Text>
+          </Button>}
         <FlatList
           ref={list => { this.postList = list }}
           data={this.props.posts}
