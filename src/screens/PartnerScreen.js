@@ -20,8 +20,8 @@ import {
   Body
 } from 'native-base'
 import Carousel from 'react-native-snap-carousel'
-import { getPartners, selectForChat } from '../actions/partners'
-import { selectedPartnerForFeed, getRealtimeByPartner } from '../actions/posts'
+import { getPartners } from '../actions/partners'
+import { selectedPartnerForFeed } from '../actions/posts'
 import { backgroundImage } from './styles';
 
 const horizontalMargin = 5
@@ -40,7 +40,7 @@ class PartnerScreen extends React.PureComponent {
   }
 
   componentDidMount() {
-    this.refrash()
+    this.props.dispatch(getPartners(this.segment.id))
   }
 
   componentWillReceiveProps(nextProps) {
@@ -95,19 +95,11 @@ class PartnerScreen extends React.PureComponent {
   )
 
   renderCardItemBody = (partner) => {
-    if (!Object.prototype.hasOwnProperty.call(partner, 'latest_posts')) {
+    if (typeof partner.last_post === 'string') {
+      return this.renderCardItemBodyImage(partner, partner.last_post)
+    } else {
       return null
     }
-
-    // latest_posts pode ser array ou string
-    if (Array.isArray(partner.latest_posts) && partner.latest_posts.length === 1)
-      return this.renderCardItemBodyImage(partner, partner.latest_posts[0])
-
-    if (typeof partner.latest_posts === 'string' && partner.latest_posts.length > 1)
-      return this.renderCardItemBodyImage(partner, partner.latest_posts)
-
-    if (Array.isArray(partner.latest_posts) && partner.latest_posts.length > 1)
-      return this.renderCardItemBodyCoursel(partner)
   }
 
   renderItem = ({ item }) => (
@@ -221,23 +213,6 @@ const mapStateToProps = (state) => {
     state.partners.bySegment,
     segmentId,
   )
-
-  if (hasPartnersBySegment) {
-
-    state.partners.bySegment[segmentId].data = state.partners.bySegment[segmentId].data.map(partner => {
-
-      if (typeof partner.last_post === 'string' && partner.last_post.length > 0) {
-        if (!Array.isArray(partner.latest_posts)) {
-          partner.latest_posts = []
-        }
-        partner.latest_posts.push(partner.last_post);
-      }
-
-      return partner;
-    })
-
-  }
-
 
   props = hasPartnersBySegment
     ? {

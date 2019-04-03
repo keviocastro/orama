@@ -15,10 +15,10 @@ import PropTypes from 'prop-types'
 import { connect } from 'react-redux'
 import { Card, CardItem, Body } from 'native-base'
 import { selectForChat } from './../actions/partners'
-import { Header } from 'react-navigation'
+import { Header, HeaderBackButton } from 'react-navigation'
 import ImageZoom from 'react-native-image-pan-zoom'
 import { getRealtimeByPartner, getByPartner } from './../actions/posts'
-import { backgroundImage } from './styles';
+import { backgroundImage } from './styles'
 
 const viewportHeight = Dimensions.get('window').height - Header.HEIGHT
 const mainFeedImageHeight = viewportHeight - (viewportHeight * 0.3)
@@ -35,13 +35,8 @@ const styles = StyleSheet.create({
 
 class PartnerFeedScreen extends React.PureComponent {
   static navigationOptions = ({ navigation }) => ({
-    title: navigation.state.params.partner.name,
+    title: navigation.state.params.partner.name
   })
-
-  constructor(props) {
-    super(props)
-
-  }
 
   componentDidMount() {
     this.props.dispatch(getRealtimeByPartner(this.partner.id))
@@ -90,7 +85,7 @@ class PartnerFeedScreen extends React.PureComponent {
   }
 
   renderItemPost({ item, index }) {
-    if (index === 0 && item.feed_image !== undefined) {
+    if (item.id === '1' && item.feed_image !== undefined) {
       return (this.renderFeedImage())
     } else {
       return (

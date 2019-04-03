@@ -9,8 +9,7 @@ import {
   Image,
   TouchableOpacity,
   StyleSheet,
-  Dimensions,
-  AsyncStorage
+  Dimensions
 } from 'react-native'
 import { Card, CardItem } from 'native-base'
 import LinearGradient from 'react-native-linear-gradient'

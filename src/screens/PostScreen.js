@@ -11,6 +11,7 @@ import { Button, Text } from 'native-base'
 import { connect } from 'react-redux'
 import PhotoUpload from 'react-native-photo-upload'
 import { sendPost, updateLatestPosts } from './../actions/posts'
+import { getPartners } from './../actions/partners';
 import { backgroundImage } from './styles'
 
 // FIXME: Remover dependencia imagepicker
@@ -49,6 +50,11 @@ class PostScreen extends React.Component {
 
   onPressSendPost() {
     this.props.dispatch(sendPost(this.inputText.value, this.state.image, this.partner.id))
+    if (typeof this.partner.segmentIds === 'array') {
+      this.partner.segmentIds.forEach(segmentId => {
+        this.props.dispatch(getPartners(segmentId))
+      })
+    }
   }
 
   render() {

@@ -8,11 +8,11 @@ import { removeChatImage } from './../actions/partners';
 import { backgroundImage, responsiveImageFullScreen } from './styles'
 import { HeaderBackButton } from 'react-navigation'
 import ImageZoom from 'react-native-image-pan-zoom'
+import md5 from 'md5'
 
 class ChatSreen extends React.Component {
     static navigationOptions = ({ navigation }) => ({
-        title: navigation.state.params.partner.name,
-        headerLeft: (<HeaderBackButton onPress={() => { navigation.navigate('PartnerFeed', { partner: navigation.state.params.partner }) }} />)
+        title: navigation.state.params.partner.name
     });
 
     constructor(props) {
@@ -143,7 +143,7 @@ class ChatSreen extends React.Component {
                 <FlatList
                     horizontal={true}
                     data={this.props.images}
-                    keyExtractor={(image, index) => index.toString()}
+                    keyExtractor={(image) => md5(image)}
                     renderItem={({ item }) => this.renderImage(item)}
                 />
             </View>
