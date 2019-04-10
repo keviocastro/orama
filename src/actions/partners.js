@@ -1,4 +1,4 @@
-import { search, partnerUpdateFbAcessToken, checkIsPartner, } from './api'
+import { search, partnerUpdateFbAcessToken, checkIsPartner, get, searchPartnerByName } from './api'
 
 export const PARTNERS_RECEIVED = 'PARTNERS_RECEIVED'
 export const received = (partners, filter) => ({
@@ -21,6 +21,22 @@ export const getPartners = segmentId => dispatch =>
     field: 'segmentIds',
     value: segmentId,
   })
+
+
+export const PARTNERS_SEARCH_LOADING = 'PARTNERS_SEARCH_LOADING'
+export const partnersSearchLoading = loading => ({
+  type: PARTNERS_SEARCH_LOADING,
+  loading
+})
+export const RECEIVE_SEARCH_PARTNERS = 'RECEIVE_SEARCH_PARTNERS'
+export const receiveSearchPartners = (partners, filter) => ({
+  type: RECEIVE_SEARCH_PARTNERS,
+  partners,
+  search: filter.name,
+})
+
+export const searchPartners = search => dispatch =>
+  searchPartnerByName(dispatch, search, partnersSearchLoading, receiveSearchPartners)
 
 
 export const getPartnersRealTime = (segmentId) => dispatch =>

@@ -5,7 +5,9 @@ import {
   PARTNERS_SELECT,
   SELECTED_FOR_CHAT,
   LOGIN,
-  REMOVE_CHAT_IMAGE
+  REMOVE_CHAT_IMAGE,
+  RECEIVE_SEARCH_PARTNERS,
+  PARTNERS_SEARCH_LOADING
 } from './../actions/partners'
 
 const initialState = {
@@ -14,6 +16,9 @@ const initialState = {
     requestError: '',
     data: [],
   },
+  searchPartners: [],
+  search: '',
+  searchLoading: false,
   imagesChatByPartner: {},
   currentSegmentId: null,
   partnerSelectedForChat: {},
@@ -75,9 +80,37 @@ const removeChatImageByPartner = (state, action) => {
   return state.imagesChatByPartner;
 }
 
+const removeAccents = (text) => {
+  return text.normalize('NFD').replace(/[\u0300-\u036f]/g, "")
+}
+
+// FIXME: Remover esse filtro quando criar o fullsearchtext no firestore
+const filterPartnerByName = (partners, name) => {
+  let searchNormalized = removeAccents(name).toLowerCase()
+  return partners.filter(partner => {
+    let nameNormalized = removeAccents(partner.name).toLowerCase()
+    if (nameNormalized.search(searchNormalized) === -1) {
+      return false
+    } else {
+      return true
+    }
+  })
+}
+
 const reducer = (state = initialState, action) => {
 
   switch (action.type) {
+    case RECEIVE_SEARCH_PARTNERS:
+      return {
+        ...state,
+        searchPartners: filterPartnerByName(action.partners, action.search),
+        search: action.search
+      }
+    case PARTNERS_SEARCH_LOADING:
+      return {
+        ...state,
+        searchLoading: action.loading
+      }
     case PARTNERS_RECEIVED:
       return {
         ...state,

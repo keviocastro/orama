@@ -1,8 +1,7 @@
 import React from 'react'
-import { Text, FlatList, TouchableOpacity, ImageBackground } from 'react-native'
+import { Text, FlatList, ImageBackground } from 'react-native'
 import { connect } from 'react-redux'
-import PropTypes from 'prop-types'
-import { ListItem, Left, Right, Body, Thumbnail, Content } from 'native-base'
+import { ListItem, Left, Right, Body, Thumbnail } from 'native-base'
 import firebase from 'react-native-firebase'
 import { addChats } from './../actions/chat'
 import { backgroundImage } from './styles';
@@ -31,7 +30,7 @@ class PartnerChatScreen extends React.PureComponent {
   }
 
   onPressChat(chat) {
-    this.props.navigation.navigate('Chat')
+    this.props.navigation.navigate('PartnerChatMessage', { chat: chat })
   }
 
   renderListItem(chat) {
@@ -42,20 +41,20 @@ class PartnerChatScreen extends React.PureComponent {
     let time = chat.time && chat.time > 0 ? chat.time : new Date().getTime()
 
     return (
-      <TouchableOpacity onPress={() => { console.log('chat') }} >
-        <ListItem avatar style={{ backgroundColor: 'transparent' }}>
-          <Left>
-            {avatar}
-          </Left>
-          <Body>
-            <Text>{chat.user_name}</Text>
-            <Text style={{ fontWeight: fontWeight }}>{chat.last_message}</Text>
-          </Body>
-          <Right>
-            <Text note>{moment(time.getTime()).fromNow()}</Text>
-          </Right>
-        </ListItem>
-      </TouchableOpacity>
+      <ListItem avatar
+        onPress={() => { this.onPressChat(chat) }}
+        style={{ backgroundColor: 'transparent' }} >
+        <Left>
+          {avatar}
+        </Left>
+        <Body>
+          <Text>{chat.user_name}</Text>
+          <Text style={{ fontWeight: fontWeight }}>{chat.last_message}</Text>
+        </Body>
+        <Right>
+          <Text note>{moment(time.getTime()).fromNow()}</Text>
+        </Right>
+      </ListItem>
     )
   }
 
@@ -69,11 +68,6 @@ class PartnerChatScreen extends React.PureComponent {
       </ImageBackground>
     )
   }
-}
-
-PartnerChatScreen.propTypes = {
-  navigation: PropTypes.object,
-  dispatch: PropTypes.func
 }
 
 const mapToProps = state => ({

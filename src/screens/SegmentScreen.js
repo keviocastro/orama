@@ -9,7 +9,8 @@ import {
   Image,
   TouchableOpacity,
   StyleSheet,
-  Dimensions
+  Dimensions,
+  TextInput
 } from 'react-native'
 import { Card, CardItem } from 'native-base'
 import LinearGradient from 'react-native-linear-gradient'
@@ -17,7 +18,7 @@ import Carousel from 'react-native-snap-carousel'
 import SplashScreen from 'react-native-splash-screen'
 import { getSegments } from './../actions/segments'
 import { getHighlights } from './../actions/highlights'
-import { selectForChat } from './../actions/partners'
+import { selectForChat, searchPartners } from './../actions/partners'
 
 const horizontalMargin = 0
 const slideWidth = 300
@@ -25,6 +26,8 @@ const slideWidth = 300
 const sliderWidth = Dimensions.get('window').width
 const itemWidth = slideWidth + horizontalMargin * 2
 const itemHeight = 100
+
+const fullWidth = Dimensions.get('window').width - 20
 
 class SegmentScreen extends React.Component {
   static navigationOptions = {
@@ -78,7 +81,11 @@ class SegmentScreen extends React.Component {
 
   onPressCarousel = (partner) => {
     this.props.dispatch(selectForChat(partner))
-    this.props.navigation.navigate('Chat', { partner })
+    if (this.props.loggedUser) {
+      this.props.navigation.navigate('Chat', { partner })
+    } else {
+      this.props.navigation.navigate('UserLogin', { partner: partner })
+    }
   }
 
   renderItemCarousel = ({ item }) => {
@@ -96,6 +103,10 @@ class SegmentScreen extends React.Component {
         </View>
       </TouchableOpacity>
     )
+  }
+
+  onSearchPartners() {
+    this.props.navigation.navigate('PartnerSearch', { search: this.inputSearch.value })
   }
 
   render() {
@@ -117,6 +128,28 @@ class SegmentScreen extends React.Component {
             loopClonesPerSide={3}
           />
         </LinearGradient>
+        <TextInput
+          ref={input => { this.inputSearch = input }}
+          clearButtonMode='always'
+          placeholder='Pesquisa de empresas'
+          clearTextOnFocus={true}
+          autoFocus={false}
+          onFocus={() => this.onSearchPartners()}
+          label="Pesquisa de empresas"
+          onSubmitEditing={() => { this.onSearchPartners() }}
+          style={{
+            height: 40,
+            width: fullWidth,
+            borderColor: 'gray',
+            marginLeft: 10,
+            borderWidth: 1,
+            marginTop: 10,
+            marginBottom: 5
+          }}
+          onChangeText={(text) => {
+            this.inputSearch.value = text
+          }}
+        />
         <FlatList
           style={styles.list}
           data={this.props.segments}
@@ -192,7 +225,8 @@ const mapStateToProps = state => {
     loading: state.segments.loading,
     segments: state.segments.segments,
     highlights: state.highlights.partners,
-    loggedPartner: state.auth.partner
+    loggedPartner: state.auth.partner,
+    loggedUser: state.auth.user
   })
 }
 

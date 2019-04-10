@@ -8,11 +8,13 @@ import PartnerFeedScreen from './../screens/PartnerFeedScreen'
 import ChatSreen from './../screens/ChatSreen'
 import LoginScreen from './../screens/LoginScreen'
 import PartnerChatScreen from './../screens/PartnerChatScreen'
-import PartnerAccountScreen from '../screens/PartnerAccountScreen'
-import PartnerPostScreen from '../screens/PartnerPostScreen'
+import PartnerAccountScreen from './../screens/PartnerAccountScreen'
+import PartnerPostScreen from './../screens/PartnerPostScreen'
 import UserLoginScreen from './../screens/UserLoginScreen'
 import PostScreen from './../screens/PostScreen'
-import ImageViewScreen from '../screens/ImageViewScreen'
+import ImageViewScreen from './../screens/ImageViewScreen'
+import PartnerSearchScreen from './../screens/PartnerSearchScreen'
+import PartnerChatMessageScreen from './../screens/PartnerChatMessageScreen'
 
 export const ModeCardStack = createStackNavigator({
   Home: { screen: SegmentScreen, navigationOptions: { gesturesEnabled: true } },
@@ -33,7 +35,9 @@ export const ModeCardStack = createStackNavigator({
         backgroundColor: 'black'
       }
     }
-  }
+  },
+  PartnerSearch: { screen: PartnerSearchScreen, navigationOptions: { gesturesEnabled: true } },
+  PartnerChatMessage: { screen: PartnerChatMessageScreen, navigationOptions: { gesturesEnabled: true } }
 });
 
 export const Navigator = createStackNavigator(

@@ -57,6 +57,20 @@ export const get = (resource, filter = {}, orderBy = {}, dispatch, realtime, loa
   }
 }
 
+export const searchPartnerByName = (dispatch, name, loadingAction, receiveAction) => {
+  // FIXME: Foi filtrado no reducer até criar fullsearchtext no firebase
+
+  dispatch(loadingAction(true))
+
+  db.collection('partners')
+    .get()
+    .then(snapshot => {
+      dispatch(loadingAction(false))
+      let docs = convertSnapshot(snapshot)
+      dispatch(receiveAction(docs, { name: name }))
+    })
+}
+
 export const search = (resource, dispatch, receiveAction, initRequestAction, errorAction, filter = []) => {
   dispatch(initRequestAction(filter))
   docRef = db.collection(resource)

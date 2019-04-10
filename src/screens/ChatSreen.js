@@ -24,6 +24,10 @@ class ChatSreen extends React.Component {
         }
     }
 
+    get partner() {
+        return this.props.navigation.state.params.partner
+    }
+
     componentDidMount() {
         this.props.dispatch(createChatIfNotExists(this.props.partner, this.props.user))
     }
@@ -114,6 +118,7 @@ class ChatSreen extends React.Component {
     }
 
     onSend(newMessages = []) {
+
         newMessages = newMessages.map(message => {
             message.partner_id = this.props.partner.id
             message.user_id = this.props.user.id
@@ -200,6 +205,8 @@ class ChatSreen extends React.Component {
                         onSend={messages => this.onSend(messages)}
                         user={{
                             _id: this.props.user.id,
+                            name: this.props.user.name,
+                            avatar: this.props.user.avatar
                         }}
                     />
                 </View>

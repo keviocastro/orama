@@ -9,6 +9,7 @@ import dimensions from './dimensions'
 import auth from './auth'
 import posts from './posts'
 import erros from './erros'
+import partnerChatMessages from './partnerChatMessages';
 
 export default combineReducers({
   segments,
@@ -19,5 +20,6 @@ export default combineReducers({
   dimensions,
   auth,
   posts,
-  erros
+  erros,
+  partnerChatMessages
 });
