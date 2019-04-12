@@ -10,6 +10,24 @@ const convertSnapshot = (snapshot) => {
   return docs
 }
 
+export const remove = (resource, id) => {
+  return db.collection(resource).doc(id).delete()
+}
+
+export const updateChatLastMessage = (messages, partner, user) => {
+  return db.collection('chats')
+    .where('partner_id', '==', partner.id)
+    .where('user_id', '==', user.id)
+    .get()
+    .then(snapshot => {
+      snapshot.docs.map(chat => {
+        db.collection('chats').doc(chat.id).update({
+          last_message: messages[messages.length - 1].text
+        })
+      })
+    })
+}
+
 export const updateLatestPostsByPartner = (partnerId, image) => {
   db.collection('partners').doc(partnerId).update({ last_post: image })
 }
@@ -206,7 +224,6 @@ export const createChatIfNotExists = (dispatch, partner, user) => {
           user_id: user.id,
           unread: 0,
           time: firebase.firestore.FieldValue.serverTimestamp(),
-          user_avatar: "https://randomuser.me/api/portraits/women/1.jpg", // FIXME: Criar tela para upload de foto do perfil 
           user_name: user.name,
           partner_name: partner.name,
           partner_avatar: partner.logo,

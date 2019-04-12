@@ -1,5 +1,5 @@
 import React from 'react'
-import { Text, FlatList, ImageBackground } from 'react-native'
+import { Text, FlatList, ImageBackground, Dimensions } from 'react-native'
 import { connect } from 'react-redux'
 import { ListItem, Left, Right, Body, Thumbnail } from 'native-base'
 import firebase from 'react-native-firebase'
@@ -41,12 +41,9 @@ class PartnerChatScreen extends React.PureComponent {
     let time = chat.time && chat.time > 0 ? chat.time : new Date().getTime()
 
     return (
-      <ListItem avatar
+      <ListItem
         onPress={() => { this.onPressChat(chat) }}
-        style={{ backgroundColor: 'transparent' }} >
-        <Left>
-          {avatar}
-        </Left>
+        style={{ backgroundColor: 'transparent', marginRight: 17 }} >
         <Body>
           <Text>{chat.user_name}</Text>
           <Text style={{ fontWeight: fontWeight }}>{chat.last_message}</Text>

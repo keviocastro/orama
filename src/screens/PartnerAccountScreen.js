@@ -59,11 +59,11 @@ class PartnerAccountScreen extends React.Component {
   }
 
   onPressNotfy() {
-
+    this.props.navigation.navigate('PartnerNotify', { partner: this.props.partner })
   }
 
   onPressNewPost() {
-    this.props.navigation.navigate('Post', { partner: this.props.partner })
+    this.props.navigation.navigate('Post', { partner: this.props.partner, title: 'Nova postagem' })
   }
 
   onPressLogout() {

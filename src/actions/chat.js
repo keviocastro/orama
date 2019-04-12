@@ -1,4 +1,4 @@
-import { add, createChatIfNotExists as createChatIfNotExistsApi } from './api'
+import { add, createChatIfNotExists as createChatIfNotExistsApi, updateChatLastMessage as updateChatLastMessageApi } from './api'
 
 export const ADD_MESSAGES = 'ADD_MESSAGES'
 export const addMessages = (messages, partner) => ({
@@ -19,10 +19,13 @@ export const addChats = (chats) => ({
     chats
 })
 
+export const updateChatLastMessage = (messages, partner, user) => dispatch =>
+    updateChatLastMessageApi(messages, partner, user)
+
 export const createChatIfNotExists = (partner, user) => dispatch =>
     createChatIfNotExistsApi(dispatch, partner, user)
 
-export const sendMessages = (messages, partner) => dispatch => {
+export const sendMessages = (messages, partner, user) => dispatch => {
     dispatch(addMessages(messages, partner))
     return add('messages', messages)
 }

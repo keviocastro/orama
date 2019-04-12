@@ -3,10 +3,9 @@ import { View, Image, FlatList, ImageBackground, Modal, Text, TouchableOpacity, 
 import { GiftedChat } from 'react-native-gifted-chat'
 import PropTypes from 'prop-types'
 import { connect } from 'react-redux'
-import { sendMessages, createChatIfNotExists } from '../actions/chat'
+import { sendMessages, createChatIfNotExists, updateChatLastMessage } from '../actions/chat'
 import { removeChatImage } from './../actions/partners';
-import { backgroundImage, responsiveImageFullScreen } from './styles'
-import { HeaderBackButton } from 'react-navigation'
+import { backgroundImage } from './styles'
 import ImageZoom from 'react-native-image-pan-zoom'
 import md5 from 'md5'
 
@@ -70,7 +69,8 @@ class ChatSreen extends React.Component {
 
         if (!recentMessage) {
             if (this.props.partner.welcome_messages == undefined) {
-                this.props.dispatch(sendMessages(defaultMessages, this.props.partner))
+                this.props.dispatch(sendMessages(defaultMessages, this.props.partner, this.props.user))
+                this.props.dispatch(updateChatLastMessage(defaultMessages, this.props.partner, this.props.user))
             } else {
                 messages = defaultMessages
 
@@ -112,7 +112,8 @@ class ChatSreen extends React.Component {
                     }).reverse()
                 }
 
-                this.props.dispatch(sendMessages(messages, this.props.partner))
+                this.props.dispatch(sendMessages(messages, this.props.partner, this.props.user))
+                this.props.dispatch(updateChatLastMessage(messages, this.props.partner, this.props.user))
             }
         }
     }
@@ -125,7 +126,8 @@ class ChatSreen extends React.Component {
 
             return message
         })
-        this.props.dispatch(sendMessages(newMessages, this.props.partner))
+        this.props.dispatch(sendMessages(newMessages, this.props.partner, this.props.user))
+        this.props.dispatch(updateChatLastMessage(newMessages, this.props.partner, this.props.user))
     }
 
     renderImage(image) {

@@ -30,7 +30,7 @@ const options = {
 
 class PostScreen extends React.Component {
   static navigationOptions = ({ navigation }) => ({
-    title: 'Nova postagem'
+    title: navigation.state.params.title
   })
 
   get partner() {

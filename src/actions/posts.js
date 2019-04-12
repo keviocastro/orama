@@ -1,4 +1,4 @@
-import { add, get, updateLatestPostsByPartner } from './api'
+import { add, get, updateLatestPostsByPartner, remove } from './api'
 
 export const getRealtimeByPartner = (partnerId) => dispatch =>
   get('posts', { partner_id: partnerId }, { 'created_at': 'desc' }, dispatch, true, loading, received)
@@ -11,6 +11,9 @@ export const sendPost = (text, image, partnerId) => dispatch =>
 
 export const updateLatestPosts = (partnerId, image) => dispatch =>
   updateLatestPostsByPartner(partnerId, image)
+
+export const removePost = (postId) => dispatch =>
+  remove('posts', postId)
 
 export const CLEAR_FORM = 'CLEAR_FORM'
 export const clearForm = (sending) => ({
