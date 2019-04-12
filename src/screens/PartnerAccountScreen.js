@@ -83,7 +83,7 @@ class PartnerAccountScreen extends React.Component {
             <Text style={styles.buttonText}>Nova postagem</Text>
           </Button>
           <Button style={styles.button} info onPress={() => this.onPressPost()}>
-            <Text style={styles.buttonText}>Minhs Postagens</Text>
+            <Text style={styles.buttonText}>Minhas Postagens</Text>
           </Button>
           <Button style={styles.button} info onPress={() => this.onPressNotfy()}>
             <Text style={styles.buttonText}>Notificações</Text>

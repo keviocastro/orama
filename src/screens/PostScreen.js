@@ -75,10 +75,11 @@ class PostScreen extends React.Component {
           numberOfLines={2}
         />
         <View style={{
-          height: 200,
+          height: 350,
           marginTop: 10
         }}>
           <PhotoUpload
+            maxHeight={350}
             onPhotoSelect={image => {
               if (image) {
                 this.setState({
@@ -87,7 +88,7 @@ class PostScreen extends React.Component {
               }
             }}>
             <Image
-              style={{ height: 200, width: 400, flex: 1, resizeMode: 'center' }}
+              style={{ height: 350, width: fullWidth, flex: 1, resizeMode: 'cover' }}
               resizeMode='cover'
               source={require('./../static/upload-image.png')}
             />

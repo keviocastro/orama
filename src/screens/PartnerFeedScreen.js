@@ -19,16 +19,24 @@ import { Header, HeaderBackButton } from 'react-navigation'
 import ImageZoom from 'react-native-image-pan-zoom'
 import { getRealtimeByPartner, getByPartner } from './../actions/posts'
 import { backgroundImage } from './styles'
+import AutoHeightImage from 'react-native-auto-height-image'
 
 const viewportHeight = Dimensions.get('window').height - Header.HEIGHT
 const mainFeedImageHeight = viewportHeight - (viewportHeight * 0.3)
 const mainFeedImageWidth = Dimensions.get('window').width
+const fullWidth = Dimensions.get('window').width
 
 const styles = StyleSheet.create({
   card: { paddingBottom: 2, paddingBottom: 2 },
-  image: { height: 200, width: null, flex: 1, resizeMode: 'stretch' },
+  image: {
+    width: fullWidth,
+    height: null,
+    flex: 1,
+    resizeMode: 'contain'
+  },
   mainFeedImage: {
-    resizeMode: 'stretch',
+    flex: 1,
+    resizeMode: 'contain',
     height: mainFeedImageHeight
   }
 })
@@ -99,7 +107,7 @@ class PartnerFeedScreen extends React.PureComponent {
               </CardItem>}
             {item.image !== undefined && item.text !== null &&
               <CardItem cardBody style={styles.card}>
-                <Image source={{ uri: item.image }} style={styles.image} />
+                <AutoHeightImage source={{ uri: item.image }} width={fullWidth} />
               </CardItem>
             }
           </Card>

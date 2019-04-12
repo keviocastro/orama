@@ -1,4 +1,5 @@
-import { PARTNER_CHAT_MESSAGES_LOADING, PARTNER_CHAT_MESSAGES_RECEVED } from '../actions/partnerChatMessages';
+import { PARTNER_CHAT_MESSAGES_LOADING, PARTNER_CHAT_MESSAGES_RECEVED, PARTNER_CHAT_MESSAGES_ADD_MESSAGES } from '../actions/partnerChatMessages'
+import { GiftedChat } from 'react-native-gifted-chat'
 
 const initialState = {
   messages: [],
@@ -13,8 +14,17 @@ const sortMessages = (messages) => {
   })
 }
 
+const mergeMessages = (state, action) => {
+  return state.messages.concat(action.messages)
+}
+
 const reducer = (state = initialState, action) => {
   switch (action.type) {
+    case PARTNER_CHAT_MESSAGES_ADD_MESSAGES:
+      return {
+        ...state,
+        messages: mergeMessages(state, action)
+      }
     case PARTNER_CHAT_MESSAGES_RECEVED:
       return {
         ...state,

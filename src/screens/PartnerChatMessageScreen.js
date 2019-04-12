@@ -3,7 +3,7 @@ import { View, Image, FlatList, ImageBackground, TouchableOpacity } from 'react-
 import { GiftedChat } from 'react-native-gifted-chat'
 import { connect } from 'react-redux'
 import { backgroundImage } from './styles'
-import { getPartnerChatMessages } from '../actions/partnerChatMessages'
+import { getPartnerChatMessages, sendMessages } from '../actions/partnerChatMessages'
 import md5 from 'md5'
 
 class PartnerChatMessageScreen extends React.Component {
@@ -21,7 +21,9 @@ class PartnerChatMessageScreen extends React.Component {
   }
 
   componentDidMount() {
-    this.props.dispatch(getPartnerChatMessages(this.user.id, this.props.partner.id))
+    if (this.props.messages.length === 0) {
+      this.props.dispatch(getPartnerChatMessages(this.user.id, this.partner.id))
+    }
   }
 
   get chat() {
@@ -43,7 +45,7 @@ class PartnerChatMessageScreen extends React.Component {
 
       return message
     })
-    this.props.dispatch(sendMessages(newMessages, this.props.partner))
+    this.props.dispatch(sendMessages(newMessages, this.partner, this.user))
   }
 
   renderImage(image) {
@@ -88,7 +90,7 @@ class PartnerChatMessageScreen extends React.Component {
             onSend={messages => this.onSend(messages)}
             user={{
               _id: this.props.partner.id,
-              name: this.props.partner,
+              name: this.props.partner.name,
               avatar: this.props.partner.logo
             }}
           />

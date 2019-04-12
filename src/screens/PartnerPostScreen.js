@@ -16,6 +16,7 @@ import { connect } from 'react-redux'
 import { Button, Text } from 'native-base'
 import { getByPartner, removePost } from './../actions/posts'
 import { backgroundImage } from './styles'
+import AutoHeightImage from 'react-native-auto-height-image'
 
 const fullWidth = Dimensions.get('window').width
 const viewportHeight = Dimensions.get('window').height
@@ -63,7 +64,7 @@ export class PartnerPostScreen extends React.PureComponent {
             </CardItem>}
           {item.image !== undefined && item.text !== null > 0 &&
             <CardItem cardBody style={styles.card}>
-              <Image source={{ uri: item.image }} style={styles.image} />
+              <AutoHeightImage source={{ uri: item.image }} width={fullWidth} />
             </CardItem>
           }
         </Card>
@@ -91,16 +92,14 @@ export class PartnerPostScreen extends React.PureComponent {
               this.props.dispatch(removePost(this.state.modalPostId))
               this.props.dispatch(getByPartner(this.partner.id))
             }}>
-              <Image style={{ height: 30, width: 30, marginBottom: 10 }} source={require('./../static/icon-remove.png')} />
+              <Image width={fullWidth} style={{ height: 30, width: 30, marginBottom: 10 }} source={require('./../static/icon-remove.png')} />
             </TouchableOpacity>
             <ImageZoom
               cropWidth={modalImageWidth}
               cropHeight={modalImagemHeight}
               imageWidth={modalImageWidth}
               imageHeight={modalImagemHeight} >
-              <Image style={{ width: modalImageWidth, height: modalImagemHeight, resizeMode: "stretch" }}
-                source={{ uri: this.state.modalImage }}
-              />
+              <AutoHeightImage source={{ uri: this.state.modalImage }} width={fullWidth} />
             </ImageZoom>
             <TouchableOpacity onPress={() => {
               this.setState({
@@ -131,7 +130,12 @@ export class PartnerPostScreen extends React.PureComponent {
 
 const styles = StyleSheet.create({
   card: { paddingBottom: 2, paddingBottom: 2 },
-  image: { height: 200, width: null, flex: 1, resizeMode: 'stretch' }
+  image: {
+    height: 350,
+    width: fullWidth,
+    flex: 1,
+    resizeMode: 'cover'
+  }
 })
 
 const mapStateToProps = (state) => {

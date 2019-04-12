@@ -3,10 +3,11 @@ import { View, Image, FlatList, ImageBackground, Modal, Text, TouchableOpacity, 
 import { GiftedChat } from 'react-native-gifted-chat'
 import PropTypes from 'prop-types'
 import { connect } from 'react-redux'
-import { sendMessages, createChatIfNotExists, updateChatLastMessage } from '../actions/chat'
-import { removeChatImage } from './../actions/partners';
+import { sendMessages, createChatIfNotExists, updateChatLastMessage, getChatMessages } from '../actions/chat'
+import { removeChatImage } from './../actions/partners' // FIXME: Refactor para actions/chat
 import { backgroundImage } from './styles'
 import ImageZoom from 'react-native-image-pan-zoom'
+import AutoHeightImage from 'react-native-auto-height-image'
 import md5 from 'md5'
 
 class ChatSreen extends React.Component {
@@ -23,13 +24,14 @@ class ChatSreen extends React.Component {
         }
     }
 
+    componentDidMount() {
+        this.props.dispatch(createChatIfNotExists(this.props.partner, this.props.user))
+    }
+
     get partner() {
         return this.props.navigation.state.params.partner
     }
 
-    componentDidMount() {
-        this.props.dispatch(createChatIfNotExists(this.props.partner, this.props.user))
-    }
 
     componentWillMount() {
         let recentMessage = false
@@ -139,7 +141,8 @@ class ChatSreen extends React.Component {
         }}>
             <Image style={{
                 height: 100,
-                width: 200
+                width: 200,
+                resizeMode: 'cover'
             }} source={{ uri: image }} />
         </TouchableOpacity>
     }
