@@ -3,8 +3,8 @@ import { View, Image, FlatList, ImageBackground, TouchableOpacity } from 'react-
 import { GiftedChat } from 'react-native-gifted-chat'
 import { connect } from 'react-redux'
 import { backgroundImage } from './styles'
-import { getPartnerChatMessages, sendMessages } from '../actions/partnerChatMessages'
-import md5 from 'md5'
+import { getPartnerChatMessages, sendMessages, setReadAllMessages } from '../actions/partnerChatMessages'
+import ChatImages from './../components/ChatImages';
 
 class PartnerChatMessageScreen extends React.Component {
   static navigationOptions = ({ navigation }) => ({
@@ -23,6 +23,10 @@ class PartnerChatMessageScreen extends React.Component {
   componentDidMount() {
     if (this.props.messages.length === 0) {
       this.props.dispatch(getPartnerChatMessages(this.user.id, this.partner.id))
+    }
+
+    if (typeof this.chat.unread === "number" && this.chat.unread > 0) {
+      //this.props.dispatch(setReadAllMessages(this.chat))
     }
   }
 
@@ -82,7 +86,7 @@ class PartnerChatMessageScreen extends React.Component {
     return (
       <ImageBackground style={backgroundImage} source={require('./../static/background.png')} >
         <View style={{ flex: 1 }}>
-          {this.renderImages()}
+          <ChatImages images={this.props.images} />
           <GiftedChat
             contentContainerStyle={{ height: 100 }}
             style={{ height: 500 }}
@@ -102,12 +106,18 @@ class PartnerChatMessageScreen extends React.Component {
 
 const mapStateToProps = state => {
   let messages = []
-  let images = []
+  let chat = state.partnerChatMessages.chatSelected
+  let images = chat.images
+
+  if (chat.user_id in state.partnerChatMessages.messages) {
+    messages = state.partnerChatMessages.messages[chat.user_id]
+  }
 
   return ({
     partner: state.auth.partner,
     images: images,
-    messages: state.partnerChatMessages.messages
+    messages: messages,
+    chat: chat
   })
 }
 

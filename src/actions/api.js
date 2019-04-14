@@ -4,15 +4,19 @@ const db = firebase.firestore()
 
 const convertSnapshot = (snapshot) => {
   let docs = []
-  snapshot.docs.forEach(doc => {
-    docs.push({ ...doc.data(), id: doc.id })
+  snapshot.docChanges.forEach(change => {
+    docs.push(change.doc.data())
   })
+
   return docs
 }
 
-export const remove = (resource, id) => {
-  return db.collection(resource).doc(id).delete()
-}
+export const remove = (resource, id) =>
+  db.collection(resource).doc(id).delete()
+
+export const update = (resource, id, data) =>
+  db.collection(resource).doc(id).update(data)
+
 
 export const updateChatLastMessage = (messages, partner, user) => {
   return db.collection('chats')
@@ -22,7 +26,23 @@ export const updateChatLastMessage = (messages, partner, user) => {
     .then(snapshot => {
       snapshot.docs.map(chat => {
         db.collection('chats').doc(chat.id).update({
-          last_message: messages[messages.length - 1].text
+          last_message: messages[messages.length - 1].text,
+          time: currentTime(),
+          unread: 1
+        })
+      })
+    })
+}
+
+export const updateChatImages = (partnerId, userId, images) => {
+  return db.collection('chats')
+    .where('partner_id', '==', partnerId)
+    .where('user_id', '==', userId)
+    .get()
+    .then(snapshot => {
+      snapshot.docs.map(chat => {
+        db.collection('chats').doc(chat.id).update({
+          images: images
         })
       })
     })
@@ -117,8 +137,7 @@ export const add = function (resource, data, dispatch, receiveAction, errorActio
   }
 
   data.forEach(item => {
-    const timestamp = firebase.firestore.FieldValue.serverTimestamp()
-    item['created_at'] = timestamp
+    item['created_at'] = currentTime()
     docRef.add(item)
       .then(snapshot => {
         countTerminated++
@@ -233,6 +252,8 @@ export const createChatIfNotExists = (dispatch, partner, user) => {
       console.log('createChatIfNotExists error ', err)
     })
 }
+
+const currentTime = () => firebase.firestore.FieldValue.serverTimestamp()
 
 const requestError = error => {
   if (__DEV__)

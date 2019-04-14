@@ -1,9 +1,8 @@
 import React from 'react'
-import { View, Image, FlatList, ImageBackground, Modal, Text, TouchableOpacity, Alert, Dimensions } from 'react-native'
+import { View, Image, FlatList, ImageBackground, Modal, TouchableOpacity, Dimensions } from 'react-native'
 import { GiftedChat } from 'react-native-gifted-chat'
-import PropTypes from 'prop-types'
 import { connect } from 'react-redux'
-import { sendMessages, createChatIfNotExists, updateChatLastMessage, getChatMessages } from '../actions/chat'
+import { sendMessages, createChatIfNotExists, updateChatLastMessage, getMessages, updateChatImages } from '../actions/chat'
 import { removeChatImage } from './../actions/partners' // FIXME: Refactor para actions/chat
 import { backgroundImage } from './styles'
 import ImageZoom from 'react-native-image-pan-zoom'
@@ -24,16 +23,7 @@ class ChatSreen extends React.Component {
         }
     }
 
-    componentDidMount() {
-        this.props.dispatch(createChatIfNotExists(this.props.partner, this.props.user))
-    }
-
-    get partner() {
-        return this.props.navigation.state.params.partner
-    }
-
-
-    componentWillMount() {
+    sendWelcomeMessages() {
         let recentMessage = false
         let timeLimiteWelcome = new Date()
         timeLimiteWelcome.setHours(timeLimiteWelcome.getHours() - 4)
@@ -70,7 +60,10 @@ class ChatSreen extends React.Component {
         ].reverse()
 
         if (!recentMessage) {
-            if (this.props.partner.welcome_messages == undefined) {
+            if (this.props.partner.welcome_messages === undefined ||
+                typeof this.props.partner.welcome_messages === 'string' &&
+                this.props.partner.welcome_messages.trim().length === 0) {
+
                 this.props.dispatch(sendMessages(defaultMessages, this.props.partner, this.props.user))
                 this.props.dispatch(updateChatLastMessage(defaultMessages, this.props.partner, this.props.user))
             } else {
@@ -120,6 +113,22 @@ class ChatSreen extends React.Component {
         }
     }
 
+    get partner() {
+        return this.props.navigation.state.params.partner
+    }
+
+    componentDidMount() {
+        this.props.dispatch(updateChatImages(this.partner, this.props.user, this.props.images))
+    }
+
+    componentWillMount() {
+        this.props.dispatch(createChatIfNotExists(this.partner, this.props.user))
+        if (this.props.messages.length === 0) {
+            this.props.dispatch(getMessages(this.partner.id, this.props.user.id))
+        }
+        // this.sendWelcomeMessages()
+    }
+
     onSend(newMessages = []) {
 
         newMessages = newMessages.map(message => {
@@ -128,8 +137,8 @@ class ChatSreen extends React.Component {
 
             return message
         })
-        this.props.dispatch(sendMessages(newMessages, this.props.partner, this.props.user))
-        this.props.dispatch(updateChatLastMessage(newMessages, this.props.partner, this.props.user))
+        this.props.dispatch(sendMessages(newMessages, this.partner, this.props.user))
+        this.props.dispatch(updateChatLastMessage(newMessages, this.partner, this.props.user))
     }
 
     renderImage(image) {
@@ -188,9 +197,7 @@ class ChatSreen extends React.Component {
                             cropHeight={modalImagemHeight}
                             imageWidth={modalImageWidth}
                             imageHeight={modalImagemHeight} >
-                            <Image style={{ width: modalImageWidth, height: modalImagemHeight, resizeMode: "stretch" }}
-                                source={{ uri: this.state.modalImage }}
-                            />
+                            <AutoHeightImage width={modalImageWidth} source={{ uri: this.state.modalImage }} />
                         </ImageZoom>
                         <TouchableOpacity onPress={() => {
                             this.setState({
@@ -223,11 +230,6 @@ class ChatSreen extends React.Component {
 const viewportHeight = Dimensions.get('window').height
 const modalImagemHeight = viewportHeight - (viewportHeight * 0.25)
 const modalImageWidth = Dimensions.get('window').width
-
-ChatSreen.propTypes = {
-    partner: PropTypes.object,
-    navigation: PropTypes.object
-};
 
 const mapStateToProps = state => {
     let messages = []

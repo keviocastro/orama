@@ -1,4 +1,4 @@
-import { ADD_MESSAGES, RECEIVE_MESSAGES, ADD_CHATS } from "./../actions/chat"
+import { ADD_MESSAGES, CHAT_RECEIVED_MESSAGES, ADD_CHATS, PARTNER_CHAT_SELECT_CHAT } from "./../actions/chat"
 import { GiftedChat } from 'react-native-gifted-chat'
 
 const initialState = {
@@ -7,16 +7,27 @@ const initialState = {
     chats: []
 }
 
-const mergeMessages = (state, action) => {
-    messages = { ...state.messages }
-    messages[action.partner.id] = GiftedChat.append(messages[action.partner.id], action.messages)
-    return messages
-}
+const mergeMessages = (state, action, partnerId) => {
+    let messages = { ...state.messages }
+    let newMessages = action.messages
+    if (partnerId in messages &&
+        Array.isArray(messages[partnerId]) &&
+        messages[partnerId].length > 0) {
+        newMessages = action.messages.filter(newMessage => {
+            let exist = false
+            messages[partnerId].forEach(currentMessage => {
+                if (currentMessage._id === newMessage._id) {
+                    exist = true
+                }
+            });
 
-const sortConversations = (conversations) => {
-    return Object.keys(conversations).sort((a, b) => {
-        return (conversations[a].meta.read === conversations[b].meta.read) ? 0 : a ? -1 : 1
-    })
+            return !exist
+        })
+    }
+    if (Array.isArray(newMessages) && newMessages.length > 0) {
+        messages[partnerId] = GiftedChat.append(messages[partnerId], newMessages)
+    }
+    return messages
 }
 
 const reducer = (state = initialState, action) => {
@@ -24,12 +35,12 @@ const reducer = (state = initialState, action) => {
         case ADD_MESSAGES:
             return {
                 ...state,
-                messages: mergeMessages(state, action)
+                messages: mergeMessages(state, action, action.partner.id)
             }
-        case RECEIVE_MESSAGES:
+        case CHAT_RECEIVED_MESSAGES:
             return {
                 ...state,
-                conversations: sortConversations(action.conversations)
+                messages: mergeMessages(state, action, action.partnerId)
             }
         case ADD_CHATS:
             return {

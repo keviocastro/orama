@@ -1,10 +1,11 @@
 import React from 'react'
-import { Text, FlatList, ImageBackground, Dimensions } from 'react-native'
+import { Text, FlatList, ImageBackground } from 'react-native'
 import { connect } from 'react-redux'
-import { ListItem, Left, Right, Body, Thumbnail } from 'native-base'
+import { ListItem, Left, Right, Body } from 'native-base'
 import firebase from 'react-native-firebase'
 import { addChats } from './../actions/chat'
-import { backgroundImage } from './styles';
+import { selectPartnerChat } from './../actions/partnerChatMessages'
+import { backgroundImage } from './styles'
 
 import moment from 'moment'
 import momentPt from 'moment/locale/pt-br'
@@ -30,15 +31,14 @@ class PartnerChatScreen extends React.PureComponent {
   }
 
   onPressChat(chat) {
+    this.props.dispatch(selectPartnerChat(chat))
     this.props.navigation.navigate('PartnerChatMessage', { chat: chat })
   }
 
   renderListItem(chat) {
     let fontWeight = chat.unread && chat.unread > 0 ? 'bold' : 'normal'
-    let avatar = chat.user_avatar && chat.user_avatar.lenth > 1
-      ? <Thumbnail source={{ uri: chat.user_avatar }} />
-      : <Thumbnail source={require('./../static/avatar.png')} />
-    let time = chat.time && chat.time > 0 ? chat.time : new Date().getTime()
+
+    let time = typeof chat.time === 'object' ? chat.time : new Date().getTime()
 
     return (
       <ListItem

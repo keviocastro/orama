@@ -15,7 +15,7 @@ import PropTypes from 'prop-types'
 import { connect } from 'react-redux'
 import { Card, CardItem, Body } from 'native-base'
 import { selectForChat } from './../actions/partners'
-import { Header, HeaderBackButton } from 'react-navigation'
+import { Header } from 'react-navigation'
 import ImageZoom from 'react-native-image-pan-zoom'
 import { getRealtimeByPartner, getByPartner } from './../actions/posts'
 import { backgroundImage } from './styles'
@@ -154,7 +154,8 @@ const mapStateToProps = (state) => {
 
   return ({
     loading: state.posts.loading,
-    posts: posts
+    posts: posts,
+    user: state.auth.user
   })
 }
 
