@@ -27,8 +27,7 @@ export default class App extends Component {
 
       },
       onRegister: function (token) {
-        if (__DEV__ && LOG_NOTIFICATION)
-          console.log('TOKEN:', token)
+        console.log('TOKEN:', token)
 
       },
       senderID: SENDER_ID

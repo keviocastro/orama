@@ -11,7 +11,8 @@ import { Button, Text } from 'native-base'
 import { connect } from 'react-redux'
 import PhotoUpload from 'react-native-photo-upload'
 import { sendPost, updateLatestPosts } from './../actions/posts'
-import { getPartners } from './../actions/partners';
+import { getPartners } from './../actions/partners'
+import { sendNotification } from './../actions/notifications';
 import { backgroundImage } from './styles'
 
 // FIXME: Remover dependencia imagepicker
@@ -37,36 +38,56 @@ class PostScreen extends React.Component {
     return this.props.navigation.state.params.partner
   }
 
+  get notify() {
+    return this.props.navigation.state.params.notify || false
+  }
+
   componentWillReceiveProps(props) {
     if (props.postCreated) {
       this.props.dispatch(updateLatestPosts(this.partner.id, this.state.image))
+    }
+
+    if (props.postCreated || props.notificationSend) {
       this.inputText.clear()
       this.setState({
         image: null
       })
       this.props.navigation.goBack()
     }
+
   }
 
   onPressSendPost() {
-    this.props.dispatch(sendPost(this.inputText.value, this.state.image, this.partner.id))
-    if (typeof this.partner.segmentIds === 'array') {
-      this.partner.segmentIds.forEach(segmentId => {
-        this.props.dispatch(getPartners(segmentId))
-      })
+    if (this.notify) {
+      let notifcation = {
+        image: this.state.image,
+        message: this.inputText.value,
+        topic: 'orama',
+        partner_id: this.partner.id
+      }
+      this.props.dispatch(sendNotification(notifcation))
+    } else {
+      this.props.dispatch(sendPost(this.inputText.value, this.state.image, this.partner.id))
+      if (typeof this.partner.segmentIds === 'array') {
+        this.partner.segmentIds.forEach(segmentId => {
+          this.props.dispatch(getPartners(segmentId))
+        })
+      }
     }
   }
 
   render() {
+    let placeholder = this.notify ? 'Texto da notificação' : 'Texto do post'
+
     return <ImageBackground style={backgroundImage} source={require('./../static/background.png')} >
       <View style={{ flexDirerection: 'column', justifyContent: 'center', alignItens: 'center', marginTop: 20 }} >
         <TextInput
           ref={input => { this.inputText = input }}
           clearButtonMode='always'
-          placeholder='Texto do post'
+          placeholder={placeholder}
           clearTextOnFocus={true}
           autoFocus={false}
-          label="Texto do post"
+          label={placeholder}
           style={{ height: 40, width: fullWidth, borderColor: 'gray', marginLeft: 10, borderWidth: 1, marginTop: 2 }}
           onChangeText={(text) => {
             this.inputText.value = text
@@ -98,7 +119,8 @@ class PostScreen extends React.Component {
           <Button style={{ width: fullWidth, justifyContent: 'center', marginLeft: 10, marginTop: 40, marginBottom: 40 }}
             info
             onPress={() => this.onPressSendPost()}>
-            <Text>Enviar post</Text>
+            {!this.notify && <Text>Enviar post</Text>}
+            {this.notify && <Text>Enviar notificação</Text>}
           </Button>
         }
         {this.props.sending === true && <ActivityIndicator animating size="small" style={{ marginTop: 40, marginBottom: 40 }} />}
@@ -110,7 +132,8 @@ class PostScreen extends React.Component {
 const mapStateToProps = (state) => {
   return ({
     sending: state.posts.sending,
-    postCreated: state.posts.postCreated
+    postCreated: state.posts.postCreated,
+    notificationSend: state.notifications.notificationSend
   })
 }
 
