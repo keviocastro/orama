@@ -88,11 +88,15 @@ const removeAccents = (text) => {
 const filterPartnerByName = (partners, name) => {
   let searchNormalized = removeAccents(name).toLowerCase()
   return partners.filter(partner => {
-    let nameNormalized = removeAccents(partner.name).toLowerCase()
-    if (nameNormalized.search(searchNormalized) === -1) {
+    try {
+      let nameNormalized = removeAccents(partner.name).toLowerCase()
+      if (nameNormalized.search(searchNormalized) === -1) {
+        return false
+      } else {
+        return true
+      }
+    } catch (e) {
       return false
-    } else {
-      return true
     }
   })
 }

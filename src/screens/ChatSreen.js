@@ -8,6 +8,7 @@ import { backgroundImage } from './styles'
 import ImageZoom from 'react-native-image-pan-zoom'
 import AutoHeightImage from 'react-native-auto-height-image'
 import md5 from 'md5'
+import ChatImages from '../components/ChatImages'
 
 class ChatSreen extends React.Component {
     static navigationOptions = ({ navigation }) => ({
@@ -117,6 +118,10 @@ class ChatSreen extends React.Component {
         return this.props.navigation.state.params.partner
     }
 
+    componentWillReceiveProps(nextProps) {
+        this.props.dispatch(updateChatImages(nextProps.partner, nextProps.user, nextProps.images))
+    }
+
     componentDidMount() {
         this.props.dispatch(updateChatImages(this.partner, this.props.user, this.props.images))
     }
@@ -174,42 +179,10 @@ class ChatSreen extends React.Component {
     render() {
         return (
             <ImageBackground style={backgroundImage} source={require('./../static/background.png')} >
-                <Modal
-                    animationType="slide"
-                    transparent={false}
-                    visible={this.state.modalVisible}
-                    onRequestClose={() => {
-                        this.setState({
-                            modalVisible: false
-                        })
-                    }}>
-                    <View style={{ flex: 1, justifyContent: "center", alignItems: "center", backgroundColor: "black" }}>
-                        <TouchableOpacity onPress={() => {
-                            this.setState({
-                                modalVisible: false
-                            })
-                            this.props.dispatch(removeChatImage(this.props.partner.id, this.state.modalImage))
-                        }}>
-                            <Image style={{ height: 30, width: 30, marginBottom: 10 }} source={require('./../static/icon-remove.png')} />
-                        </TouchableOpacity>
-                        <ImageZoom
-                            cropWidth={modalImageWidth}
-                            cropHeight={modalImagemHeight}
-                            imageWidth={modalImageWidth}
-                            imageHeight={modalImagemHeight} >
-                            <AutoHeightImage width={modalImageWidth} source={{ uri: this.state.modalImage }} />
-                        </ImageZoom>
-                        <TouchableOpacity onPress={() => {
-                            this.setState({
-                                modalVisible: false
-                            })
-                        }}>
-                            <Image style={{ width: 50, height: 50, marginTop: 10, backgroundColor: 'black' }} source={require('./../static/icon-down.png')} />
-                        </TouchableOpacity>
-                    </View>
-                </Modal>
                 <View style={{ flex: 1 }}>
-                    {this.renderImages()}
+                    <ChatImages images={this.props.images} onRemove={(image) => {
+                        this.props.dispatch(removeChatImage(this.partner.id, image))
+                    }} />
                     <GiftedChat
                         contentContainerStyle={{ height: 100 }}
                         style={{ height: 500 }}

@@ -4,7 +4,7 @@ import { GiftedChat } from 'react-native-gifted-chat'
 import { connect } from 'react-redux'
 import { backgroundImage } from './styles'
 import { getPartnerChatMessages, sendMessages, setReadAllMessages } from '../actions/partnerChatMessages'
-import ChatImages from './../components/ChatImages';
+import ChatImages from './../components/ChatImages'
 
 class PartnerChatMessageScreen extends React.Component {
   static navigationOptions = ({ navigation }) => ({

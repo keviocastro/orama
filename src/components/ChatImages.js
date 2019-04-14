@@ -2,6 +2,7 @@ import React, { Component } from 'react'
 import { View, TouchableOpacity, FlatList, Image, Modal, Dimensions } from 'react-native'
 import ImageZoom from 'react-native-image-pan-zoom'
 import AutoHeightImage from 'react-native-auto-height-image'
+import PropTypes from 'prop-types'
 import md5 from 'md5'
 
 const viewportHeight = Dimensions.get('window').height
@@ -47,15 +48,17 @@ export default class ChatImages extends Component {
             })
           }}>
           <View style={{ flex: 1, justifyContent: "center", alignItems: "center", backgroundColor: "black" }}>
-            <TouchableOpacity onPress={() => {
-              this.setState({
-                modalVisible: false
-              })
-              this.props.removeAction(this.props.partner.id, this.state.modalImage)
-            }}>
-              {this.props.showBtnRemove &&
-                <Image style={{ height: 30, width: 30, marginBottom: 10 }} source={require('./../static/icon-remove.png')} />}
-            </TouchableOpacity>
+            {this.props.onRemove &&
+              <TouchableOpacity onPress={() => {
+                this.setState({
+                  modalVisible: false
+                })
+                this.props.onRemove(this.state.modalImage)
+              }}>
+                <Image style={{ height: 30, width: 30, marginBottom: 10 }} source={require('./../static/icon-remove.png')} />
+
+              </TouchableOpacity>
+            }
             <ImageZoom
               cropWidth={modalImageWidth}
               cropHeight={modalImagemHeight}
@@ -83,4 +86,9 @@ export default class ChatImages extends Component {
       return null
     }
   }
+}
+
+ChatImages.propTypes = {
+  images: PropTypes.array,
+  removeAcion: PropTypes.func
 }
