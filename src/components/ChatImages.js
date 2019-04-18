@@ -1,5 +1,5 @@
 import React, { Component } from 'react'
-import { View, TouchableOpacity, FlatList, Image, Modal, Dimensions } from 'react-native'
+import { View, TouchableOpacity, FlatList, Image, Modal, Dimensions, ImageBackground } from 'react-native'
 import ImageZoom from 'react-native-image-pan-zoom'
 import AutoHeightImage from 'react-native-auto-height-image'
 import PropTypes from 'prop-types'
@@ -47,7 +47,7 @@ export default class ChatImages extends Component {
               modalVisible: false
             })
           }}>
-          <View style={{ flex: 1, justifyContent: "center", alignItems: "center", backgroundColor: "black" }}>
+          <ImageBackground source={require('./../static/background-modal-images.jpg')} style={{ flex: 1, justifyContent: "center", alignItems: "center" }}>
             {this.props.onRemove &&
               <TouchableOpacity onPress={() => {
                 this.setState({
@@ -55,7 +55,7 @@ export default class ChatImages extends Component {
                 })
                 this.props.onRemove(this.state.modalImage)
               }}>
-                <Image style={{ height: 30, width: 30, marginBottom: 10 }} source={require('./../static/icon-remove.png')} />
+                <Image style={{ height: 30, width: 30, marginBottom: 10, backgroundColor: 'transparent' }} source={require('./../static/icon-remove.png')} />
 
               </TouchableOpacity>
             }
@@ -71,9 +71,9 @@ export default class ChatImages extends Component {
                 modalVisible: false
               })
             }}>
-              <Image style={{ width: 50, height: 50, marginTop: 10, backgroundColor: 'black' }} source={require('./../static/icon-down.png')} />
+              <Image style={{ width: 50, height: 50, marginTop: 10 }} source={require('./../static/icon-down.png')} />
             </TouchableOpacity>
-          </View>
+          </ImageBackground>
         </Modal>
         <FlatList
           horizontal={true}

@@ -2,12 +2,15 @@ import {
   ADD_LOGGED_USER,
   REMOVE_LOGGED_USER,
   INVALID_PASS,
-  LOADING,
+  USER_LOGIN_LOADING,
+  PARTNER_LOGIN_LOADING,
   PARTNER_LOGOFF,
   REDIRECT_TO_ACCOUNT,
   LOGIN_USER,
   INVALID_PHONE,
-  USER_LOGOFF
+  USER_LOGOFF,
+  LOAD_DATA_LOGGED_PARTNER,
+  REDIRECT_TO_CHAT
 } from "./../actions/auth"
 import { AsyncStorage } from 'react-native'
 
@@ -29,7 +32,8 @@ let initialState = {
   fbAcessToken: null,
   partner: null,
   invalidPass: false,
-  loading: false,
+  userLoginloading: false,
+  partnerLoginLoading: false,
   redirectToAccount: false,
   redirectToChat: false,
   invalidPhone: false,
@@ -42,9 +46,7 @@ const reducer = (state = initialState, action) => {
       AsyncStorage.setItem('user', JSON.stringify(action.user))
       return {
         ...state,
-        user: action.user,
-        loading: false,
-        redirectToChat: true
+        user: action.user
       }
     case USER_LOGOFF:
       AsyncStorage.removeItem('user')
@@ -63,8 +65,12 @@ const reducer = (state = initialState, action) => {
         ...state,
         fbId: action.fbId,
         fbAcessToken: action.fbAcessToken,
-        partner: action.partner,
-        loading: false
+        partner: action.partner
+      }
+    case LOAD_DATA_LOGGED_PARTNER:
+      return {
+        ...state,
+        partner: action.partner
       }
     case PARTNER_LOGOFF:
       AsyncStorage.removeItem('partner')
@@ -86,15 +92,27 @@ const reducer = (state = initialState, action) => {
         ...state,
         invalidPass: action.invalid
       }
-    case LOADING:
+    case USER_LOGIN_LOADING:
       return {
         ...state,
-        loading: action.loading
+        userLoginLoading: action.loading
+      }
+    case PARTNER_LOGIN_LOADING:
+      return {
+        ...state,
+        partnerLoginLoading: action.loading
       }
     case REDIRECT_TO_ACCOUNT:
+      // PARTNER
       return {
         ...state,
         redirectToAccount: action.redirect
+      }
+    case REDIRECT_TO_CHAT:
+      // USER
+      return {
+        ...state,
+        redirectToChat: action.redirect
       }
     default:
       return state

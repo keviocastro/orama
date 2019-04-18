@@ -38,13 +38,15 @@ class PartnerNotifyScreen extends React.Component {
             <Text style={{ fontSize: 25, color: 'white' }}>Ligar</Text>
           </Button>
         </View>
-        <View style={{ flex: .1, alignItems: 'center' }}>
-          <Button style={{ width: 200, justifyContent: 'center', marginTop: 20 }}
-            info
-            onPress={() => { this.props.navigation.navigate('Post', { partner: this.partner, title: 'Envio de notificação', notify: true }) }}>
-            <Text style={{ fontSize: 20, color: 'white' }}>Enviar notificação</Text>
-          </Button>
-        </View>
+        {this.credits > 0 &&
+          < View style={{ flex: .1, alignItems: 'center' }}>
+            <Button style={{ width: 200, justifyContent: 'center', marginTop: 20 }}
+              info
+              onPress={() => { this.props.navigation.navigate('Post', { partner: this.partner, title: 'Envio de notificação', notify: true }) }}>
+              <Text style={{ fontSize: 20, color: 'white' }}>Enviar notificação</Text>
+            </Button>
+          </View>
+        }
       </View>
     )
   }

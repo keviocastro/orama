@@ -6,7 +6,7 @@ const initialState = {
 };
 
 const addFixedSegmentOrama = (segments, state) => {
-  segments.unshift({
+  segments.push({
     id: 0,
     name: 'O-rama Fast Commerce',
     image: 'https://i.ibb.co/F3zbXsk/segmento-orama.jpg'

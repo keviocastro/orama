@@ -25,6 +25,10 @@ class UserLoginScreen extends React.Component {
     return this.props.navigation.state.params.partner
   }
 
+  get goBack() {
+    return this.props.navigation.state.params.goBack
+  }
+
   get chatImage() {
     return this.props.navigation.state.params.image
   }
@@ -33,7 +37,7 @@ class UserLoginScreen extends React.Component {
     if (nextProps.user !== null && nextProps.redirectToChat) {
       this.props.dispatch(redirectToChat(false))
       this.props.dispatch(selectForChat(this.partner, null))
-      this.props.navigation.navigate('Chat', { partner: this.partner, image: this.chatImage })
+      this.props.navigation.navigate('Chat', { partner: this.partner, image: this.chatImage, goBack: this.goBack })
     }
   }
 
@@ -94,7 +98,7 @@ const styles = StyleSheet.create({
 
 const mapStateToProps = (state) => ({
   invalidPhone: state.auth.invalidPhone,
-  loading: state.auth.loading,
+  loading: state.auth.userLoginloading,
   user: state.auth.user,
   redirectToChat: state.auth.redirectToChat
 })

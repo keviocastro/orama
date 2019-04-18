@@ -3,13 +3,18 @@ import { StyleSheet, TextInput, Dimensions, View, ActivityIndicator, ImageBackgr
 import { Button, Text } from 'native-base'
 import { connect } from 'react-redux'
 import PropTypes from 'prop-types'
-import { partnerLogin, redirectToAccount } from './../actions/auth'
+import { partnerLogin, redirectToAccount, invalidPass } from './../actions/auth'
+import { HeaderBackButton } from 'react-navigation';
 
 const contentWidth = Dimensions.get('window').width - 10
 
 class LoginScreen extends Component {
   static navigationOptions = ({ navigation }) => ({
     title: 'Login',
+    headerLeft: (<HeaderBackButton onPress={() => {
+      navigation.navigate('Home')
+      navigation.dispatch(invalidPass(false))
+    }} />)
   })
 
   componentWillReceiveProps(nextProps) {
@@ -81,7 +86,7 @@ const mapStateToProps = (state) => ({
   pass: state.auth.pass,
   invalidPass: state.auth.invalidPass,
   partner: state.auth.partner,
-  loading: state.auth.loading,
+  loading: state.auth.partnerLoginLoading,
   redirectToAccount: state.auth.redirectToAccount
 })
 

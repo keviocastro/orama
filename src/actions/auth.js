@@ -1,11 +1,11 @@
-import { partnerLogin as apiPartnerLogin, userLogin as apiUserLogin } from './api'
+import { partnerLogin as apiPartnerLogin, userLogin as apiUserLogin, getOne } from './api'
 
 export const partnerLogin = (pass) => dispatch => {
-  return apiPartnerLogin(pass, dispatch, loading, redirectToAccount)
+  return apiPartnerLogin(pass, dispatch, partnerLoginLoading, redirectToAccount, invalidPass)
 }
 
 export const userLogin = (phone) => dispatch => {
-  return apiUserLogin(phone, dispatch, loading, loginUser, invalidPhone)
+  return apiUserLogin(phone, dispatch, userLoginLoading, loginUser, redirectToChat)
 }
 
 export const LOGIN_USER = 'LOGIN_USER'
@@ -38,14 +38,20 @@ export const redirectToChat = (redirect) => ({
   redirect
 })
 
-const PARTNER_LOGOFF = 'PARTNER_LOGOFF'
+export const PARTNER_LOGOFF = 'PARTNER_LOGOFF'
 export const partnerLogoff = () => ({
   type: PARTNER_LOGOFF
 })
 
-export const LOADING = 'LOADING'
-export const loading = (loading) => ({
-  type: LOADING,
+export const USER_LOGIN_LOADING = 'USER_LOGIN_LOADING'
+export const userLoginLoading = (loading) => ({
+  type: USER_LOGIN_LOADING,
+  loading
+})
+
+export const PARTNER_LOGIN_LOADING = 'PARTNER_LOGIN_LOADING'
+export const partnerLoginLoading = (loading) => ({
+  type: PARTNER_LOGIN_LOADING,
   loading
 })
 
@@ -54,6 +60,15 @@ export const invalidPass = (invalid) => ({
   type: INVALID_PASS,
   invalid
 })
+
+export const LOAD_DATA_LOGGED_PARTNER = 'LOAD_DATA_LOGGED_PARTNER'
+export const receivedLoadDataLoggedPartner = (partner) => ({
+  type: LOAD_DATA_LOGGED_PARTNER,
+  partner
+})
+
+export const loadDataLoggedPartner = (partnerId) => dispatch =>
+  getOne('partners', partnerId, dispatch, receivedLoadDataLoggedPartner)
 
 export const ADD_LOGGED_USER = 'ADD_LOGGED_USER'
 export const addLoggedUser = (fbId, fbAcessToken, partner) => ({

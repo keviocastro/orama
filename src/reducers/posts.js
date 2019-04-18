@@ -4,7 +4,7 @@ import {
   SENDING,
   CLEAR_FORM,
   RECEIVED,
-  LOADING,
+  POSTS_LOADING,
   SELECT_IMAGE,
   CLEAR_POSTS,
   SELECTED_PARTNER_FOR_FEED
@@ -48,7 +48,7 @@ export default (state = initialState, action) => {
         ...state,
         posts: []
       }
-    case LOADING:
+    case POSTS_LOADING:
       return {
         ...state,
         loading: action.loading

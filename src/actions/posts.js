@@ -1,10 +1,10 @@
 import { add, get, updateLatestPostsByPartner, remove } from './api'
 
 export const getRealtimeByPartner = (partnerId) => dispatch =>
-  get('posts', { partner_id: partnerId }, { 'created_at': 'desc' }, dispatch, true, loading, received)
+  get('posts', { partner_id: partnerId }, { 'created_at': 'desc' }, dispatch, true, postsLoading, received)
 
 export const getByPartner = (partnerId) => dispatch =>
-  get('posts', { partner_id: partnerId }, { 'created_at': 'desc' }, dispatch, false, loading, received)
+  get('posts', { partner_id: partnerId }, { 'created_at': 'desc' }, dispatch, false, postsLoading, received)
 
 export const sendPost = (text, image, partnerId) => dispatch =>
   add('posts', { text, image, partner_id: partnerId }, dispatch, postCreated, errorPostCreate, sending)
@@ -27,9 +27,9 @@ export const received = (posts, filter) => ({
   filter
 })
 
-export const LOADING = 'LOADING'
-export const loading = (loading) => ({
-  type: LOADING,
+export const POSTS_LOADING = 'POSTS_LOADING'
+export const postsLoading = (loading) => ({
+  type: POSTS_LOADING,
   loading
 })
 

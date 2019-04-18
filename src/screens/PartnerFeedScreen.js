@@ -47,7 +47,9 @@ class PartnerFeedScreen extends React.PureComponent {
   })
 
   componentDidMount() {
-    this.props.dispatch(getRealtimeByPartner(this.partner.id))
+    if (this.props.posts.length <= 1) {
+      this.props.dispatch(getRealtimeByPartner(this.partner.id))
+    }
   }
 
   get partner() {
@@ -57,7 +59,7 @@ class PartnerFeedScreen extends React.PureComponent {
   onClickItemCard = (image) => {
     AsyncStorage.getItem('user').then(user => {
       if (user === null || user === undefined) {
-        this.props.navigation.navigate('UserLogin', { partner: this.partner, image: image })
+        this.props.navigation.navigate('UserLogin', { partner: this.partner, image: image, goBack: 'PartnerFeed' })
       } else {
         this.props.dispatch(selectForChat(this.partner, image))
         this.props.navigation.navigate('Chat', { partner: this.partner })

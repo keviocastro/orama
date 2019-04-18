@@ -9,6 +9,7 @@ import {
   RECEIVE_SEARCH_PARTNERS,
   PARTNERS_SEARCH_LOADING
 } from './../actions/partners'
+import accents from 'remove-accents'
 
 const initialState = {
   bySegment: {
@@ -80,22 +81,18 @@ const removeChatImageByPartner = (state, action) => {
   return state.imagesChatByPartner;
 }
 
-const removeAccents = (text) => {
-  return text.normalize('NFD').replace(/[\u0300-\u036f]/g, "")
-}
-
 // FIXME: Remover esse filtro quando criar o fullsearchtext no firestore
 const filterPartnerByName = (partners, name) => {
-  let searchNormalized = removeAccents(name).toLowerCase()
+  let searchNormalized = accents.remove(name).toLowerCase()
   return partners.filter(partner => {
-    try {
-      let nameNormalized = removeAccents(partner.name).toLowerCase()
+    if (typeof partner.name === 'string') {
+      let nameNormalized = accents.remove(partner.name).toLowerCase()
       if (nameNormalized.search(searchNormalized) === -1) {
         return false
       } else {
         return true
       }
-    } catch (e) {
+    } else {
       return false
     }
   })

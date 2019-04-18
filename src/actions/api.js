@@ -5,6 +5,8 @@ const db = firebase.firestore()
 const convertSnapshot = (snapshot) => {
   let docs = []
   snapshot.docChanges.forEach(change => {
+    let data = change.doc.data()
+    data.id = change.doc.id
     docs.push(change.doc.data())
   })
 
@@ -17,6 +19,16 @@ export const remove = (resource, id) =>
 export const update = (resource, id, data) =>
   db.collection(resource).doc(id).update(data)
 
+
+export const getOne = (resource, id, dispatch, receiveAction) => {
+  return db.collection(resource)
+    .doc(id)
+    .get()
+    .then(snapshot => {
+      let doc = snapshot.data()
+      dispatch(receiveAction(doc))
+    })
+}
 
 export const updateChatLastMessage = (messages, partner, user) => {
   return db.collection('chats')
@@ -157,7 +169,7 @@ export const add = function (resource, data, dispatch, receiveAction, errorActio
   })
 }
 
-export const partnerLogin = (pass, dispatch, loadingAction) => {
+export const partnerLogin = (pass, dispatch, loadingAction, redirectToAccount, invalidPass) => {
   dispatch(loadingAction(true))
 
   return db.collection('partners')
@@ -169,15 +181,17 @@ export const partnerLogin = (pass, dispatch, loadingAction) => {
         dispatch(addLoggedUser(null, null, docs[0].data()))
         dispatch(invalidPass(false))
         dispatch(redirectToAccount(true))
+      } else {
+        dispatch(redirectToAccount(false))
+        dispatch(invalidPass(true))
       }
       dispatch(loadingAction(false))
-      dispatch(redirectToAccount(false))
     }).catch(err => {
       console.log('partnerLogin error ', err)
     })
 }
 
-export const userLogin = (user, dispatch, loadingAction, loginSuccessAction) => {
+export const userLogin = (user, dispatch, loadingAction, loginSuccessAction, redirectToChat) => {
   dispatch(loadingAction(true))
 
   return db.collection('users')
@@ -186,13 +200,17 @@ export const userLogin = (user, dispatch, loadingAction, loginSuccessAction) => 
     .then(snapshot => {
       let docs = snapshot.docs
       if (docs.length >= 1) {
+        let user = docs[0].data()
+        user.id = docs[0].id
         dispatch(loginSuccessAction(docs[0].data()))
+        dispatch(redirectToChat(true))
       } else {
         // FIXME: Confirmar antes de cadastrar o usuário
         db.collection('users').add(user)
           .then(snapshot => {
             user.id = snapshot.id
             dispatch(loginSuccessAction(user))
+            dispatch(redirectToChat(true))
           })
       }
     }).catch(err => {

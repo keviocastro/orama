@@ -10,7 +10,8 @@ import {
   TouchableOpacity,
   StyleSheet,
   Dimensions,
-  TextInput
+  TextInput,
+  AsyncStorage
 } from 'react-native'
 import { Card, CardItem } from 'native-base'
 import LinearGradient from 'react-native-linear-gradient'
@@ -19,6 +20,7 @@ import SplashScreen from 'react-native-splash-screen'
 import { getSegments } from './../actions/segments'
 import { getHighlights } from './../actions/highlights'
 import { selectForChat, searchPartners } from './../actions/partners'
+import PushNotificationAndroid from 'react-native-push-notification'
 
 const horizontalMargin = 0
 const slideWidth = 300
@@ -41,6 +43,16 @@ class SegmentScreen extends React.Component {
       this.props.dispatch(getSegments())
       this.props.dispatch(getHighlights())
     }
+
+    AsyncStorage.getItem('partnerNotification').then(partner => {
+      if (partner) {
+        partner = JSON.parse(partner)
+        this.props.dispatch(selectedPartnerForFeed(partner))
+        this.props.navigation.navigate('PartnerFeed', { partner })
+        AsyncStorage.removeItem('partnerNotification')
+      }
+    })
+
   }
 
   onPressSegment = (segment) => {
@@ -84,7 +96,7 @@ class SegmentScreen extends React.Component {
     if (this.props.loggedUser) {
       this.props.navigation.navigate('Chat', { partner })
     } else {
-      this.props.navigation.navigate('UserLogin', { partner: partner })
+      this.props.navigation.navigate('UserLogin', { partner: partner, goBack: 'Home' })
     }
   }
 

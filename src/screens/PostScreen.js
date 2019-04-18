@@ -12,6 +12,7 @@ import { connect } from 'react-redux'
 import PhotoUpload from 'react-native-photo-upload'
 import { sendPost, updateLatestPosts } from './../actions/posts'
 import { getPartners } from './../actions/partners'
+import { loadDataLoggedPartner } from './../actions/auth';
 import { sendNotification } from './../actions/notifications';
 import { backgroundImage } from './styles'
 
@@ -60,10 +61,11 @@ class PostScreen extends React.Component {
   onPressSendPost() {
     if (this.notify) {
       let notifcation = {
+        title: this.partner.name,
+        body: this.inputText.value,
         image: this.state.image,
-        message: this.inputText.value,
-        topic: 'orama',
-        partner_id: this.partner.id
+        partner_id: this.partner.id,
+        topic: 'orama'
       }
       this.props.dispatch(sendNotification(notifcation))
     } else {
@@ -74,6 +76,8 @@ class PostScreen extends React.Component {
         })
       }
     }
+
+    this.props.dispatch(loadDataLoggedPartner(this.partner.id))
   }
 
   render() {

@@ -7,6 +7,7 @@ import { HeaderBackButton } from 'react-navigation'
 import { partnerLogoff } from './../actions/auth'
 import { backgroundImage } from './styles'
 import { clearPosts, getRealtimeByPartner } from '../actions/posts'
+import { loadDataLoggedPartner } from './../actions/auth';
 
 const contentWidth = Dimensions.get('window').width - 20
 
@@ -41,13 +42,16 @@ const styles = StyleSheet.create({
 class PartnerAccountScreen extends React.Component {
   static navigationOptions = ({ navigation }) => ({
     title: navigation.state.params.partner.name,
-    headerLeft: (<HeaderBackButton onPress={() => { navigation.navigate('Home') }} />)
+    headerLeft: (<HeaderBackButton onPress={() => {
+      navigation.navigate('Home')
+    }} />)
   })
 
   componentDidMount() {
     if (this.props.posts.length === 0) {
       this.props.dispatch(getRealtimeByPartner(this.props.partner.id))
     }
+    this.props.dispatch(loadDataLoggedPartner(this.props.partner.id))
   }
 
   onPressChat() {

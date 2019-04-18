@@ -4,15 +4,33 @@ import { GiftedChat } from 'react-native-gifted-chat'
 import { connect } from 'react-redux'
 import { sendMessages, createChatIfNotExists, updateChatLastMessage, getMessages, updateChatImages } from '../actions/chat'
 import { removeChatImage } from './../actions/partners' // FIXME: Refactor para actions/chat
+import { selectedPartnerForFeed } from './../actions/posts'
 import { backgroundImage } from './styles'
-import ImageZoom from 'react-native-image-pan-zoom'
-import AutoHeightImage from 'react-native-auto-height-image'
 import md5 from 'md5'
 import ChatImages from '../components/ChatImages'
+import { HeaderBackButton } from 'react-navigation'
 
 class ChatSreen extends React.Component {
     static navigationOptions = ({ navigation }) => ({
-        title: navigation.state.params.partner.name
+        title: navigation.state.params.partner.name,
+        headerLeft: (<HeaderBackButton onPress={() => {
+            let goBack = navigation.state.params.goBack
+            if (goBack) {
+                switch (goBack) {
+                    case 'PartnerFeed':
+                        navigation.dispatch(selectedPartnerForFeed(navigation.state.params.partner))
+                        navigation.navigate('PartnerFeed', { partner: navigation.state.params.partner })
+                        break;
+                    case 'Home':
+                        navigation.navigate('Home')
+                    default:
+                        navigation.goBack()
+                        break;
+                }
+            } else {
+                navigation.goBack()
+            }
+        }} />)
     });
 
     constructor(props) {
@@ -58,7 +76,7 @@ class ChatSreen extends React.Component {
                 partner_id: this.props.partner.id,
                 user_id: this.props.user.id
             }
-        ].reverse()
+        ]
 
         if (!recentMessage) {
             if (this.props.partner.welcome_messages === undefined ||
@@ -87,7 +105,6 @@ class ChatSreen extends React.Component {
                             user_id: this.props.user.id
                         }
                     })
-                    messages = messages.reverse()
                 }
 
                 if (Array.isArray(this.props.partner.welcome_messages)) {
@@ -105,7 +122,7 @@ class ChatSreen extends React.Component {
                             partner_id: this.props.partner.id,
                             user_id: this.props.user.id
                         }
-                    }).reverse()
+                    })
                 }
 
                 this.props.dispatch(sendMessages(messages, this.props.partner, this.props.user))
@@ -131,7 +148,7 @@ class ChatSreen extends React.Component {
         if (this.props.messages.length === 0) {
             this.props.dispatch(getMessages(this.partner.id, this.props.user.id))
         }
-        // this.sendWelcomeMessages()
+        this.sendWelcomeMessages()
     }
 
     onSend(newMessages = []) {
