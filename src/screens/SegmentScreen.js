@@ -20,7 +20,8 @@ import SplashScreen from 'react-native-splash-screen'
 import { getSegments } from './../actions/segments'
 import { getHighlights } from './../actions/highlights'
 import { selectForChat, searchPartners } from './../actions/partners'
-import PushNotificationAndroid from 'react-native-push-notification'
+import firebase from 'react-native-firebase'
+const firestore = firebase.firestore()
 
 const horizontalMargin = 0
 const slideWidth = 300
@@ -38,22 +39,69 @@ class SegmentScreen extends React.Component {
 
   componentDidMount() {
     SplashScreen.hide()
+    this.receiveNotifications()
 
     if (this.props.segments.length === 0 && this.props.loading === false) {
       this.props.dispatch(getSegments())
       this.props.dispatch(getHighlights())
     }
+  }
 
-    AsyncStorage.getItem('partnerNotification').then(partner => {
-      if (partner) {
-        partner = JSON.parse(partner)
-        this.props.dispatch(selectedPartnerForFeed(partner))
-        this.props.navigation.navigate('PartnerFeed', { partner })
-        AsyncStorage.removeItem('partnerNotification')
-      }
-    })
+  receiveNotifications() {
+    firebase.messaging().subscribeToTopic('orama-test');
+    firebase.messaging().hasPermission()
+      .then(enabled => {
+        if (!enabled) {
+          firebase.messaging().requestPermission()
+            .then(() => {
+              console.log('requestPermission:', 'autorization')
+            })
+            .catch(error => {
+              console.log('requestPermission', 'User has rejected permissions')
+            })
+        }
+      })
+
+    this.notificationDisplayedListener = firebase.notifications().onNotificationDisplayed((notification) => {
+      console.log('onNotificationDisplayed', notification)
+    });
+
+    this.notificationListener = firebase.notifications().onNotification((notification) => {
+      console.log('onNotification', notification)
+    });
+
+    this.notificationOpenedListener = firebase.notifications()
+      .onNotificationOpened((notify) => { this.onNotificationOpened(notify) });
+
+    firebase.notifications()
+      .getInitialNotification()
+      .then((notify) => this.onNotificationOpened(notify));
 
   }
+
+  onNotificationOpened(notificationOpen) {
+    if (notificationOpen) {
+      const action = notificationOpen.action;
+      const notification = notificationOpen.notification;
+
+      firestore
+        .collection('partners')
+        .doc(notification.data.partner_id)
+        .get()
+        .then(snapshot => {
+          let partner = snapshot.data()
+          partner.id = snapshot.id
+          this.navigateToChat(partner)
+        })
+    }
+  }
+
+  componentWillUnmount() {
+    this.notificationDisplayedListener();
+    this.notificationListener();
+    this.notificationOpenedListener();
+  }
+
 
   onPressSegment = (segment) => {
     if (segment.id === 0) {
@@ -91,13 +139,17 @@ class SegmentScreen extends React.Component {
     return <ActivityIndicator animating size="large" />
   }
 
-  onPressCarousel = (partner) => {
+  navigateToChat(partner) {
     this.props.dispatch(selectForChat(partner))
     if (this.props.loggedUser) {
       this.props.navigation.navigate('Chat', { partner })
     } else {
       this.props.navigation.navigate('UserLogin', { partner: partner, goBack: 'Home' })
     }
+  }
+
+  onPressCarousel = (partner) => {
+    this.navigateToChat(partner)
   }
 
   renderItemCarousel = ({ item }) => {
@@ -135,6 +187,10 @@ class SegmentScreen extends React.Component {
             sliderWidth={sliderWidth}
             itemWidth={itemWidth}
             autoplay={true}
+            enableMomentum={true}
+            lockScrollWhileSnapping={true}
+            autoplayDelay={1000}
+            autoplayInterval={2000}
             loop={true}
             enableSnap={true}
             loopClonesPerSide={3}

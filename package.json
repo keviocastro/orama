@@ -35,11 +35,13 @@
     "react-native-push-notification": "^3.1.2",
     "react-native-snap-carousel": "^3.7.5",
     "react-native-splash-screen": "^3.1.1",
+    "react-native-text-input-mask": "^1.0.1",
     "react-navigation": "2.2.0",
     "react-redux": "^5.1.0",
     "redux": "^4.0.1",
     "redux-logger": "^3.0.6",
-    "redux-thunk": "^2.3.0"
+    "redux-thunk": "^2.3.0",
+    "remove-accents": "^0.4.2"
   },
   "devDependencies": {
     "babel-jest": "23.6.0",

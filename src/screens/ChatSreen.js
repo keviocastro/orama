@@ -148,7 +148,10 @@ class ChatSreen extends React.Component {
         if (this.props.messages.length === 0) {
             this.props.dispatch(getMessages(this.partner.id, this.props.user.id))
         }
-        this.sendWelcomeMessages()
+
+        setTimeout(() => {
+            this.sendWelcomeMessages()
+        }, 3000)
     }
 
     onSend(newMessages = []) {

@@ -4,7 +4,8 @@ import { Button, Text } from 'native-base'
 import { connect } from 'react-redux'
 import PropTypes from 'prop-types'
 import { partnerLogin, redirectToAccount, invalidPass } from './../actions/auth'
-import { HeaderBackButton } from 'react-navigation';
+import { HeaderBackButton } from 'react-navigation'
+import TextInputMask from 'react-native-text-input-mask'
 
 const contentWidth = Dimensions.get('window').width - 10
 
