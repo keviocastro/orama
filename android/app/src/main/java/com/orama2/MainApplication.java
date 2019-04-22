@@ -12,7 +12,6 @@ import io.invertase.firebase.RNFirebasePackage;
 import io.invertase.firebase.database.RNFirebaseDatabasePackage; // @todo remover
 import io.invertase.firebase.firestore.RNFirebaseFirestorePackage;
 import org.devio.rn.splashscreen.SplashScreenReactPackage;
-import com.dieam.reactnativepushnotification.ReactNativePushNotificationPackage;
 import com.BV.LinearGradient.LinearGradientPackage;
 import com.facebook.react.ReactNativeHost;
 import com.facebook.react.ReactPackage;
@@ -48,8 +47,8 @@ public class MainApplication extends Application implements ReactApplication {
       return Arrays.<ReactPackage>asList(new MainReactPackage(), new RNTextInputMaskPackage(), new RNFSPackage(),
           new ImageResizerPackage(), new RNDeviceInfo(), new ImagePickerPackage(), new RNFirebasePackage(),
           new RNFirebaseDatabasePackage(), new FBSDKPackage(mCallbackManager), new SplashScreenReactPackage(),
-          new ReactNativePushNotificationPackage(), new LinearGradientPackage(), new RNFirebaseFirestorePackage(),
-          new RNFirebaseMessagingPackage(), new RNFirebaseNotificationsPackage());
+          new LinearGradientPackage(), new RNFirebaseFirestorePackage(), new RNFirebaseMessagingPackage(),
+          new RNFirebaseNotificationsPackage());
     }
 
     @Override

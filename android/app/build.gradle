@@ -103,8 +103,8 @@ android {
         applicationId "com.orama2"
         minSdkVersion rootProject.ext.minSdkVersion
         targetSdkVersion rootProject.ext.targetSdkVersion
-        versionCode 22
-        versionName "1.22"
+        versionCode 23
+        versionName "1.23"
         ndk {
             abiFilters "armeabi-v7a", "x86"
         }
@@ -164,7 +164,6 @@ dependencies {
     implementation 'com.facebook.android:facebook-android-sdk:4.34.0'
     implementation project(':react-native-fbsdk')
     compile project(':react-native-splash-screen')
-    compile project(':react-native-push-notification')  // @todo remover
     compile project(':react-native-linear-gradient')
     implementation fileTree(dir: "libs", include: ["*.jar"])
     implementation "com.android.support:appcompat-v7:${rootProject.ext.supportLibVersion}"

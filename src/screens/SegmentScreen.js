@@ -40,6 +40,7 @@ class SegmentScreen extends React.Component {
   componentDidMount() {
     SplashScreen.hide()
     this.receiveNotifications()
+    this.reveiveMessages()
 
     if (this.props.segments.length === 0 && this.props.loading === false) {
       this.props.dispatch(getSegments())
@@ -47,8 +48,14 @@ class SegmentScreen extends React.Component {
     }
   }
 
+  reveiveMessages() {
+    this.messageListener = firebase.messaging().onMessage((message) => {
+      this.displayNotification(message)
+    });
+  }
+
   receiveNotifications() {
-    firebase.messaging().subscribeToTopic('orama-test');
+    firebase.messaging().subscribeToTopic('orama');
     firebase.messaging().hasPermission()
       .then(enabled => {
         if (!enabled) {
@@ -63,19 +70,27 @@ class SegmentScreen extends React.Component {
       })
 
     this.notificationDisplayedListener = firebase.notifications().onNotificationDisplayed((notification) => {
+      // IOS
       console.log('onNotificationDisplayed', notification)
     });
 
-    this.notificationListener = firebase.notifications().onNotification((notification) => {
-      console.log('onNotification', notification)
+    this.notificationListener = firebase.notifications().onNotification((notify) => {
+      console.log('onNotification', notify)
+      this.displayNotification(notify)
     });
 
     this.notificationOpenedListener = firebase.notifications()
-      .onNotificationOpened((notify) => { this.onNotificationOpened(notify) });
+      .onNotificationOpened((notify) => {
+        console.log('onNotificationOpened', notify)
+        this.onNotificationOpened(notify)
+      });
 
     firebase.notifications()
       .getInitialNotification()
-      .then((notify) => this.onNotificationOpened(notify));
+      .then((notify) => {
+        console.log('onNotificationOpened', notify)
+        this.onNotificationOpened(notify)
+      });
 
   }
 
@@ -91,9 +106,25 @@ class SegmentScreen extends React.Component {
         .then(snapshot => {
           let partner = snapshot.data()
           partner.id = snapshot.id
-          this.navigateToChat(partner)
+          this.navigateToChat(partner, notification.data.image)
         })
     }
+  }
+
+  displayNotification(message) {
+    let notification = new firebase.notifications.Notification();
+    notification = notification.setTitle(message.data.title).setBody(message.data.body).setData(message.data)
+
+    notification.android.setPriority(firebase.notifications.Android.Priority.High)
+    notification.android.setChannelId('orama')
+    notification.android.setLargeIcon('ic_launcher')
+    notification.android.setSmallIcon('ic_launcher')
+
+    if (message.data.image) {
+      notification.android.setBigPicture(message.data.image, 'ic_launcher', message.data.title, message.data.body)
+    }
+
+    firebase.notifications().displayNotification(notification)
   }
 
   componentWillUnmount() {
@@ -139,12 +170,12 @@ class SegmentScreen extends React.Component {
     return <ActivityIndicator animating size="large" />
   }
 
-  navigateToChat(partner) {
-    this.props.dispatch(selectForChat(partner))
+  navigateToChat(partner, image) {
+    this.props.dispatch(selectForChat(partner, image))
     if (this.props.loggedUser) {
-      this.props.navigation.navigate('Chat', { partner })
+      this.props.navigation.navigate('Chat', { partner, image })
     } else {
-      this.props.navigation.navigate('UserLogin', { partner: partner, goBack: 'Home' })
+      this.props.navigation.navigate('UserLogin', { partner: partner, image, goBack: 'Home' })
     }
   }
 

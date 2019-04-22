@@ -12,7 +12,6 @@ import material from './theme/variables/material'
 import { SENDER_ID, LOG_REDUX } from './config'
 import { selectForChat } from './actions/partners'
 import firebase from 'react-native-firebase'
-const firestore = firebase.firestore()
 
 const middleware = [thunkMiddleware]
 if (process.env.NODE_ENV === 'development' && __DEV__ && LOG_REDUX) {
@@ -21,6 +20,13 @@ if (process.env.NODE_ENV === 'development' && __DEV__ && LOG_REDUX) {
 
 const store = createStore(reducers, applyMiddleware(...middleware))
 export default class App extends Component {
+
+  componentDidMount() {
+    const channel = new firebase.notifications.Android.Channel('orama', 'Orama Channel', firebase.notifications.Android.Importance.Max)
+      .setDescription('Default app channel');
+
+    firebase.notifications().android.createChannel(channel);
+  }
 
   handleAppStateChange(appState) {
     if (appState === 'background') {
