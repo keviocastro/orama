@@ -141,7 +141,7 @@ const styles = StyleSheet.create({
 const mapStateToProps = (state) => {
   return ({
     loading: state.posts.loading,
-    posts: state.posts.posts,
+    posts: state.posts.postsByPartner[state.auth.partner.id],
     partnerId: state.posts.partnerId
   })
 }

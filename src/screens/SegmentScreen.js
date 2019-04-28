@@ -20,6 +20,7 @@ import SplashScreen from 'react-native-splash-screen'
 import { getSegments } from './../actions/segments'
 import { getHighlights } from './../actions/highlights'
 import { selectForChat, searchPartners } from './../actions/partners'
+import { selectPartnerChat } from './../actions/partnerChatMessages';
 import firebase from 'react-native-firebase'
 const firestore = firebase.firestore()
 
@@ -99,32 +100,95 @@ class SegmentScreen extends React.Component {
       const action = notificationOpen.action;
       const notification = notificationOpen.notification;
 
-      firestore
-        .collection('partners')
-        .doc(notification.data.partner_id)
-        .get()
-        .then(snapshot => {
-          let partner = snapshot.data()
-          partner.id = snapshot.id
-          this.navigateToChat(partner, notification.data.image)
-        })
+      if (notification.data.type && notification.data.type === 'chat') {
+        firestore
+          .collection('chats')
+          .doc(notification.data.chat_id)
+          .get()
+          .then(snapshot => {
+
+            let chat = snapshot.data()
+            chat.id = snapshot.id
+
+            if (notification.data.send_by === 'user') {
+
+              this.props.dispatch(selectPartnerChat(chat))
+              this.props.navigation.navigate('PartnerChatMessage', { chat: chat })
+              this.closeNotification(notification)
+            }
+
+            if (notification.data.send_by === 'partner') {
+              firestore
+                .collection('partners')
+                .doc(chat.partner_id)
+                .get()
+                .then(snapshot => {
+                  let partner = snapshot.data()
+                  partner.id = snapshot.id
+                  this.navigateToChat(partner)
+                  this.closeNotification(notification)
+                })
+            }
+
+          })
+
+      } else {
+
+        firestore
+          .collection('partners')
+          .doc(notification.data.partner_id)
+          .get()
+          .then(snapshot => {
+            let partner = snapshot.data()
+            partner.id = snapshot.id
+            this.navigateToChat(partner, notification.data.image)
+            this.closeNotification(notification)
+          })
+      }
+
     }
   }
 
+  closeNotification(notification) {
+    firebase.notifications().removeDeliveredNotification(notification.notificationId);
+  }
+
   displayNotification(message) {
-    let notification = new firebase.notifications.Notification();
-    notification = notification.setTitle(message.data.title).setBody(message.data.body).setData(message.data)
+    let notify = true
 
-    notification.android.setPriority(firebase.notifications.Android.Priority.High)
-    notification.android.setChannelId('orama')
-    notification.android.setLargeIcon('ic_launcher')
-    notification.android.setSmallIcon('ic_launcher')
-
-    if (message.data.image) {
-      notification.android.setBigPicture(message.data.image, 'ic_launcher', message.data.title, message.data.body)
+    // Não notificar se o usuário estiver na tela de chat com parceiro
+    if (message.data.send_by === "partner" &&
+      this.props.currentRoute.routeName === "Chat" &&
+      this.props.currentRoute.params &&
+      this.props.currentRoute.params.partner &&
+      this.props.currentRoute.params.partner.id === message.data.partner_id) {
+      notify = false
     }
 
-    firebase.notifications().displayNotification(notification)
+    // Não notificar se o parceiro estiver na tela de chat com cliente
+    if (message.data.send_by === "user" &&
+      this.props.currentRoute.routeName === "PartnerChatMessage" &&
+      this.props.currentRoute.params &&
+      this.props.currentRoute.params.chat &&
+      this.props.currentRoute.params.chat.user_id === message.data.user_id) {
+      notify = false
+    }
+
+    if (notify) {
+      let notification = new firebase.notifications.Notification();
+      notification = notification.setTitle(message.data.title).setBody(message.data.body).setData(message.data)
+
+      notification.android.setPriority(firebase.notifications.Android.Priority.High)
+      notification.android.setChannelId('orama')
+      notification.android.setLargeIcon('ic_launcher')
+      notification.android.setSmallIcon('icon')
+
+      if (message.data.image) {
+        notification.android.setBigPicture(message.data.image, 'ic_launcher', message.data.title, message.data.body)
+      }
+
+      firebase.notifications().displayNotification(notification)
+    }
   }
 
   componentWillUnmount() {
@@ -218,8 +282,6 @@ class SegmentScreen extends React.Component {
             sliderWidth={sliderWidth}
             itemWidth={itemWidth}
             autoplay={true}
-            enableMomentum={true}
-            lockScrollWhileSnapping={true}
             autoplayDelay={1000}
             autoplayInterval={2000}
             loop={true}
@@ -320,12 +382,21 @@ SegmentScreen.propTypes = {
 }
 
 const mapStateToProps = state => {
+  let currentRoute = undefined
+  state.nav.routes.forEach((route, indexRoute) => {
+    route.routes.forEach((subRoute, indexSubroute) => {
+      if (route.index === indexSubroute)
+        currentRoute = subRoute
+    })
+  })
+
   return ({
     loading: state.segments.loading,
     segments: state.segments.segments,
     highlights: state.highlights.partners,
     loggedPartner: state.auth.partner,
-    loggedUser: state.auth.user
+    loggedUser: state.auth.user,
+    currentRoute: currentRoute
   })
 }
 

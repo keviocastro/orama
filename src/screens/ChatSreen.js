@@ -9,6 +9,7 @@ import { backgroundImage } from './styles'
 import md5 from 'md5'
 import ChatImages from '../components/ChatImages'
 import { HeaderBackButton } from 'react-navigation'
+import firebase from 'react-native-firebase'
 
 class ChatSreen extends React.Component {
     static navigationOptions = ({ navigation }) => ({

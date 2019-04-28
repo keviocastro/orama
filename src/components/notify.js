@@ -10,6 +10,7 @@ export default async (notificationOpen) => {
   notification.android.setPriority(firebase.notifications.Android.Priority.High)
   notification.android.setChannelId('orama')
   notification.android.setLargeIcon('ic_launcher')
+  notification.android.setSmallIcon('icon')
 
   if (notificationOpen.data.image) {
     notification.android.setBigPicture(notificationOpen.data.image, 'ic_launcher', notificationOpen.data.title, notificationOpen.data.body)

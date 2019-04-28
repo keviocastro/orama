@@ -14,6 +14,8 @@ import DeviceInfo from 'react-native-device-info'
 import { selectForChat } from './../actions/partners';
 import { userLogin, redirectToChat } from './../actions/auth'
 import TextInputMask from 'react-native-text-input-mask'
+import firebase from 'react-native-firebase'
+const firestore = firebase.firestore()
 
 const contentWidth = Dimensions.get('window').width - 10
 
@@ -45,6 +47,17 @@ class UserLoginScreen extends React.Component {
       this.props.dispatch(redirectToChat(false))
       this.props.dispatch(selectForChat(this.partner, null))
       this.props.navigation.navigate('Chat', { partner: this.partner, image: this.chatImage, goBack: this.goBack })
+
+      firebase.messaging().getToken()
+        .then(fcmToken => {
+          if (fcmToken) {
+
+            firestore.collection('users').doc(nextProps.user.id)
+              .update({
+                cloud_message_token: fcmToken
+              })
+          }
+        });
     }
   }
 

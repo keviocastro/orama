@@ -108,9 +108,15 @@ PartnerAccountScreen.propTypes = {
   dispatch: PropTypes.func
 }
 
-const mapToProps = state => ({
-  partner: state.auth.partner,
-  posts: state.posts.posts
-})
+const mapToProps = state => {
+  let posts = state.posts.postsByPartner[state.auth.partner.id]
+    ? state.posts.postsByPartner[state.auth.partner.id]
+    : []
+
+  return ({
+    partner: state.auth.partner,
+    posts: posts
+  })
+}
 
 export default connect(mapToProps)(PartnerAccountScreen)

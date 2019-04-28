@@ -6,6 +6,8 @@ import PropTypes from 'prop-types'
 import { partnerLogin, redirectToAccount, invalidPass } from './../actions/auth'
 import { HeaderBackButton } from 'react-navigation'
 import TextInputMask from 'react-native-text-input-mask'
+import firebase from 'react-native-firebase'
+const firestore = firebase.firestore()
 
 const contentWidth = Dimensions.get('window').width - 10
 
@@ -22,6 +24,17 @@ class LoginScreen extends Component {
     if (nextProps.partner !== null && nextProps.redirectToAccount) {
       this.props.navigation.navigate('PartnerAccount', { partner: nextProps.partner })
       this.props.dispatch(redirectToAccount(false))
+
+      firebase.messaging().getToken()
+        .then(fcmToken => {
+          if (fcmToken) {
+
+            firestore.collection('partners').doc(nextProps.partner.id)
+              .update({
+                cloud_message_token: fcmToken
+              })
+          }
+        });
     }
   }
 

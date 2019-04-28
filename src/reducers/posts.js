@@ -9,6 +9,7 @@ import {
   CLEAR_POSTS,
   SELECTED_PARTNER_FOR_FEED
 } from './../actions/posts'
+import { Actions } from 'react-native-gifted-chat';
 
 const initialState = {
   posts: [],
@@ -24,9 +25,25 @@ const initialState = {
 }
 
 const setPostsByPartner = (state, action) => {
-  const postsByPartner = { ...state.posts }
-  postsByPartner[action.filter.partner_id] = action.posts
-  return postsByPartner
+
+  if (state.postsByPartner[action.filter.partner_id] === undefined) {
+    state.postsByPartner[action.filter.partner_id] = action.posts
+  } else {
+    action.posts.forEach(newPost => {
+      let exist = false
+      state.postsByPartner[action.filter.partner_id].every(currentPost => {
+        if (currentPost.id === newPost.id) {
+          exist = true
+        }
+        return !exist
+      })
+      if (!exist) {
+        state.postsByPartner[action.filter.partner_id].unshift(newPost)
+      }
+    })
+  }
+
+  return state.postsByPartner
 }
 
 
