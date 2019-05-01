@@ -154,6 +154,7 @@ class SegmentScreen extends React.Component {
   }
 
   displayNotification(message) {
+    console.log('displayNotification', message.messageId)
     let notify = true
 
     // Não notificar se o usuário estiver na tela de chat com parceiro

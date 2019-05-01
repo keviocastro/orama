@@ -1,7 +1,7 @@
 import { partnerLogin as apiPartnerLogin, userLogin as apiUserLogin, getOne } from './api'
 
-export const partnerLogin = (pass) => dispatch => {
-  return apiPartnerLogin(pass, dispatch, partnerLoginLoading, redirectToAccount, invalidPass)
+export const partnerLogin = (pass, partnerId) => dispatch => {
+  return apiPartnerLogin(pass, partnerId, dispatch, partnerLoginLoading, redirectToAccount, invalidPass)
 }
 
 export const userLogin = (phone) => dispatch => {

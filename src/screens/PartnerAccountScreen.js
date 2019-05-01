@@ -109,9 +109,10 @@ PartnerAccountScreen.propTypes = {
 }
 
 const mapToProps = state => {
-  let posts = state.posts.postsByPartner[state.auth.partner.id]
-    ? state.posts.postsByPartner[state.auth.partner.id]
-    : []
+  let posts = []
+  if (state.auth.partner && state.posts.postsByPartner[state.auth.partner.id]) {
+    posts = state.posts.postsByPartner[state.auth.partner.id]
+  }
 
   return ({
     partner: state.auth.partner,

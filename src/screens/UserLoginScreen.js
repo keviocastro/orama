@@ -27,7 +27,7 @@ class UserLoginScreen extends React.Component {
   constructor(props) {
     super(props)
 
-    this.state = { validPhoneNumber: false };
+    this.state = { validPhoneNumber: false, validName: false };
   }
 
   get partner() {
@@ -105,9 +105,19 @@ class UserLoginScreen extends React.Component {
           style={styles.input}
           onChangeText={(text) => {
             this.inputName.value = text
+
+            if (this.inputName.value && this.inputName.value.length >= 3) {
+              this.setState({
+                validName: true
+              })
+            } else {
+              this.setState({
+                validName: false
+              })
+            }
           }} />
         <View style={styles.containerButton}>
-          {!this.props.loading && this.state.validPhoneNumber && <Button info onPress={() => this.onPressLogin()}><Text>Entrar</Text></Button>}
+          {!this.props.loading && this.state.validPhoneNumber && this.state.validName && <Button info onPress={() => this.onPressLogin()}><Text>Entrar</Text></Button>}
           {this.props.loading && <ActivityIndicator animating size="large" style={{ marginTop: 40, marginBottom: 40 }} />}
         </View>
       </View>

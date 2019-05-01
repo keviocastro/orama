@@ -9,19 +9,14 @@ class PartnerNotifyScreen extends React.Component {
   })
 
   get partner() {
+    if (typeof this.props.navigation.state.params.partner.notification_credits !== 'number') {
+      this.props.navigation.state.params.partner.notification_credits = 0
+    }
     return this.props.navigation.state.params.partner
   }
 
   get phone() {
     return ''
-  }
-
-  get credits() {
-    if (this.partner.notification_credits) {
-      return this.partner.notification_credits
-    } else {
-      return 0
-    }
   }
 
   render() {
@@ -38,7 +33,7 @@ class PartnerNotifyScreen extends React.Component {
             <Text style={{ fontSize: 25, color: 'white' }}>Ligar</Text>
           </Button>
         </View>
-        {this.credits > 0 &&
+        {this.partner.notification_credits > 0 &&
           < View style={{ flex: .1, alignItems: 'center' }}>
             <Button style={{ width: 200, justifyContent: 'center', marginTop: 20 }}
               info

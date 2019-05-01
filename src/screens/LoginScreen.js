@@ -20,6 +20,12 @@ class LoginScreen extends Component {
     }} />)
   })
 
+  constructor(props) {
+    super(props)
+
+    this.state = { validPass: false, validIdOrama: false };
+  }
+
   componentWillReceiveProps(nextProps) {
     if (nextProps.partner !== null && nextProps.redirectToAccount) {
       this.props.navigation.navigate('PartnerAccount', { partner: nextProps.partner })
@@ -39,13 +45,33 @@ class LoginScreen extends Component {
   }
 
   onPressLogin() {
-    this.props.dispatch(partnerLogin(this.inputPass.value))
+    this.props.dispatch(partnerLogin(this.inputPass.value, this.inputIdOrama.value))
   }
 
   render() {
     return (
       <ImageBackground style={styles.imageBackground} source={require('./../static/background-pass.png')} >
         <View style={styles.container}>
+          <TextInput
+            label="Seu Código O-RAMA"
+            placeholder="ID O-RAMA"
+            ref={input => { this.inputIdOrama = input }}
+            value={this.props.idOrama}
+            style={{ height: 40, width: contentWidth, borderColor: '#3787c4', borderWidth: 2 }}
+            onChangeText={(text) => {
+              this.inputIdOrama.value = text
+
+              if (text.length >= 6) {
+                this.setState({
+                  validIdOrama: true
+                })
+              } else {
+                this.setState({
+                  validIdOrama: false
+                })
+              }
+            }}
+          />
           <TextInput
             label="Sua senha"
             placeholder="SENHA"
@@ -55,16 +81,26 @@ class LoginScreen extends Component {
             autoComplete="password"
             onChangeText={(text) => {
               this.inputPass.value = text
+
+              if (text.length >= 3) {
+                this.setState({
+                  validPass: true
+                })
+              } else {
+                this.setState({
+                  validPass: false
+                })
+              }
             }}
             secureTextEntry={true}
           />
-          {this.props.invalidPass === true && <Text style={{ color: 'red' }}>Senha inválida</Text>}
+          {this.props.invalidPass === true && <Text style={{ color: 'red' }}>Código O-RAMA ou senha inválida</Text>}
           <View style={{ alignItems: 'center', justifyContent: 'center', height: 100 }}>
-            {!this.props.loading && <Button info onPress={() => this.onPressLogin()}><Text>Entrar</Text></Button>}
+            {!this.props.loading && this.state.validPass && this.state.validIdOrama && < Button info onPress={() => this.onPressLogin()}><Text>Entrar</Text></Button>}
             {this.props.loading && <ActivityIndicator animating size="large" style={{ marginTop: 40, marginBottom: 40 }} />}
           </View>
         </View>
-      </ImageBackground>
+      </ImageBackground >
     )
   }
 }

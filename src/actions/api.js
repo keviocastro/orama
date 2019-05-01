@@ -169,10 +169,11 @@ export const add = function (resource, data, dispatch, receiveAction, errorActio
   })
 }
 
-export const partnerLogin = (pass, dispatch, loadingAction, redirectToAccount, invalidPass) => {
+export const partnerLogin = (pass, partnerId, dispatch, loadingAction, redirectToAccount, invalidPass) => {
   dispatch(loadingAction(true))
 
   return db.collection('partners')
+    .where('id_lower_case', '==', partnerId.toLowerCase())
     .where('pass', '==', pass)
     .get()
     .then(snapshot => {

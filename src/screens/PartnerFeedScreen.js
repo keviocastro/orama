@@ -9,7 +9,8 @@ import {
   TouchableOpacity,
   Dimensions,
   ImageBackground,
-  AsyncStorage
+  AsyncStorage,
+  Modal
 } from 'react-native'
 import PropTypes from 'prop-types'
 import { connect } from 'react-redux'
@@ -22,9 +23,12 @@ import { backgroundImage } from './styles'
 import AutoHeightImage from 'react-native-auto-height-image'
 
 const viewportHeight = Dimensions.get('window').height - Header.HEIGHT
-const mainFeedImageHeight = viewportHeight - (viewportHeight * 0.3)
+const mainFeedImageHeight = viewportHeight - (viewportHeight * 0.7)
 const mainFeedImageWidth = Dimensions.get('window').width
 const fullWidth = Dimensions.get('window').width
+
+const modalImagemHeight = viewportHeight - (viewportHeight * 0.1)
+const modalImageWidth = Dimensions.get('window').width
 
 const styles = StyleSheet.create({
   card: { paddingBottom: 2, paddingBottom: 2 },
@@ -46,6 +50,14 @@ class PartnerFeedScreen extends React.PureComponent {
     title: navigation.state.params.partner.name
   })
 
+  constructor(props) {
+    super(props)
+
+    this.state = {
+      modalVisible: false,
+      modalImage: null
+    }
+  }
   componentDidMount() {
     if (this.props.posts.length <= 1) {
       this.props.dispatch(getRealtimeByPartner(this.partner.id))
@@ -78,25 +90,20 @@ class PartnerFeedScreen extends React.PureComponent {
       return null
   }
 
-  renderFeedImage() {
-    if (this.props.navigation.state.params.partner !== undefined &&
-      typeof this.props.navigation.state.params.partner.feed_image === 'string' &&
-      this.props.navigation.state.params.partner.feed_image.length > 0)
-      return <ImageZoom
-        cropWidth={mainFeedImageWidth}
-        cropHeight={mainFeedImageHeight}
-        imageWidth={mainFeedImageWidth}
-        imageHeight={mainFeedImageHeight}>
-        <Image style={styles.mainFeedImage}
-          source={{ uri: this.props.navigation.state.params.partner.feed_image }} />
-      </ImageZoom>
-    else
-      return null
+  renderFeedImage(image) {
+    return <TouchableOpacity onPress={() => {
+      this.setState({
+        modalVisible: true,
+        modalImage: image
+      })
+    }}>
+      <Image style={{ ...styles.mainFeedImage, marginTop: 5 }} source={{ uri: image }} />
+    </TouchableOpacity>
   }
 
   renderItemPost({ item, index }) {
     if (item.id === '1' && item.feed_image !== undefined) {
-      return (this.renderFeedImage())
+      return (this.renderFeedImage(item.feed_image))
     } else {
       return (
         <TouchableOpacity onPress={() => this.onClickItemCard(item.image)}>
@@ -120,6 +127,33 @@ class PartnerFeedScreen extends React.PureComponent {
 
   render = () => (
     <ImageBackground style={backgroundImage} source={require('./../static/background.png')} >
+      <Modal
+        animationType="slide"
+        transparent={false}
+        visible={this.state.modalVisible}
+        onRequestClose={() => {
+          this.setState({
+            modalVisible: false
+          })
+        }}>
+        <ImageBackground source={require('./../static/background-modal-images.jpg')}
+          style={{ flex: 1, justifyContent: "center", alignItems: "center" }}>
+          <ImageZoom
+            cropWidth={modalImageWidth}
+            cropHeight={modalImagemHeight}
+            imageWidth={modalImageWidth}
+            imageHeight={modalImagemHeight} >
+            <AutoHeightImage source={{ uri: this.state.modalImage }} width={fullWidth} />
+          </ImageZoom>
+          <TouchableOpacity onPress={() => {
+            this.setState({
+              modalVisible: false
+            })
+          }}>
+            <Image style={{ width: 50, height: 50, marginTop: 10 }} source={require('./../static/icon-down.png')} />
+          </TouchableOpacity>
+        </ImageBackground>
+      </Modal>
       <View style={{ flex: 1, flexDirection: 'column' }}>
         <FlatList
           data={this.props.posts}
