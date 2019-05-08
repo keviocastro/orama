@@ -63,7 +63,8 @@ class ChatSreen extends React.Component {
                     avatar: this.props.partner.logo
                 },
                 partner_id: this.props.partner.id,
-                user_id: this.props.user.id
+                user_id: this.props.user.id,
+                welcome: true
             },
             {
                 _id: Math.random() * 1000,
@@ -75,7 +76,8 @@ class ChatSreen extends React.Component {
                     avatar: this.props.partner.logo
                 },
                 partner_id: this.props.partner.id,
-                user_id: this.props.user.id
+                user_id: this.props.user.id,
+                welcome: true
             }
         ]
 
@@ -95,7 +97,6 @@ class ChatSreen extends React.Component {
                         return {
                             _id: Math.random() * 1000,
                             text: msg,
-                            welcome: true,
                             createdAt: new Date(),
                             user: {
                                 _id: this.props.partner.id,
@@ -103,7 +104,8 @@ class ChatSreen extends React.Component {
                                 avatar: this.props.partner.logo
                             },
                             partner_id: this.props.partner.id,
-                            user_id: this.props.user.id
+                            user_id: this.props.user.id,
+                            welcome: true
                         }
                     })
                 }
@@ -113,7 +115,6 @@ class ChatSreen extends React.Component {
                         return {
                             _id: Math.random() * 1000,
                             text: msg,
-                            welcome: true,
                             createdAt: new Date(),
                             user: {
                                 _id: this.props.partner.id,
@@ -121,7 +122,8 @@ class ChatSreen extends React.Component {
                                 avatar: this.props.partner.logo
                             },
                             partner_id: this.props.partner.id,
-                            user_id: this.props.user.id
+                            user_id: this.props.user.id,
+                            welcome: true
                         }
                     })
                 }

@@ -16,6 +16,7 @@ import ImageViewScreen from './../screens/ImageViewScreen'
 import PartnerSearchScreen from './../screens/PartnerSearchScreen'
 import PartnerChatMessageScreen from './../screens/PartnerChatMessageScreen'
 import PartnerNotifyScreen from './../screens/PartnerNotifyScreen'
+import PartnerNotificationScreen from "./../screens/PartnerNotificationScreen"
 
 export const ModeCardStack = createStackNavigator({
   Home: { screen: SegmentScreen, navigationOptions: { gesturesEnabled: true } },
@@ -28,6 +29,7 @@ export const ModeCardStack = createStackNavigator({
   PartnerPost: { screen: PartnerPostScreen, navigationOptions: { gesturesEnabled: true } },
   UserLogin: { screen: UserLoginScreen, navigationOptions: { gesturesEnabled: true } },
   Post: { screen: PostScreen, navigationOptions: { gesturesEnabled: true } },
+  PartnerNotification: { screen: PartnerNotificationScreen },
   ImageView: {
     screen: ImageViewScreen, navigationOptions: {
       gesturesEnabled: true,

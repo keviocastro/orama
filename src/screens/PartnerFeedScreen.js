@@ -40,7 +40,7 @@ const styles = StyleSheet.create({
   },
   mainFeedImage: {
     flex: 1,
-    resizeMode: 'contain',
+    resizeMode: 'cover',
     height: mainFeedImageHeight
   }
 })

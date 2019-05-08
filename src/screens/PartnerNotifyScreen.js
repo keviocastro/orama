@@ -5,7 +5,7 @@ import { Button } from 'native-base';
 
 class PartnerNotifyScreen extends React.Component {
   static navigationOptions = ({ navigation }) => ({
-    title: 'Minhas notificações'
+    title: 'Notificações'
   })
 
   get partner() {
@@ -40,9 +40,15 @@ class PartnerNotifyScreen extends React.Component {
               onPress={() => { this.props.navigation.navigate('Post', { partner: this.partner, title: 'Envio de notificação', notify: true }) }}>
               <Text style={{ fontSize: 20, color: 'white' }}>Enviar notificação</Text>
             </Button>
-          </View>
-        }
-      </View>
+          </View>}
+        < View style={{ flex: .1, alignItems: 'center' }}>
+          <Button style={{ width: 200, justifyContent: 'center', marginTop: 20 }}
+            info
+            onPress={() => this.props.navigation.navigate('PartnerNotification', { partner: this.partner })} >
+            <Text style={{ fontSize: 20, color: 'white' }}>Minhas notificação</Text>
+          </Button>
+        </View>
+      </View >
     )
   }
 }

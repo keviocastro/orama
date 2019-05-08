@@ -10,7 +10,7 @@
     "emulador": "emulator -avd nexus",
     "icon": "./node_modules/.bin/react-native-icon",
     "release": "cd android && ./gradlew assembleRelease",
-    "partner-login": "adb shell input text '7VGrUBBt6UjmpL06it31' && adb shell input keyevent 66 && adb shell input text '333' && adb shell input keyevent 66"
+    "partner-login": "adb shell input text 'Jy8ZKMnO1Wz5RckcBP8p' && adb shell input keyevent 66 && adb shell input text '333' && adb shell input keyevent 66"
   },
   "dependencies": {
     "console": "^0.7.2",

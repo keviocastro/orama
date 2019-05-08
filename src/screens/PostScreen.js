@@ -4,16 +4,16 @@ import {
   TextInput,
   Dimensions,
   ActivityIndicator,
-  Image,
-  ImageBackground
+  ImageBackground,
+  Image
 } from 'react-native'
 import { Button, Text } from 'native-base'
 import { connect } from 'react-redux'
 import PhotoUpload from 'react-native-photo-upload'
-import { sendPost, updateLatestPosts } from './../actions/posts'
+import { sendPost, updateLatestPosts, getByPartner } from './../actions/posts'
 import { getPartners } from './../actions/partners'
-import { loadDataLoggedPartner } from './../actions/auth';
-import { sendNotification } from './../actions/notifications';
+import { loadDataLoggedPartner } from './../actions/auth'
+import { sendNotification } from './../actions/notifications'
 import { backgroundImage } from './styles'
 
 // FIXME: Remover dependencia imagepicker
@@ -35,6 +35,11 @@ class PostScreen extends React.Component {
     title: navigation.state.params.title
   })
 
+  state = {
+    height: 250,
+    formValid: false
+  }
+
   get partner() {
     return this.props.navigation.state.params.partner
   }
@@ -51,7 +56,7 @@ class PostScreen extends React.Component {
     if (props.postCreated || props.notificationSend) {
       this.inputText.clear()
       this.setState({
-        image: null
+        image: null,
       })
       this.props.navigation.goBack()
     }
@@ -75,16 +80,25 @@ class PostScreen extends React.Component {
           this.props.dispatch(getPartners(segmentId))
         })
       }
+      this.props.dispatch(getByPartner(this.partner.id))
     }
 
     this.props.dispatch(loadDataLoggedPartner(this.partner.id))
+  }
+
+  checkValidFom() {
+    if (this.inputText.value >= 3 && this.state.image.indexOf('data:image/jpeg;base64,') !== -1) {
+      this.setState({
+        formValid: true
+      })
+    }
   }
 
   render() {
     let placeholder = this.notify ? 'Texto da notificação' : 'Texto do post'
 
     return <ImageBackground style={backgroundImage} source={require('./../static/background.png')} >
-      <View style={{ flexDirerection: 'column', justifyContent: 'center', alignItens: 'center', marginTop: 20 }} >
+      <View style={{ flexDirerection: 'column', justifyContent: 'flex-start', alignItens: 'center', flex: 1, marginTop: 20 }} >
         <TextInput
           ref={input => { this.inputText = input }}
           clearButtonMode='always'
@@ -95,25 +109,29 @@ class PostScreen extends React.Component {
           style={{ height: 40, width: fullWidth, borderColor: 'gray', marginLeft: 10, borderWidth: 1, marginTop: 2 }}
           onChangeText={(text) => {
             this.inputText.value = text
+            this.checkValidFom()
           }}
           multiline={true}
           numberOfLines={2}
         />
         <View style={{
-          height: 350,
+          height: this.state.height,
           marginTop: 10
         }}>
           <PhotoUpload
+            photoPickerTitle="Escolha uma foto"
             maxHeight={350}
             onPhotoSelect={image => {
               if (image) {
                 this.setState({
-                  image: 'data:image/jpeg;base64,' + image
+                  image: 'data:image/jpeg;base64,' + image,
+                  height: 350
                 })
               }
+              this.checkValidFom()
             }}>
             <Image
-              style={{ height: 350, width: fullWidth, flex: 1, resizeMode: 'cover' }}
+              style={{ width: fullWidth, flex: 1, resizeMode: 'cover' }}
               resizeMode='cover'
               source={require('./../static/upload-image.png')}
             />

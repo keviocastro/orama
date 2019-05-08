@@ -11,11 +11,10 @@ import {
 } from 'react-native'
 import ImageZoom from 'react-native-image-pan-zoom'
 import { Card, CardItem, Body } from 'native-base'
-import PropTypes from 'prop-types'
 import { connect } from 'react-redux'
 import { Button, Text } from 'native-base'
-import { getByPartner, removePost } from './../actions/posts'
 import { backgroundImage } from './styles'
+import { getNotificationsRealtime } from './../actions/notifications'
 import AutoHeightImage from 'react-native-auto-height-image'
 
 const fullWidth = Dimensions.get('window').width
@@ -23,39 +22,44 @@ const viewportHeight = Dimensions.get('window').height
 const modalImagemHeight = viewportHeight - (viewportHeight * 0.25)
 const modalImageWidth = Dimensions.get('window').width
 
-export class PartnerPostScreen extends React.PureComponent {
-  static propTypes = {
-    navigation: PropTypes.object,
-    dispatch: PropTypes.func
-  }
+export class PartnerNotificationScreen extends React.PureComponent {
   static navigationOptions = ({ navigation }) => ({
-    title: navigation.state.params.partner.name + ' posts'
+    title: ' Minhas notificações'
   })
 
-  state = {
-    modalVisible: false,
-    modalImage: null,
-    modalPostId: null
+  constructor(props) {
+    super(props)
+
+    this.state = {
+      modalVisible: false,
+      modalImage: null
+    }
   }
+
+  componentDidMount() {
+    if (this.props.notifications.length === 0) {
+      this.props.dispatch(getNotificationsRealtime(this.partner))
+    }
+  }
+
 
   get partner() {
     return this.props.navigation.state.params.partner
   }
 
-  renderItemPost({ item, index }) {
+  renderItem({ item, index }) {
     return (
       <TouchableOpacity onPress={() => {
         this.setState({
           modalVisible: true,
-          modalImage: item.image,
-          modalPostId: item.id
+          modalImage: item.image
         })
       }}>
         <Card styles={styles.card}>
-          {item.text !== undefined && item.text !== null > 0 &&
+          {item.title !== undefined && item.title !== null > 0 &&
             <CardItem >
               <Body>
-                <Text>{item.text}</Text>
+                <Text>{item.title}</Text>
               </Body>
             </CardItem>}
           {item.image !== undefined && item.text !== null > 0 &&
@@ -69,7 +73,7 @@ export class PartnerPostScreen extends React.PureComponent {
   }
 
   render() {
-    const { posts, loading, dispatch, navigation } = this.props
+    const { notifications, loading } = this.props
     return (
       <ImageBackground style={backgroundImage} source={require('./../static/background.png')} >
         <Modal
@@ -82,14 +86,6 @@ export class PartnerPostScreen extends React.PureComponent {
             })
           }}>
           <View style={{ flex: 1, justifyContent: "center", alignItems: "center", backgroundColor: "black" }}>
-            <TouchableOpacity onPress={() => {
-              this.setState({
-                modalVisible: false
-              })
-              dispatch(removePost(this.state.modalPostId))
-            }}>
-              <Image width={fullWidth} style={{ height: 30, width: 30, marginBottom: 10 }} source={require('./../static/icon-remove.png')} />
-            </TouchableOpacity>
             <ImageZoom
               cropWidth={modalImageWidth}
               cropHeight={modalImagemHeight}
@@ -109,15 +105,14 @@ export class PartnerPostScreen extends React.PureComponent {
         {!loading &&
           <Button style={{ width: fullWidth, justifyContent: 'center', marginTop: 10, marginBottom: 10 }}
             info
-            onPress={() => { navigation.navigate('Post', { partner: this.partner, title: 'Nova postagem' }) }}>
-            <Text>Novo post</Text>
+            onPress={() => { this.props.navigation.navigate('Post', { partner: this.partner, title: 'Envio de notificação', notify: true }) }}>
+            <Text>Enviar notificação</Text>
           </Button>}
         <FlatList
-          ref={list => { this.postList = list }}
-          data={posts}
+          data={notifications}
           keyExtractor={(item) => item.id}
-          renderItem={({ item, index }) => this.renderItemPost({ item, index })}
-          onRefresh={() => { dispatch(getByPartner(this.partner.id)) }}
+          renderItem={({ item, index }) => this.renderItem({ item, index })}
+          onRefresh={() => { alert('get notifications') }}
           refreshing={loading} />
       </ImageBackground>
     )
@@ -136,10 +131,9 @@ const styles = StyleSheet.create({
 
 const mapStateToProps = (state) => {
   return ({
-    loading: state.posts.loading,
-    posts: state.posts.postsByPartner[state.auth.partner.id],
-    partnerId: state.posts.partnerId
+    loading: state.notifications.loading,
+    notifications: state.notifications.notifications
   })
 }
 
-export default connect(mapStateToProps)(PartnerPostScreen)
+export default connect(mapStateToProps)(PartnerNotificationScreen)
