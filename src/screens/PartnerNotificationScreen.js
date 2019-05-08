@@ -7,6 +7,7 @@ import {
   ImageBackground,
   Modal,
   View,
+  ScrollView,
   TouchableOpacity
 } from 'react-native'
 import ImageZoom from 'react-native-image-pan-zoom'
@@ -56,10 +57,10 @@ export class PartnerNotificationScreen extends React.PureComponent {
         })
       }}>
         <Card styles={styles.card}>
-          {item.title !== undefined && item.title !== null > 0 &&
+          {item.body !== undefined && item.body !== null > 0 &&
             <CardItem >
               <Body>
-                <Text>{item.title}</Text>
+                <Text>{item.body}</Text>
               </Body>
             </CardItem>}
           {item.image !== undefined && item.text !== null > 0 &&
@@ -85,14 +86,8 @@ export class PartnerNotificationScreen extends React.PureComponent {
               modalVisible: false
             })
           }}>
-          <View style={{ flex: 1, justifyContent: "center", alignItems: "center", backgroundColor: "black" }}>
-            <ImageZoom
-              cropWidth={modalImageWidth}
-              cropHeight={modalImagemHeight}
-              imageWidth={modalImageWidth}
-              imageHeight={modalImagemHeight} >
-              <AutoHeightImage source={{ uri: this.state.modalImage }} width={fullWidth} />
-            </ImageZoom>
+          <ScrollView contentContainerStyle={{ flex: 1, justifyContent: "center", alignItems: "center", backgroundColor: "black" }}>
+            <AutoHeightImage source={{ uri: this.state.modalImage }} width={fullWidth} />
             <TouchableOpacity onPress={() => {
               this.setState({
                 modalVisible: false
@@ -100,7 +95,7 @@ export class PartnerNotificationScreen extends React.PureComponent {
             }}>
               <Image style={{ width: 50, height: 50, marginTop: 10, backgroundColor: 'black' }} source={require('./../static/icon-down.png')} />
             </TouchableOpacity>
-          </View>
+          </ScrollView>
         </Modal>
         {!loading &&
           <Button style={{ width: fullWidth, justifyContent: 'center', marginTop: 10, marginBottom: 10 }}

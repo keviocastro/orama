@@ -12,7 +12,21 @@ const initialState = {
 
 const mergeNotifications = (state, action) => {
   let notifications = state.notifications
-  return Array.apply(notifications, action.notifications)
+  action.notifications.forEach(newNotification => {
+    let exist = false
+    notifications.every(currentNotify => {
+      if (currentNotify.id === newNotification.id) {
+        exist = true
+        return false
+      } else {
+        return true
+      }
+    })
+    if (!exist) {
+      notifications.unshift(newNotification)
+    }
+  })
+  return notifications
 }
 
 const reducer = (state = initialState, action) => {

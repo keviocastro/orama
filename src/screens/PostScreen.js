@@ -87,7 +87,7 @@ class PostScreen extends React.Component {
   }
 
   checkValidFom() {
-    if (this.inputText.value >= 3 && this.state.image.indexOf('data:image/jpeg;base64,') !== -1) {
+    if (typeof this.inputText === 'string' && this.inputText.value >= 3 && typeof this.state.image === 'string' && this.state.image.indexOf('data:image/jpeg;base64,') !== -1) {
       this.setState({
         formValid: true
       })
