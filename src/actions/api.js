@@ -1,5 +1,5 @@
 import firebase from 'react-native-firebase'
-import { addLoggedUser, invalidPass, redirectToAccount } from './auth'
+import { addLoggedUser } from './auth'
 const db = firebase.firestore()
 
 const convertSnapshot = (snapshot) => {
@@ -7,6 +7,7 @@ const convertSnapshot = (snapshot) => {
   snapshot.docChanges.forEach(change => {
     let data = change.doc.data()
     data.id = change.doc.id
+    data.type = change.type
     docs.push(change.doc.data())
   })
 

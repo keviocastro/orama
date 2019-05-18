@@ -20,7 +20,8 @@ import SplashScreen from 'react-native-splash-screen'
 import { getSegments } from './../actions/segments'
 import { getHighlights } from './../actions/highlights'
 import { selectForChat, searchPartners } from './../actions/partners'
-import { selectPartnerChat } from './../actions/partnerChatMessages';
+import { selectPartnerChat } from './../actions/partnerChatMessages'
+import { sendMessages } from './../actions/chat'
 import firebase from 'react-native-firebase'
 const firestore = firebase.firestore()
 
@@ -62,34 +63,30 @@ class SegmentScreen extends React.Component {
         if (!enabled) {
           firebase.messaging().requestPermission()
             .then(() => {
-              console.log('requestPermission:', 'autorization')
+              // autorization
             })
             .catch(error => {
-              console.log('requestPermission', 'User has rejected permissions')
+              // User has rejected permissions
             })
         }
       })
 
     this.notificationDisplayedListener = firebase.notifications().onNotificationDisplayed((notification) => {
       // IOS
-      console.log('onNotificationDisplayed', notification)
     });
 
     this.notificationListener = firebase.notifications().onNotification((notify) => {
-      console.log('onNotification', notify)
       this.displayNotification(notify)
     });
 
     this.notificationOpenedListener = firebase.notifications()
       .onNotificationOpened((notify) => {
-        console.log('onNotificationOpened', notify)
         this.onNotificationOpened(notify)
       });
 
     firebase.notifications()
       .getInitialNotification()
       .then((notify) => {
-        console.log('onNotificationOpened', notify)
         this.onNotificationOpened(notify)
       });
 
@@ -141,7 +138,8 @@ class SegmentScreen extends React.Component {
           .then(snapshot => {
             let partner = snapshot.data()
             partner.id = snapshot.id
-            this.navigateToChat(partner, notification.data.image)
+
+            this.navigateToChat(partner, notification.data.image, notification)
             this.closeNotification(notification)
           })
       }
@@ -154,7 +152,6 @@ class SegmentScreen extends React.Component {
   }
 
   displayNotification(message) {
-    console.log('displayNotification', message.messageId)
     let notify = true
 
     // Não notificar se o usuário estiver na tela de chat com parceiro
@@ -235,9 +232,30 @@ class SegmentScreen extends React.Component {
     return <ActivityIndicator animating size="large" />
   }
 
-  navigateToChat(partner, image) {
+  sendChatMessage(message) {
+    this.props.dispatch(sendMessages([message]))
+  }
+
+  navigateToChat(partner, image, notification) {
     this.props.dispatch(selectForChat(partner, image))
     if (this.props.loggedUser) {
+
+      if (notification) {
+        let message = {
+          _id: Math.random() * 1000,
+          text: notification.data.body,
+          createdAt: new Date(),
+          user: {
+            _id: partner.id,
+            name: partner.name,
+            avatar: partner.logo
+          },
+          partner_id: partner.id,
+          user_id: this.props.loggedUser.id
+        };
+
+        this.sendChatMessage(message)
+      }
       this.props.navigation.navigate('Chat', { partner, image })
     } else {
       this.props.navigation.navigate('UserLogin', { partner: partner, image, goBack: 'Home' })

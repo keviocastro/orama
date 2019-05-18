@@ -7,7 +7,8 @@ import {
   ImageBackground,
   Modal,
   View,
-  TouchableOpacity
+  TouchableNativeFeedback,
+  ScrollView
 } from 'react-native'
 import ImageZoom from 'react-native-image-pan-zoom'
 import { Card, CardItem, Body } from 'native-base'
@@ -44,7 +45,7 @@ export class PartnerPostScreen extends React.PureComponent {
 
   renderItemPost({ item, index }) {
     return (
-      <TouchableOpacity onPress={() => {
+      <TouchableNativeFeedback onPress={() => {
         this.setState({
           modalVisible: true,
           modalImage: item.image,
@@ -60,11 +61,11 @@ export class PartnerPostScreen extends React.PureComponent {
             </CardItem>}
           {item.image !== undefined && item.text !== null > 0 &&
             <CardItem cardBody style={styles.card}>
-              <AutoHeightImage source={{ uri: item.image }} width={fullWidth} />
+              <Image source={{ uri: item.image }} style={{ width: fullWidth, height: 200, resizeMode: 'cover' }} />
             </CardItem>
           }
         </Card>
-      </TouchableOpacity>
+      </TouchableNativeFeedback>
     )
   }
 
@@ -81,30 +82,33 @@ export class PartnerPostScreen extends React.PureComponent {
               modalVisible: false
             })
           }}>
-          <View style={{ flex: 1, justifyContent: "center", alignItems: "center", backgroundColor: "black" }}>
-            <TouchableOpacity onPress={() => {
-              this.setState({
-                modalVisible: false
-              })
-              dispatch(removePost(this.state.modalPostId))
+          <ImageBackground source={require('./../static/background-modal-images.jpg')}
+            style={{ flex: 1, justifyContent: "center", alignItems: "center" }}>
+            <View style={{
+              width: fullWidth,
+              flexDirection: 'row',
+              justifyContent: 'space-between'
             }}>
-              <Image width={fullWidth} style={{ height: 30, width: 30, marginBottom: 10 }} source={require('./../static/icon-remove.png')} />
-            </TouchableOpacity>
-            <ImageZoom
-              cropWidth={modalImageWidth}
-              cropHeight={modalImagemHeight}
-              imageWidth={modalImageWidth}
-              imageHeight={modalImagemHeight} >
+              <TouchableNativeFeedback onPress={() => {
+                this.setState({
+                  modalVisible: false
+                })
+              }}>
+                <Image style={{ width: 50, height: 50, marginTop: 10, marginLeft: 20 }} source={require('./../static/icon-back.png')} />
+              </TouchableNativeFeedback>
+              <TouchableNativeFeedback onPress={() => {
+                this.setState({
+                  modalVisible: false
+                })
+                dispatch(removePost(this.state.modalPostId))
+              }}>
+                <Image style={{ height: 40, width: 40, marginTop: 10, marginRight: 20 }} source={require('./../static/icon-remove.png')} />
+              </TouchableNativeFeedback>
+            </View>
+            <ScrollView contentContainerStyle={{ marginTop: 10 }}>
               <AutoHeightImage source={{ uri: this.state.modalImage }} width={fullWidth} />
-            </ImageZoom>
-            <TouchableOpacity onPress={() => {
-              this.setState({
-                modalVisible: false
-              })
-            }}>
-              <Image style={{ width: 50, height: 50, marginTop: 10, backgroundColor: 'black' }} source={require('./../static/icon-down.png')} />
-            </TouchableOpacity>
-          </View>
+            </ScrollView>
+          </ImageBackground>
         </Modal>
         {!loading &&
           <Button style={{ width: fullWidth, justifyContent: 'center', marginTop: 10, marginBottom: 10 }}
@@ -117,7 +121,6 @@ export class PartnerPostScreen extends React.PureComponent {
           data={posts}
           keyExtractor={(item) => item.id}
           renderItem={({ item, index }) => this.renderItemPost({ item, index })}
-          onRefresh={() => { dispatch(getByPartner(this.partner.id)) }}
           refreshing={loading} />
       </ImageBackground>
     )

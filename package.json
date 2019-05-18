@@ -3,7 +3,7 @@
   "version": "0.0.1",
   "private": true,
   "scripts": {
-    "start": "node node_modules/react-native/local-cli/cli.js sta7rt",
+    "start": "node node_modules/react-native/local-cli/cli.js start",
     "test": "jest",
     "log-android": "react-native log-android",
     "dev-menu": "adb shell input keyevent 82",

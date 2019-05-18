@@ -1,12 +1,19 @@
 import React from 'react'
 import { Text, View, Linking } from 'react-native'
-import { connect } from 'react-redux';
-import { Button } from 'native-base';
+import { connect } from 'react-redux'
+import { Button } from 'native-base'
+import { getNotificationsRealtime } from './../actions/notifications'
 
 class PartnerNotifyScreen extends React.Component {
   static navigationOptions = ({ navigation }) => ({
     title: 'Notificações'
   })
+
+  componentDidMount() {
+    if (this.props.notifications.length === 0) {
+      this.props.dispatch(getNotificationsRealtime(this.partner))
+    }
+  }
 
   get partner() {
     if (typeof this.props.navigation.state.params.partner.notification_credits !== 'number') {
@@ -45,7 +52,7 @@ class PartnerNotifyScreen extends React.Component {
           <Button style={{ width: 200, justifyContent: 'center', marginTop: 20 }}
             info
             onPress={() => this.props.navigation.navigate('PartnerNotification', { partner: this.partner })} >
-            <Text style={{ fontSize: 20, color: 'white' }}>Minhas notificação</Text>
+            <Text style={{ fontSize: 20, color: 'white' }}>Minhas notificações</Text>
           </Button>
         </View>
       </View >
@@ -53,4 +60,10 @@ class PartnerNotifyScreen extends React.Component {
   }
 }
 
-export default connect()(PartnerNotifyScreen)
+const mapStateToProps = (state) => {
+  return ({
+    notifications: state.notifications.notifications
+  })
+}
+
+export default connect(mapStateToProps)(PartnerNotifyScreen)

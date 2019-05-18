@@ -87,7 +87,11 @@ class PostScreen extends React.Component {
   }
 
   checkValidFom() {
-    if (typeof this.inputText === 'string' && this.inputText.value >= 3 && typeof this.state.image === 'string' && this.state.image.indexOf('data:image/jpeg;base64,') !== -1) {
+    if (typeof this.inputText.value === 'string' &&
+      this.inputText.value.length >= 3 &&
+      typeof this.state.image === 'string' && this
+        .state.image.indexOf('data:image/jpeg;base64,') !== -1) {
+
       this.setState({
         formValid: true
       })
@@ -138,6 +142,7 @@ class PostScreen extends React.Component {
           </PhotoUpload>
         </View>
         {!this.props.sending &&
+          this.state.formValid &&
           <Button style={{ width: fullWidth, justifyContent: 'center', marginLeft: 10, marginTop: 40, marginBottom: 40 }}
             info
             onPress={() => this.onPressSendPost()}>

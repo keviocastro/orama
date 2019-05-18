@@ -30,15 +30,26 @@ const setPostsByPartner = (state, action) => {
     state.postsByPartner[action.filter.partner_id] = action.posts
   } else {
     action.posts.forEach(newPost => {
-      let exist = false
-      state.postsByPartner[action.filter.partner_id].every(currentPost => {
-        if (currentPost.id === newPost.id) {
-          exist = true
+      if (newPost.type === 'removed') {
+        state.postsByPartner[action.filter.partner_id] = state.postsByPartner[action.filter.partner_id].filter(currentPost => {
+          if (currentPost.id === newPost.id)
+            return false
+          else
+            return true
+        })
+      } else if (newPost.type === 'added') {
+        let exist = false
+        state.postsByPartner[action.filter.partner_id].every(currentPost => {
+          if (currentPost.id === newPost.id) {
+            exist = true
+          }
+          return !exist
+        })
+        if (!exist) {
+          state.postsByPartner[action.filter.partner_id].unshift(newPost)
         }
-        return !exist
-      })
-      if (!exist) {
-        state.postsByPartner[action.filter.partner_id].unshift(newPost)
+      } else {
+
       }
     })
   }

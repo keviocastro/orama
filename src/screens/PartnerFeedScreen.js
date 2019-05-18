@@ -6,18 +6,18 @@ import {
   View,
   Image,
   StyleSheet,
-  TouchableOpacity,
+  TouchableNativeFeedback,
   Dimensions,
   ImageBackground,
   AsyncStorage,
-  Modal
+  Modal,
+  ScrollView
 } from 'react-native'
 import PropTypes from 'prop-types'
 import { connect } from 'react-redux'
 import { Card, CardItem, Body } from 'native-base'
 import { selectForChat } from './../actions/partners'
 import { Header } from 'react-navigation'
-import ImageZoom from 'react-native-image-pan-zoom'
 import { getRealtimeByPartner, getByPartner } from './../actions/posts'
 import { backgroundImage } from './styles'
 import AutoHeightImage from 'react-native-auto-height-image'
@@ -91,14 +91,14 @@ class PartnerFeedScreen extends React.PureComponent {
   }
 
   renderFeedImage(image) {
-    return <TouchableOpacity onPress={() => {
+    return <TouchableNativeFeedback onPress={() => {
       this.setState({
         modalVisible: true,
         modalImage: image
       })
     }}>
       <Image style={{ ...styles.mainFeedImage, marginTop: 5 }} source={{ uri: image }} />
-    </TouchableOpacity>
+    </TouchableNativeFeedback>
   }
 
   renderItemPost({ item, index }) {
@@ -106,7 +106,7 @@ class PartnerFeedScreen extends React.PureComponent {
       return (this.renderFeedImage(item.feed_image))
     } else {
       return (
-        <TouchableOpacity onPress={() => this.onClickItemCard(item.image)}>
+        <TouchableNativeFeedback onPress={() => this.onClickItemCard(item.image)}>
           <Card styles={styles.card}>
             {item.text !== undefined && item.text !== null &&
               <CardItem >
@@ -116,11 +116,11 @@ class PartnerFeedScreen extends React.PureComponent {
               </CardItem>}
             {item.image !== undefined && item.text !== null &&
               <CardItem cardBody style={styles.card}>
-                <AutoHeightImage source={{ uri: item.image }} width={fullWidth} />
+                <Image source={{ uri: item.image }} style={{ width: fullWidth, height: 200, resizeMode: 'cover' }} />
               </CardItem>
             }
           </Card>
-        </TouchableOpacity>
+        </TouchableNativeFeedback>
       )
     }
   }
@@ -136,22 +136,19 @@ class PartnerFeedScreen extends React.PureComponent {
             modalVisible: false
           })
         }}>
-        <ImageBackground source={require('./../static/background-modal-images.jpg')}
-          style={{ flex: 1, justifyContent: "center", alignItems: "center" }}>
-          <ImageZoom
-            cropWidth={modalImageWidth}
-            cropHeight={modalImagemHeight}
-            imageWidth={modalImageWidth}
-            imageHeight={modalImagemHeight} >
-            <AutoHeightImage source={{ uri: this.state.modalImage }} width={fullWidth} />
-          </ImageZoom>
-          <TouchableOpacity onPress={() => {
+        <ImageBackground style={backgroundImage} source={require('./../static/background-modal-images.jpg')} >
+          <TouchableNativeFeedback onPress={() => {
             this.setState({
               modalVisible: false
             })
           }}>
-            <Image style={{ width: 50, height: 50, marginTop: 10 }} source={require('./../static/icon-down.png')} />
-          </TouchableOpacity>
+            <View style={{ flex: 1, alignContent: 'flex-start', alignItems: 'flex-start' }}>
+              <Image style={{ width: 50, height: 50 }} source={require('./../static/icon-back.png')} />
+            </View>
+          </TouchableNativeFeedback>
+          <ScrollView bouncesZoom={true} >
+            <AutoHeightImage source={{ uri: this.state.modalImage }} width={fullWidth} />
+          </ScrollView>
         </ImageBackground>
       </Modal>
       <View style={{ flex: 1, flexDirection: 'column' }}>

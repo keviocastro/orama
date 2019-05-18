@@ -43,7 +43,7 @@ export const updateChatImages = (partner, user, images) => dispatch =>
 export const createChatIfNotExists = (partner, user) => dispatch =>
     createChatIfNotExistsApi(dispatch, partner, user)
 
-export const sendMessages = (messages, partner, user) => dispatch => {
+export const sendMessages = (messages) => dispatch => {
     return add('messages', messages)
 }
 

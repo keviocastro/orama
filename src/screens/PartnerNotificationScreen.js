@@ -8,22 +8,17 @@ import {
   Modal,
   View,
   ScrollView,
-  TouchableOpacity
+  TouchableNativeFeedback
 } from 'react-native'
-import ImageZoom from 'react-native-image-pan-zoom'
 import { Card, CardItem, Body } from 'native-base'
 import { connect } from 'react-redux'
 import { Button, Text } from 'native-base'
 import { backgroundImage } from './styles'
-import { getNotificationsRealtime } from './../actions/notifications'
 import AutoHeightImage from 'react-native-auto-height-image'
 
 const fullWidth = Dimensions.get('window').width
-const viewportHeight = Dimensions.get('window').height
-const modalImagemHeight = viewportHeight - (viewportHeight * 0.25)
-const modalImageWidth = Dimensions.get('window').width
 
-export class PartnerNotificationScreen extends React.PureComponent {
+export class PartnerNotificationScreen extends React.Component {
   static navigationOptions = ({ navigation }) => ({
     title: ' Minhas notificações'
   })
@@ -37,20 +32,13 @@ export class PartnerNotificationScreen extends React.PureComponent {
     }
   }
 
-  componentDidMount() {
-    if (this.props.notifications.length === 0) {
-      this.props.dispatch(getNotificationsRealtime(this.partner))
-    }
-  }
-
-
   get partner() {
     return this.props.navigation.state.params.partner
   }
 
   renderItem({ item, index }) {
     return (
-      <TouchableOpacity onPress={() => {
+      <TouchableNativeFeedback onPress={() => {
         this.setState({
           modalVisible: true,
           modalImage: item.image
@@ -65,16 +53,15 @@ export class PartnerNotificationScreen extends React.PureComponent {
             </CardItem>}
           {item.image !== undefined && item.text !== null > 0 &&
             <CardItem cardBody style={styles.card}>
-              <AutoHeightImage source={{ uri: item.image }} width={fullWidth} />
+              <Image source={{ uri: item.image }} style={{ width: fullWidth, height: 200, resizeMode: 'cover' }} />
             </CardItem>
           }
         </Card>
-      </TouchableOpacity>
+      </TouchableNativeFeedback>
     )
   }
 
   render() {
-    const { notifications, loading } = this.props
     return (
       <ImageBackground style={backgroundImage} source={require('./../static/background.png')} >
         <Modal
@@ -86,29 +73,24 @@ export class PartnerNotificationScreen extends React.PureComponent {
               modalVisible: false
             })
           }}>
-          <ScrollView contentContainerStyle={{ flex: 1, justifyContent: "center", alignItems: "center", backgroundColor: "black" }}>
-            <AutoHeightImage source={{ uri: this.state.modalImage }} width={fullWidth} />
-            <TouchableOpacity onPress={() => {
+          <ImageBackground style={backgroundImage} source={require('./../static/background-modal-images.jpg')} >
+            <TouchableNativeFeedback style={{ alignContent: 'flex-start' }} onPress={() => {
               this.setState({
                 modalVisible: false
               })
             }}>
-              <Image style={{ width: 50, height: 50, marginTop: 10, backgroundColor: 'black' }} source={require('./../static/icon-down.png')} />
-            </TouchableOpacity>
-          </ScrollView>
+              <Image style={{ width: 50, height: 50, marginTop: 10 }} source={require('./../static/icon-back.png')} />
+            </TouchableNativeFeedback>
+            <ScrollView contentContainerStyle={{ paddingTop: 10 }} >
+              <AutoHeightImage source={{ uri: this.state.modalImage }} width={fullWidth} />
+            </ScrollView>
+          </ImageBackground>
         </Modal>
-        {!loading &&
-          <Button style={{ width: fullWidth, justifyContent: 'center', marginTop: 10, marginBottom: 10 }}
-            info
-            onPress={() => { this.props.navigation.navigate('Post', { partner: this.partner, title: 'Envio de notificação', notify: true }) }}>
-            <Text>Enviar notificação</Text>
-          </Button>}
         <FlatList
-          data={notifications}
+          data={this.props.notifications}
           keyExtractor={(item) => item.id}
           renderItem={({ item, index }) => this.renderItem({ item, index })}
-          onRefresh={() => { alert('get notifications') }}
-          refreshing={loading} />
+          refreshing={this.props.loading} />
       </ImageBackground>
     )
   }
