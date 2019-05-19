@@ -4,7 +4,8 @@ import { GiftedChat } from 'react-native-gifted-chat'
 const initialState = {
     messages: {},
     conversations: {},
-    chats: []
+    chats: [],
+    CHAT_RECEIVED_MESSAGES: false,
 }
 
 const mergeMessages = (state, action, partnerId) => {
@@ -35,16 +36,19 @@ const reducer = (state = initialState, action) => {
         case ADD_MESSAGES:
             return {
                 ...state,
+                CHAT_RECEIVED_MESSAGES: false,
                 messages: mergeMessages(state, action, action.partner.id)
             }
         case CHAT_RECEIVED_MESSAGES:
             return {
                 ...state,
+                CHAT_RECEIVED_MESSAGES: true,
                 messages: mergeMessages(state, action, action.partnerId)
             }
         case ADD_CHATS:
             return {
                 ...state,
+                CHAT_RECEIVED_MESSAGES: false,
                 chats: Array.isArray(action.chats) ? action.chats : [action.chats]
             }
         default:

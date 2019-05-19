@@ -9,7 +9,7 @@ import { backgroundImage } from './styles'
 import md5 from 'md5'
 import ChatImages from '../components/ChatImages'
 import { HeaderBackButton } from 'react-navigation'
-import firebase from 'react-native-firebase'
+const fullWidth = Dimensions.get('window').height
 
 class ChatSreen extends React.Component {
     static navigationOptions = ({ navigation }) => ({
@@ -39,19 +39,12 @@ class ChatSreen extends React.Component {
 
         this.state = {
             modalVisible: false,
-            modalImage: null
+            modalImage: null,
+            sendWelcomeMessages: true
         }
     }
 
     sendWelcomeMessages() {
-        let recentMessage = false
-        let timeLimiteWelcome = new Date()
-        timeLimiteWelcome.setHours(timeLimiteWelcome.getHours() - 4)
-
-        this.props.messages.forEach(msg => {
-            if (msg.createdAt.getTime() > timeLimiteWelcome.getTime())
-                recentMessage = true
-        })
         let defaultMessages = [
             {
                 _id: Math.random() * 1000,
@@ -81,56 +74,54 @@ class ChatSreen extends React.Component {
             }
         ]
 
-        if (!recentMessage) {
-            if (this.props.partner.welcome_messages === undefined ||
-                typeof this.props.partner.welcome_messages === 'string' &&
-                this.props.partner.welcome_messages.trim().length === 0) {
+        if (this.props.partner.welcome_messages === undefined ||
+            typeof this.props.partner.welcome_messages === 'string' &&
+            this.props.partner.welcome_messages.trim().length === 0) {
 
-                this.props.dispatch(sendMessages(defaultMessages, this.props.partner, this.props.user))
-                this.props.dispatch(updateChatLastMessage(defaultMessages, this.props.partner, this.props.user))
-            } else {
-                messages = defaultMessages
+            this.props.dispatch(sendMessages(defaultMessages, this.props.partner, this.props.user))
+            this.props.dispatch(updateChatLastMessage(defaultMessages, this.props.partner, this.props.user))
+        } else {
+            messages = defaultMessages
 
-                if (typeof this.props.partner.welcome_messages === 'string') {
-                    messages = this.props.partner.welcome_messages.split(/\r?\n/)
-                    messages = messages.map((msg) => {
-                        return {
-                            _id: Math.random() * 1000,
-                            text: msg,
-                            createdAt: new Date(),
-                            user: {
-                                _id: this.props.partner.id,
-                                name: this.props.partner.name,
-                                avatar: this.props.partner.logo
-                            },
-                            partner_id: this.props.partner.id,
-                            user_id: this.props.user.id,
-                            welcome: true
-                        }
-                    })
-                }
-
-                if (Array.isArray(this.props.partner.welcome_messages)) {
-                    messages = this.props.partner.welcome_messages.map((msg) => {
-                        return {
-                            _id: Math.random() * 1000,
-                            text: msg,
-                            createdAt: new Date(),
-                            user: {
-                                _id: this.props.partner.id,
-                                name: this.props.partner.name,
-                                avatar: this.props.partner.logo
-                            },
-                            partner_id: this.props.partner.id,
-                            user_id: this.props.user.id,
-                            welcome: true
-                        }
-                    })
-                }
-
-                this.props.dispatch(sendMessages(messages, this.props.partner, this.props.user))
-                this.props.dispatch(updateChatLastMessage(messages, this.props.partner, this.props.user))
+            if (typeof this.props.partner.welcome_messages === 'string') {
+                messages = this.props.partner.welcome_messages.split(/\r?\n/)
+                messages = messages.map((msg) => {
+                    return {
+                        _id: Math.random() * 1000,
+                        text: msg,
+                        createdAt: new Date(),
+                        user: {
+                            _id: this.props.partner.id,
+                            name: this.props.partner.name,
+                            avatar: this.props.partner.logo
+                        },
+                        partner_id: this.props.partner.id,
+                        user_id: this.props.user.id,
+                        welcome: true
+                    }
+                })
             }
+
+            if (Array.isArray(this.props.partner.welcome_messages)) {
+                messages = this.props.partner.welcome_messages.map((msg) => {
+                    return {
+                        _id: Math.random() * 1000,
+                        text: msg,
+                        createdAt: new Date(),
+                        user: {
+                            _id: this.props.partner.id,
+                            name: this.props.partner.name,
+                            avatar: this.props.partner.logo
+                        },
+                        partner_id: this.props.partner.id,
+                        user_id: this.props.user.id,
+                        welcome: true
+                    }
+                })
+            }
+
+            this.props.dispatch(sendMessages(messages, this.props.partner, this.props.user))
+            this.props.dispatch(updateChatLastMessage(messages, this.props.partner, this.props.user))
         }
     }
 
@@ -140,6 +131,12 @@ class ChatSreen extends React.Component {
 
     componentWillReceiveProps(nextProps) {
         this.props.dispatch(updateChatImages(nextProps.partner, nextProps.user, nextProps.images))
+        if (nextProps.received_messages && nextProps.messages.length === 0 && this.state.sendWelcomeMessages) {
+            this.setState({
+                sendWelcomeMessages: false
+            })
+            this.sendWelcomeMessages()
+        }
     }
 
     componentDidMount() {
@@ -152,9 +149,6 @@ class ChatSreen extends React.Component {
             this.props.dispatch(getMessages(this.partner.id, this.props.user.id))
         }
 
-        setTimeout(() => {
-            this.sendWelcomeMessages()
-        }, 3000)
     }
 
     onSend(newMessages = []) {
@@ -171,9 +165,12 @@ class ChatSreen extends React.Component {
 
     renderImage(image) {
         return <TouchableOpacity onPress={() => {
-            this.setState({
-                modalVisible: true,
-                modalImage: image
+            Image.getSize(image, (width, height) => {
+                this.setState({
+                    modalVisible: true,
+                    modalImage: imagem,
+                    modalImagemHeight: (width / fullWidth) * height
+                })
             })
         }}>
             <Image style={{
@@ -223,10 +220,6 @@ class ChatSreen extends React.Component {
     }
 }
 
-const viewportHeight = Dimensions.get('window').height
-const modalImagemHeight = viewportHeight - (viewportHeight * 0.25)
-const modalImageWidth = Dimensions.get('window').width
-
 const mapStateToProps = state => {
     let messages = []
     let images = []
@@ -244,7 +237,8 @@ const mapStateToProps = state => {
         partner: state.partners.partnerSelectedForChat,
         images: images,
         messages: messages,
-        user: state.auth.user
+        user: state.auth.user,
+        received_messages: state.chat.CHAT_RECEIVED_MESSAGES
     })
 }
 

@@ -17,13 +17,19 @@ class PartnerChatScreen extends React.PureComponent {
   }
 
   componentDidMount() {
-    firebase
-      .firestore()
-      .collection('chats')
-      .where("partner_id", "==", this.partner.id)
-      .onSnapshot(snapshot => {
-        this.props.dispatch(addChats(snapshot.docs.map(doc => doc.data())))
-      })
+    if (this.props.chats.length === 0) {
+      firebase
+        .firestore()
+        .collection('chats')
+        .where("partner_id", "==", this.partner.id)
+        .onSnapshot(snapshot => {
+          this.props.dispatch(addChats(snapshot.docs.map(doc => {
+            let data = doc.data()
+            data.id = doc.id
+            return data
+          })))
+        })
+    }
   }
 
   get partner() {

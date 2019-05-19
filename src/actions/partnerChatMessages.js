@@ -25,5 +25,5 @@ export const getPartnerChatMessages = (user_id, partner_id) => dispatch =>
 export const sendMessages = (messages, partner, user) => dispatch =>
   add('messages', messages)
 
-export const setReadAllMessages = (chat) =>
+export const setReadAllMessages = (chat) => dispatch =>
   update('chats', chat.id, { unread: 0 })

@@ -11,8 +11,10 @@ import {
   ImageBackground,
   AsyncStorage,
   Modal,
-  ScrollView
+  ScrollView,
+  Linking
 } from 'react-native'
+import Hyperlink from 'react-native-hyperlink'
 import PropTypes from 'prop-types'
 import { connect } from 'react-redux'
 import { Card, CardItem, Body } from 'native-base'
@@ -20,15 +22,11 @@ import { selectForChat } from './../actions/partners'
 import { Header } from 'react-navigation'
 import { getRealtimeByPartner, getByPartner } from './../actions/posts'
 import { backgroundImage } from './styles'
-import AutoHeightImage from 'react-native-auto-height-image'
+import PhotoView from 'react-native-photo-view'
 
 const viewportHeight = Dimensions.get('window').height - Header.HEIGHT
 const mainFeedImageHeight = viewportHeight - (viewportHeight * 0.7)
-const mainFeedImageWidth = Dimensions.get('window').width
 const fullWidth = Dimensions.get('window').width
-
-const modalImagemHeight = viewportHeight - (viewportHeight * 0.1)
-const modalImageWidth = Dimensions.get('window').width
 
 const styles = StyleSheet.create({
   card: { paddingBottom: 2, paddingBottom: 2 },
@@ -92,9 +90,12 @@ class PartnerFeedScreen extends React.PureComponent {
 
   renderFeedImage(image) {
     return <TouchableNativeFeedback onPress={() => {
-      this.setState({
-        modalVisible: true,
-        modalImage: image
+      Image.getSize(image, (width, height) => {
+        this.setState({
+          modalVisible: true,
+          modalImage: image,
+          modalImagemHeight: (width / fullWidth) * height
+        })
       })
     }}>
       <Image style={{ ...styles.mainFeedImage, marginTop: 5 }} source={{ uri: image }} />
@@ -106,21 +107,25 @@ class PartnerFeedScreen extends React.PureComponent {
       return (this.renderFeedImage(item.feed_image))
     } else {
       return (
-        <TouchableNativeFeedback onPress={() => this.onClickItemCard(item.image)}>
-          <Card styles={styles.card}>
-            {item.text !== undefined && item.text !== null &&
-              <CardItem >
-                <Body>
-                  <Text>{item.text}</Text>
-                </Body>
-              </CardItem>}
-            {item.image !== undefined && item.text !== null &&
+        <Card styles={styles.card}>
+          {item.text !== undefined && item.text !== null &&
+            <CardItem >
+              <Body>
+                <Hyperlink linkStyle={{ color: '#2980b9' }} onPress={(url, text) => {
+                  Linking.openURL(url)
+                }}>
+                  <Text selectable={true}>{item.text}</Text>
+                </Hyperlink>
+              </Body>
+            </CardItem>}
+          {item.image !== undefined && item.text !== null &&
+            <TouchableNativeFeedback onPress={() => this.onClickItemCard(item.image)}>
               <CardItem cardBody style={styles.card}>
                 <Image source={{ uri: item.image }} style={{ width: fullWidth, height: 200, resizeMode: 'cover' }} />
               </CardItem>
-            }
-          </Card>
-        </TouchableNativeFeedback>
+            </TouchableNativeFeedback>
+          }
+        </Card>
       )
     }
   }
@@ -142,12 +147,18 @@ class PartnerFeedScreen extends React.PureComponent {
               modalVisible: false
             })
           }}>
-            <View style={{ flex: 1, alignContent: 'flex-start', alignItems: 'flex-start' }}>
+            <View style={{ flex: 1, alignContent: 'center', alignItems: 'center', position: 'absolute', zIndex: 999 }}>
               <Image style={{ width: 50, height: 50 }} source={require('./../static/icon-back.png')} />
             </View>
           </TouchableNativeFeedback>
-          <ScrollView bouncesZoom={true} >
-            <AutoHeightImage source={{ uri: this.state.modalImage }} width={fullWidth} />
+          <ScrollView bouncesZoom={true} minimumZoomScale={1} maximumZoomScale={5} >
+            <PhotoView
+              source={{ uri: this.state.modalImage }}
+              minimumZoomScale={1}
+              maximumZoomScale={3}
+              androidScaleType="fitXY"
+              style={{ width: fullWidth, height: this.state.modalImagemHeight }} />
+            {/* <AutoHeightImage source={{ uri: this.state.modalImage }} width={fullWidth} /> */}
           </ScrollView>
         </ImageBackground>
       </Modal>

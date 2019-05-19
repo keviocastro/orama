@@ -88,6 +88,9 @@ class UserLoginScreen extends React.Component {
             this.inputPhone.value = extracted
           }}
           mask={"([00]) [0] [0000]-[0000]"}
+          onSubmitEditing={() => {
+            this.inputName.focus()
+          }}
         />
         {/* <TextInput
           ref={input => { this.inputPhone = input }}

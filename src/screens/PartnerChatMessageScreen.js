@@ -26,7 +26,7 @@ class PartnerChatMessageScreen extends React.Component {
     }
 
     if (typeof this.chat.unread === "number" && this.chat.unread > 0) {
-      //this.props.dispatch(setReadAllMessages(this.chat))
+      this.props.dispatch(setReadAllMessages(this.chat))
     }
   }
 

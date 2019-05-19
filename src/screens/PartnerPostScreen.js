@@ -8,14 +8,15 @@ import {
   Modal,
   View,
   TouchableNativeFeedback,
-  ScrollView
+  ScrollView,
+  Linking
 } from 'react-native'
-import ImageZoom from 'react-native-image-pan-zoom'
+import Hyperlink from 'react-native-hyperlink'
 import { Card, CardItem, Body } from 'native-base'
 import PropTypes from 'prop-types'
 import { connect } from 'react-redux'
 import { Button, Text } from 'native-base'
-import { getByPartner, removePost } from './../actions/posts'
+import { removePost } from './../actions/posts'
 import { backgroundImage } from './styles'
 import AutoHeightImage from 'react-native-auto-height-image'
 
@@ -45,27 +46,31 @@ export class PartnerPostScreen extends React.PureComponent {
 
   renderItemPost({ item, index }) {
     return (
-      <TouchableNativeFeedback onPress={() => {
-        this.setState({
-          modalVisible: true,
-          modalImage: item.image,
-          modalPostId: item.id
-        })
-      }}>
-        <Card styles={styles.card}>
-          {item.text !== undefined && item.text !== null > 0 &&
-            <CardItem >
-              <Body>
-                <Text>{item.text}</Text>
-              </Body>
-            </CardItem>}
-          {item.image !== undefined && item.text !== null > 0 &&
+      <Card styles={styles.card}>
+        {item.text !== undefined && item.text !== null > 0 &&
+          <CardItem >
+            <Body>
+              <Hyperlink linkStyle={{ color: '#2980b9' }} onPress={(url, text) => {
+                Linking.openURL(url)
+              }}>
+                <Text selectable={true}>{item.text}</Text>
+              </Hyperlink>
+            </Body>
+          </CardItem>}
+        {item.image !== undefined && item.text !== null > 0 &&
+          <TouchableNativeFeedback onPress={() => {
+            this.setState({
+              modalVisible: true,
+              modalImage: item.image,
+              modalPostId: item.id
+            })
+          }}>
             <CardItem cardBody style={styles.card}>
               <Image source={{ uri: item.image }} style={{ width: fullWidth, height: 200, resizeMode: 'cover' }} />
             </CardItem>
-          }
-        </Card>
-      </TouchableNativeFeedback>
+          </TouchableNativeFeedback>
+        }
+      </Card>
     )
   }
 

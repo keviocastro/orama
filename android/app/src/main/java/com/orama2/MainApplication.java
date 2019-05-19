@@ -3,6 +3,7 @@ package com.orama2;
 import android.app.Application;
 
 import com.facebook.react.ReactApplication;
+import com.reactnative.photoview.PhotoViewPackage;
 import com.RNTextInputMask.RNTextInputMaskPackage;
 import com.rnfs.RNFSPackage;
 import fr.bamlab.rnimageresizer.ImageResizerPackage;
@@ -44,7 +45,8 @@ public class MainApplication extends Application implements ReactApplication {
 
     @Override
     protected List<ReactPackage> getPackages() {
-      return Arrays.<ReactPackage>asList(new MainReactPackage(), new RNTextInputMaskPackage(), new RNFSPackage(),
+      return Arrays.<ReactPackage>asList(new MainReactPackage(),
+            new PhotoViewPackage(), new RNTextInputMaskPackage(), new RNFSPackage(),
           new ImageResizerPackage(), new RNDeviceInfo(), new ImagePickerPackage(), new RNFirebasePackage(),
           new RNFirebaseDatabasePackage(), new FBSDKPackage(mCallbackManager), new SplashScreenReactPackage(),
           new LinearGradientPackage(), new RNFirebaseFirestorePackage(), new RNFirebaseMessagingPackage(),

@@ -37,7 +37,8 @@ class PostScreen extends React.Component {
 
   state = {
     height: 250,
-    formValid: false
+    formValid: false,
+    inputHeight: 40
   }
 
   get partner() {
@@ -110,13 +111,17 @@ class PostScreen extends React.Component {
           clearTextOnFocus={true}
           autoFocus={false}
           label={placeholder}
-          style={{ height: 40, width: fullWidth, borderColor: 'gray', marginLeft: 10, borderWidth: 1, marginTop: 2 }}
+          style={{ height: this.state.inputHeight, width: fullWidth, borderColor: 'gray', marginLeft: 10, borderWidth: 1, marginTop: 2 }}
           onChangeText={(text) => {
             this.inputText.value = text
             this.checkValidFom()
           }}
           multiline={true}
-          numberOfLines={2}
+          onContentSizeChange={(e => {
+            this.setState({
+              inputHeight: e.nativeEvent.contentSize.height
+            })
+          })}
         />
         <View style={{
           height: this.state.height,

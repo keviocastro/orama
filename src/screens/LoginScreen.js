@@ -71,6 +71,9 @@ class LoginScreen extends Component {
                 })
               }
             }}
+            onSubmitEditing={() => {
+              this.inputPass.focus()
+            }}
           />
           <TextInput
             label="Sua senha"
