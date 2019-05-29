@@ -1,4 +1,10 @@
-import { ADD_MESSAGES, CHAT_RECEIVED_MESSAGES, ADD_CHATS, PARTNER_CHAT_SELECT_CHAT } from "./../actions/chat"
+import {
+    ADD_MESSAGES,
+    CHAT_RECEIVED_MESSAGES,
+    ADD_CHATS,
+    PARTNER_CHAT_SELECT_CHAT,
+    ADD_NOTIFICATION_MESSAGE
+} from "./../actions/chat"
 import { GiftedChat } from 'react-native-gifted-chat'
 
 const initialState = {
@@ -6,6 +12,7 @@ const initialState = {
     conversations: {},
     chats: [],
     CHAT_RECEIVED_MESSAGES: false,
+    notification: null
 }
 
 const mergeMessages = (state, action, partnerId) => {
@@ -50,6 +57,11 @@ const reducer = (state = initialState, action) => {
                 ...state,
                 CHAT_RECEIVED_MESSAGES: false,
                 chats: Array.isArray(action.chats) ? action.chats : [action.chats]
+            }
+        case ADD_NOTIFICATION_MESSAGE:
+            return {
+                ...state,
+                notification: action.notification
             }
         default:
             return state

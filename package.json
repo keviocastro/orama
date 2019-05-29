@@ -10,7 +10,7 @@
     "emulador": "emulator -avd nexus",
     "icon": "./node_modules/.bin/react-native-icon",
     "release": "cd android && ./gradlew assembleRelease",
-    "partner-cafe-login": "adb shell input text 'Jy8ZKMnO1Wz5RckcBP8p' && adb shell input keyevent 66 && adb shell input text '333' && adb shell input keyevent 66",
+    "partner-cafe-login": "adb shell input text 'Jy8ZKMnO1Wz5RckcBP8p' && adb shell input keyevent 66 && adb shell input text '54321' && adb shell input keyevent 66",
     "partner-tiago-login": "adb shell input text 'vccdDbFHfF1BB9xqz7kl' && adb shell input keyevent 66 && adb shell input text '66613' && adb shell input keyevent 66"
   },
   "dependencies": {
@@ -35,7 +35,7 @@
     "react-native-navigation-v1-v2-adapter": "^2.0.10",
     "react-native-parallax-header": "^1.0.6",
     "react-native-photo-upload": "^1.3.0",
-    "react-native-photo-view": "^1.5.2",
+    "react-native-photo-view": "git+https://github.com/tomtom94/react-native-photo-view.git",
     "react-native-pinch-zoom-responder": "^0.1.2",
     "react-native-pinch-zoom-view": "^0.2.0",
     "react-native-push-notification": "^3.1.2",

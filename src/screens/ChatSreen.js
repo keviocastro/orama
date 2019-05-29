@@ -1,14 +1,23 @@
 import React from 'react'
-import { View, Image, FlatList, ImageBackground, Modal, TouchableOpacity, Dimensions } from 'react-native'
+import { View, Image, FlatList, ImageBackground, TouchableOpacity, Dimensions, Linking } from 'react-native'
 import { GiftedChat } from 'react-native-gifted-chat'
 import { connect } from 'react-redux'
-import { sendMessages, createChatIfNotExists, updateChatLastMessage, getMessages, updateChatImages } from '../actions/chat'
-import { removeChatImage } from './../actions/partners' // FIXME: Refactor para actions/chat
+import {
+    sendMessages,
+    createChatIfNotExists,
+    updateChatLastMessage,
+    getMessages,
+    updateChatImages,
+    addNotificationMessage
+} from '../actions/chat'
+import { removeChatImage, addChatImage } from './../actions/partners' // FIXME: Refactor para actions/chat
 import { selectedPartnerForFeed } from './../actions/posts'
 import { backgroundImage } from './styles'
 import md5 from 'md5'
 import ChatImages from '../components/ChatImages'
 import { HeaderBackButton } from 'react-navigation'
+import Hyperlink from 'react-native-hyperlink'
+
 const fullWidth = Dimensions.get('window').height
 
 class ChatSreen extends React.Component {
@@ -140,6 +149,28 @@ class ChatSreen extends React.Component {
     }
 
     componentDidMount() {
+        if (this.props.notification !== null) {
+            addNotificationMessage(null)
+            let message = {
+                _id: Math.random() * 1000,
+                text: this.props.notification.data.body,
+                createdAt: new Date(),
+                user: {
+                    _id: this.props.user.id,
+                    name: this.props.user.name
+                },
+                partner_id: this.props.partner.id,
+                user_id: this.props.user.id
+            };
+
+            this.onSend([message]);
+
+            if (typeof this.props.notification.data.image === 'string' &&
+                this.props.notification.data.image.length > 10) {
+                addChatImage(this.partner.id, this.props.notification.data.image)
+            }
+        }
+
         this.props.dispatch(updateChatImages(this.partner, this.props.user, this.props.images))
     }
 
@@ -238,7 +269,8 @@ const mapStateToProps = state => {
         images: images,
         messages: messages,
         user: state.auth.user,
-        received_messages: state.chat.CHAT_RECEIVED_MESSAGES
+        received_messages: state.chat.CHAT_RECEIVED_MESSAGES,
+        notification: state.chat.notification
     })
 }
 

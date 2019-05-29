@@ -20,8 +20,8 @@ import SplashScreen from 'react-native-splash-screen'
 import { getSegments } from './../actions/segments'
 import { getHighlights } from './../actions/highlights'
 import { selectForChat, searchPartners } from './../actions/partners'
-import { selectPartnerChat } from './../actions/partnerChatMessages'
-import { sendMessages } from './../actions/chat'
+import { selectPartnerChat, } from './../actions/partnerChatMessages'
+import { sendMessages, addNotificationMessage } from './../actions/chat'
 import firebase from 'react-native-firebase'
 const firestore = firebase.firestore()
 
@@ -40,6 +40,7 @@ class SegmentScreen extends React.Component {
   }
 
   componentDidMount() {
+
     SplashScreen.hide()
     this.receiveNotifications()
     this.reveiveMessages()
@@ -48,6 +49,17 @@ class SegmentScreen extends React.Component {
       this.props.dispatch(getSegments())
       this.props.dispatch(getHighlights())
     }
+
+    // Notify Test
+    // this.displayNotification({
+    //   data: {
+    //     image: "https://firebasestorage.googleapis.com/v0/b/o-rama2.appspot.com/o/notifications-image-GThLMIMQlZG1yYLP49WQ.jpeg?alt=media",
+    //     notification_id: "GThLMIMQlZG1yYLP49WQ",
+    //     partner_id: "Ka8a1fwbIkapLDwhdFxh",
+    //     title: "Teste",
+    //     body: "Teste local"
+    //   }
+    // });
   }
 
   reveiveMessages() {
@@ -232,29 +244,11 @@ class SegmentScreen extends React.Component {
     return <ActivityIndicator animating size="large" />
   }
 
-  sendChatMessage(message) {
-    this.props.dispatch(sendMessages([message]))
-  }
-
   navigateToChat(partner, image, notification) {
     this.props.dispatch(selectForChat(partner, image))
     if (this.props.loggedUser) {
-
       if (notification) {
-        let message = {
-          _id: Math.random() * 1000,
-          text: notification.data.body,
-          createdAt: new Date(),
-          user: {
-            _id: partner.id,
-            name: partner.name,
-            avatar: partner.logo
-          },
-          partner_id: partner.id,
-          user_id: this.props.loggedUser.id
-        };
-
-        this.sendChatMessage(message)
+        this.props.dispatch(addNotificationMessage(notification))
       }
       this.props.navigation.navigate('Chat', { partner, image })
     } else {

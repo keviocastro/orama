@@ -61,6 +61,13 @@ export const removeChatImage = (partnerId, image) => ({
   image
 })
 
+export const ADD_CHAT_IMAGE = 'ADD_CHAT_IMAGE'
+export const addChatImage = (partnerId, image) => ({
+  type: ADD_CHAT_IMAGE,
+  partnerId,
+  image
+})
+
 export const updateFbAcessToken = (fbId, fbAcessToken) => dispatch =>
   partnerUpdateFbAcessToken(dispatch, fbId, fbAcessToken)
 

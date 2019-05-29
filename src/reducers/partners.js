@@ -7,7 +7,8 @@ import {
   LOGIN,
   REMOVE_CHAT_IMAGE,
   RECEIVE_SEARCH_PARTNERS,
-  PARTNERS_SEARCH_LOADING
+  PARTNERS_SEARCH_LOADING,
+  ADD_CHAT_IMAGE
 } from './../actions/partners'
 import accents from 'remove-accents'
 
@@ -143,6 +144,11 @@ const reducer = (state = initialState, action) => {
       return {
         ...state,
         imagesChatByPartner: removeChatImageByPartner(state, action)
+      }
+    case ADD_CHAT_IMAGE:
+      return {
+        ...state,
+        imagesChatByPartner: setChatImagesByPartner(state, action)
       }
     case LOGIN:
       return {

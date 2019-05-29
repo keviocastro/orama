@@ -8,9 +8,11 @@ import {
   Modal,
   View,
   ScrollView,
-  TouchableNativeFeedback
+  TouchableNativeFeedback,
+  Linking
 } from 'react-native'
 import { Card, CardItem, Body } from 'native-base'
+import Hyperlink from 'react-native-hyperlink'
 import { connect } from 'react-redux'
 import { Button, Text } from 'native-base'
 import { backgroundImage } from './styles'
@@ -48,7 +50,11 @@ export class PartnerNotificationScreen extends React.Component {
           {item.body !== undefined && item.body !== null > 0 &&
             <CardItem >
               <Body>
-                <Text>{item.body}</Text>
+                <Hyperlink linkStyle={{ color: '#2980b9' }} onPress={(url, text) => {
+                  Linking.openURL(url)
+                }}>
+                  <Text>{item.body}</Text>
+                </Hyperlink>
               </Body>
             </CardItem>}
           {item.image !== undefined && item.text !== null > 0 &&

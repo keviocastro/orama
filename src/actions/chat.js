@@ -6,6 +6,12 @@ import {
     updateChatImages as updateChatImagesApi
 } from './api'
 
+export const ADD_NOTIFICATION_MESSAGE = 'ADD_NOTIFICATION_MESSAGE'
+export const addNotificationMessage = (notification) => ({
+    type: ADD_NOTIFICATION_MESSAGE,
+    notification
+})
+
 export const CHAT_MESSAGES_LOADING = 'CHAT_MESSAGES_LOADING'
 export const loading = (loading) => ({
     type: CHAT_MESSAGES_LOADING,
