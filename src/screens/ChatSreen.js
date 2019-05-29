@@ -149,7 +149,8 @@ class ChatSreen extends React.Component {
     }
 
     componentDidMount() {
-        if (this.props.notification !== null) {
+        if (this.props.notification !== null &&
+            this.partner.id === this.props.notification.data.partner_id) {
             addNotificationMessage(null)
             let message = {
                 _id: Math.random() * 1000,
