@@ -8,7 +8,8 @@ import {
     updateChatLastMessage,
     getMessages,
     updateChatImages,
-    addNotificationMessage
+    addNotificationMessage,
+    addTextMessage
 } from '../actions/chat'
 import { removeChatImage, addChatImage } from './../actions/partners' // FIXME: Refactor para actions/chat
 import { selectedPartnerForFeed } from './../actions/posts'
@@ -149,9 +150,28 @@ class ChatSreen extends React.Component {
     }
 
     componentDidMount() {
+
+        if (this.props.addTextMessage) {
+            this.props.dispatch(addTextMessage(null))
+
+            let message = {
+                _id: Math.random() * 1000,
+                text: this.props.addTextMessage,
+                createdAt: new Date(),
+                user: {
+                    _id: this.props.user.id,
+                    name: this.props.user.name
+                },
+                partner_id: this.props.partner.id,
+                user_id: this.props.user.id
+            };
+
+            this.onSend([message]);
+        }
+
         if (this.props.notification !== null &&
             this.partner.id === this.props.notification.data.partner_id) {
-            addNotificationMessage(null)
+            this.props.dispatch(addNotificationMessage(null))
             let message = {
                 _id: Math.random() * 1000,
                 text: this.props.notification.data.body,
@@ -271,7 +291,8 @@ const mapStateToProps = state => {
         messages: messages,
         user: state.auth.user,
         received_messages: state.chat.CHAT_RECEIVED_MESSAGES,
-        notification: state.chat.notification
+        notification: state.chat.notification,
+        addTextMessage: state.chat.textMessage
     })
 }
 

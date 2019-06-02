@@ -18,6 +18,13 @@ export const loading = (loading) => ({
     loading
 })
 
+export const ADD_TEXT_MESSSAGE = 'ADD_TEXT_MESSSAGE'
+export const addTextMessage = (partner, text) => ({
+    type: ADD_TEXT_MESSSAGE,
+    text,
+    partner
+})
+
 export const ADD_MESSAGES = 'ADD_MESSAGES'
 export const addMessages = (messages, partner) => ({
     type: ADD_MESSAGES,

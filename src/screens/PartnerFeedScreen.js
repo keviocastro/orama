@@ -19,6 +19,7 @@ import PropTypes from 'prop-types'
 import { connect } from 'react-redux'
 import { Card, CardItem, Body } from 'native-base'
 import { selectForChat } from './../actions/partners'
+import { addTextMessage } from './../actions/chat'
 import { Header } from 'react-navigation'
 import { getRealtimeByPartner, getByPartner } from './../actions/posts'
 import { backgroundImage } from './styles'
@@ -66,11 +67,12 @@ class PartnerFeedScreen extends React.PureComponent {
     return this.props.navigation.state.params.partner
   }
 
-  onClickItemCard = (image) => {
+  onClickItemCard = (image, text) => {
     AsyncStorage.getItem('user').then(user => {
       if (user === null || user === undefined) {
         this.props.navigation.navigate('UserLogin', { partner: this.partner, image: image, goBack: 'PartnerFeed' })
       } else {
+        this.props.dispatch(addTextMessage(this.partner, text))
         this.props.dispatch(selectForChat(this.partner, image))
         this.props.navigation.navigate('Chat', { partner: this.partner })
       }
@@ -119,7 +121,7 @@ class PartnerFeedScreen extends React.PureComponent {
               </Body>
             </CardItem>}
           {item.image !== undefined && item.text !== null &&
-            <TouchableNativeFeedback onPress={() => this.onClickItemCard(item.image)}>
+            <TouchableNativeFeedback onPress={() => this.onClickItemCard(item.image, item.text)}>
               <CardItem cardBody style={styles.card}>
                 <Image source={{ uri: item.image }} style={{ width: fullWidth, height: 200, resizeMode: 'cover' }} />
               </CardItem>
