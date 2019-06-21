@@ -28,6 +28,7 @@ import PhotoView from 'react-native-photo-view'
 const viewportHeight = Dimensions.get('window').height - Header.HEIGHT
 const mainFeedImageHeight = viewportHeight - (viewportHeight * 0.7)
 const fullWidth = Dimensions.get('window').width
+const fullHeight = Dimensions.get('window').height
 
 const styles = StyleSheet.create({
   card: { paddingBottom: 2, paddingBottom: 2 },
@@ -96,7 +97,7 @@ class PartnerFeedScreen extends React.PureComponent {
         this.setState({
           modalVisible: true,
           modalImage: image,
-          modalImagemHeight: (width / fullWidth) * height
+          modalImagemHeight: (fullWidth / width) * height
         })
       })
     }}>
@@ -154,13 +155,15 @@ class PartnerFeedScreen extends React.PureComponent {
             </View>
           </TouchableNativeFeedback>
           <ScrollView bouncesZoom={true} minimumZoomScale={1} maximumZoomScale={5} >
-            <PhotoView
-              source={{ uri: this.state.modalImage }}
-              minimumZoomScale={1}
-              maximumZoomScale={3}
-              androidScaleType="fitXY"
-              style={{ width: fullWidth, height: this.state.modalImagemHeight }} />
-            {/* <AutoHeightImage source={{ uri: this.state.modalImage }} width={fullWidth} /> */}
+            <View style={{ minHeight: fullHeight, justifyContent: 'center', alignItems: 'center' }}>
+              <PhotoView
+                source={{ uri: this.state.modalImage }}
+                minimumZoomScale={1}
+                maximumZoomScale={3}
+                androidScaleType="fitXY"
+                style={{ width: fullWidth, height: this.state.modalImagemHeight }} />
+              {/* <AutoHeightImage source={{ uri: this.state.modalImage }} width={fullWidth} /> */}
+            </View>
           </ScrollView>
         </ImageBackground>
       </Modal>

@@ -6,6 +6,7 @@ import md5 from 'md5'
 import { backgroundImage } from './../screens/styles'
 
 const fullWidth = Dimensions.get('window').width
+const fullHeight = Dimensions.get('window').height
 
 export default class ChatImages extends Component {
 
@@ -24,7 +25,7 @@ export default class ChatImages extends Component {
         this.setState({
           modalVisible: true,
           modalImage: image,
-          modalImagemHeight: (width / fullWidth) * height
+          modalImagemHeight: (fullWidth / width) * height
         })
       })
     }}>
@@ -74,12 +75,14 @@ export default class ChatImages extends Component {
               }
             </View>
             <ScrollView bouncesZoom={true} minimumZoomScale={1} maximumZoomScale={5} >
-              <PhotoView
-                source={{ uri: this.state.modalImage }}
-                minimumZoomScale={1}
-                maximumZoomScale={3}
-                androidScaleType="fitXY"
-                style={{ width: fullWidth, height: this.state.modalImagemHeight }} />
+              <View style={{ minHeight: fullHeight, justifyContent: 'center', alignItems: 'center' }}>
+                <PhotoView
+                  source={{ uri: this.state.modalImage }}
+                  minimumZoomScale={1}
+                  maximumZoomScale={3}
+                  androidScaleType="fitXY"
+                  style={{ width: fullWidth, height: this.state.modalImagemHeight }} />
+              </View>
             </ScrollView>
           </ImageBackground>
         </Modal>

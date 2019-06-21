@@ -221,7 +221,7 @@ class ChatSreen extends React.Component {
                 this.setState({
                     modalVisible: true,
                     modalImage: imagem,
-                    modalImagemHeight: (width / fullWidth) * height
+                    modalImagemHeight: (fullWidth / width) * height
                 })
             })
         }}>

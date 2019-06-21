@@ -377,6 +377,7 @@ const styles = StyleSheet.create({
   slideImage: {
     width: slideWidth,
     height: '100%',
+    resizeMode: 'contain',
     borderRadius: 10,
   },
   segmentImage: {
